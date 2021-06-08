@@ -7,7 +7,7 @@ DB_NAME="back-artist";
 DB_USER="root";
 DB_PASS=null;
 DB_HOST="localhost";
-DB_PORT=3306;
+DB_PORT=5500;
 
 
 const db = new Sequelize(DB_NAME, DB_USER, DB_PASS,
