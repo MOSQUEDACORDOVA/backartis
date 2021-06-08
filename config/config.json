@@ -1,17 +1,17 @@
 {
   "development": {
-    "username": "egpijhnywrkodb",
-    "password": "608bf8c663808da183e47320dfc52887d8756c2fde0276bf7ed37c941b525d4e",
-    "database": "de69n41tmrgc7t",
+    "username": "bef9a651ee054d",
+    "password": "7139c364 ",
+    "database": "heroku_d3ab0a1b9873300",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "mysql"
   },
   "test": {
-    "username": "egpijhnywrkodb",
-    "password": "608bf8c663808da183e47320dfc52887d8756c2fde0276bf7ed37c941b525d4e",
-    "database": "de69n41tmrgc7t",
+    "username": "bef9a651ee054d",
+    "password": "7139c364",
+    "database": "heroku_d3ab0a1b9873300",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "mysql"
   },
   "production": {
     "username": "root",
