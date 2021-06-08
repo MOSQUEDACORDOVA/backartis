@@ -1,17 +1,17 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "back-artist",
+    "username": "egpijhnywrkodb",
+    "password": "608bf8c663808da183e47320dfc52887d8756c2fde0276bf7ed37c941b525d4e",
+    "database": "de69n41tmrgc7t",
     "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "back-artist",
+    "username": "egpijhnywrkodb",
+    "password": "608bf8c663808da183e47320dfc52887d8756c2fde0276bf7ed37c941b525d4e",
+    "database": "de69n41tmrgc7t",
     "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "production": {
     "username": "root",
