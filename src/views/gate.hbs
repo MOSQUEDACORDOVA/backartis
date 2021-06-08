@@ -441,8 +441,8 @@ function fixStepIndicator(n) {
 </div>{{/if}}
 {{#if gate.seguir_soundcloud}}<div class="tab">
 	<div class="soundc"><a class="div_share" id="div_share" ><i class="fab fa-soundcloud" style="padding-right: 16px;"></i> SoundCloud</a>
-	<label class="label_url" hidden>{{gate.url_souncloud}}</label>
-	</div>
+  <label class="label_url" hidden>{{gate.url_souncloud}}</label>
+  </div>
 	
 			
 </div>{{/if}}
@@ -541,7 +541,7 @@ function fixStepIndicator(n) {
 
 
 
-					<a href="#" class="btn btn-primary btn-block btn_disabled" id="descargar_link" style="pointer-events: none;">Descargar <i class="fa fa-angle-right"></i></a>
+					<a href="/assets/uploads/{{gate.archivo}}" class="btn btn-primary btn-block btn_disabled" id="descargar_link" style="pointer-events: none;">Descargar <i class="fa fa-angle-right"></i></a>
 
 					<footer class="main-gate__footer">
 						<div class="row align-items-center">
