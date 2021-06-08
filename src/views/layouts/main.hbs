@@ -39,10 +39,10 @@
 							<li>
 								<a href="/fans" class="btn btn-primary btn-block op">Fans</a>
 							</li>
-							
+							{{#if user.admin}}
 							<li>
 								<a href="/admin_dash" class="btn btn-primary btn-block op">Administrador</a>
-							</li>
+							</li>{{/if}}
 							<li>
 								<a href="/close-session" class="btn btn-primary btn-block op">Cerrar Sesión</a>
 							</li>
