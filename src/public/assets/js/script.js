@@ -1508,9 +1508,9 @@ class validateInput {
 		var that = $(this);
 		//var href = document.getElementById('url_facebook').innerHTML
 		var post1 = that.parents('.label_url');
-		var post = that.parents('.label_url').prevObject[0].nextElementSibling.innerHTML;
+		//var post = that.parents('.label_url').prevObject[0].nextElementSibling.innerHTML;
 		var last = document.getElementById("nextBtn").innerHTML
-		console.log(post)
+		console.log(post1)
         var url = post;
 		//var url = document.getElementById('url_facebook').innerHTML;
         var openDialog = function(uri, name, options, closeCallback) {
