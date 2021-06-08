@@ -1,0 +1,242 @@
+{{> header }}
+	<main>
+		<!-- Jumbo Banner -->
+		<div class="jumbo-banner" style="background: linear-gradient(
+					rgba(0, 0, 0, .3) 60%,
+					#05001D),
+				url(/assets/img/background-1.jpg) center / cover;">
+			<h1 class="jumbo-banner__title text-center"><span class="text-primary">Haz</span> que todos<br>te <span class="text-primary">escuchen</span>.</h1>
+			<a href="/register" class="btn btn-primary btn-x-lg">
+				Comencemos
+				<i class="fa fa-angle-right"></i>
+			</a>
+		</div>
+		<!-- End Jumbo Banner -->
+
+		<!-- Section Register -->
+		<section class="section-register">
+			<div class="section-register__box" style="background-image: linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .7) 100%), url(/assets/img/concierto-1.jpg);">
+				<h2>Únete</h2>
+			</div>
+			<div class="section-register__box" style="background-image: linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .7) 100%), url(/assets/img/concierto-2.jpg);">
+				<h2>Comparte</h2>
+			</div>
+			<div class="section-register__box" style="background-image: linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .7) 100%), url(/assets/img/concierto-3.jpg);">
+				<h2>Promueve</h2>
+			</div>
+			<div class="section-register__box" style="background-image: linear-gradient(rgba(0, 0, 0, .1) 0%, rgba(0, 0, 0, .7) 100%), url(/assets/img/concierto-4.jpg);">
+				<h2>Aprende</h2>
+			</div>
+
+			<a href="/register" class="btn btn-primary btn-x-lg">
+				Regístrate
+				<i class="fa fa-angle-right"></i>
+			</a>
+		</section>
+		<!-- Section Register -->
+
+		<!-- Jumbo Banner -->
+		<div class="jumbo-banner py-5" style="background: linear-gradient(
+					rgba(0, 0, 0, .3) 60%,
+					#05001D),
+				url(/assets/img/background-2.jpg) center / cover;" id="backstore">
+			<div class="wrapper-container d-flex flex-column align-items-center">
+				<h2 class="jumbo-banner__title text-center mb-0"><span class="text-primary">Back</span>Store</h2>
+				<p class="jumbo-banner__desc text-center">Vende tu música de una forma diferente</p>
+
+				<!-- Step Component -->
+				<div class="steps">
+					<div class="step step--active">
+						<div class="step__number">1</div>
+						<div class="step__body">
+							<h3 class="step__title">Paso 1</h3>
+							<p class="step__desc">Crea</p>
+						</div>
+					</div>
+					<div class="steps__line"></div>
+					<div class="step">
+						<div class="step__number">2</div>
+						<div class="step__body">
+							<h3 class="step__title">Paso 2</h3>
+							<p class="step__desc">Comparte</p>
+						</div>
+					</div>
+					<div class="steps__line"></div>
+					<div class="step">
+						<div class="step__number">3</div>
+						<div class="step__body">
+							<h3 class="step__title">Paso 3</h3>
+							<p class="step__desc">Vende</p>
+						</div>
+					</div>
+				</div>
+				<!-- End Step Component -->
+			</div>
+		</div>
+		<!-- End Jumbo Banner -->
+
+		<!-- Section Planes -->
+		<section class="section-center bd-deg-y" id="planes">
+			<div class="section-center__content wrapper-container">
+				<h2 class="section-center__title">Nuestros planes</h2>
+				<h3 class="section-center__subtitle mb-0">Promociona tu música de la mejor manera</h3>
+				<div class="text-center">
+					<div class="select-plan" id="select-plan">
+						<span id="opt-1" class="select-plan__option" data-plan="mensual">Mensual</span>
+						<span id="opt-2" class="select-plan__option active" data-plan="anual">Anual<span>17 % Dsct.</span></span>
+					</div>
+				</div>
+				<div class="grid-plans show" id="grid-plans">
+					<div class="card card-plan">
+						<div class="card-body">
+							<h3 class="card-title">
+								<span class="card-title-icon">
+									<i class="far fa-star"></i>
+								</span>
+								<span>Basic</span>
+							</h3>
+							<p class="card-press">
+								Free
+							</p>
+							<ul class="card-list">
+								<li>{{plan_basico_Mensual.0.linea1}}</li>
+								<li>{{plan_basico_Mensual.0.linea2}}</li>
+								<li>{{plan_basico_Mensual.0.linea3}}</li>
+								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea4}}</li>
+								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea5}}</li>
+								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea6}}</li>
+								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea7}}</li>
+								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea8}}</li>
+								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea9}}</li>
+								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea10}}</li>
+							</ul>
+							<a href="#" class="btn btn-block btn-primary">
+								<span>Obtener Plan</span>
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+					<div class="card card-plan card-plan--primary">
+						<div class="card-body">
+							<h3 class="card-title">
+								<span class="card-title-icon">
+									<i class="far fa-heart"></i>
+								</span>
+								<span>VIP</span>
+							</h3>
+							<p class="card-press card-press--light">
+								<span class="card-press__dollar">$</span>
+								<span id="vip-press">{{plan_VIP_Anual.0.costo}}</span>
+								<span id="anual_vip" hidden>{{plan_VIP_Anual.0.costo}}</span>
+								<span id="mensual_vip" hidden>{{plan_VIP_Mensual.0.costo}}</span>
+								<span class="card-press__divider"></span>
+								<span id="vip-time">/ Año + </span>
+								<span>{{plan_VIP_Anual.0.descuento}}% de Dsct. Por apertura</span>
+							</p>
+							<ul class="card-list">
+								<li>{{plan_VIP_Anual.0.linea1}}</li>
+								<li>{{plan_VIP_Anual.0.linea2}}</li>
+								<li>{{plan_VIP_Anual.0.linea3}}</li>
+								<li class="">{{plan_VIP_Anual.0.linea4}}</li>
+								<li class="">{{plan_VIP_Anual.0.linea5}}</li>
+								<li class="">{{plan_VIP_Anual.0.linea6}}</li>
+								<li class="">{{plan_VIP_Anual.0.linea7}}</li>
+								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea8}}</li>
+								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea9}}</li>
+								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea10}}</li>
+							</ul>
+							<a href="#" class="btn btn-block btn-light">
+								<span>Obtener Plan</span>
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+					<div class="card card-plan">
+						<div class="card-body">
+							<h3 class="card-title">
+								<span class="card-title-icon">
+									<i class="far fa-chart-bar"></i>
+								</span>
+								<span>Gold</span>
+							</h3>
+							<p class="card-press">
+								<span class="card-press__dollar">$</span>
+								<span id="gold-press">{{plan_Gold_Anual.0.costo}}</span>
+								<span id="anual_gold" hidden>{{plan_Gold_Anual.0.costo}}</span>
+								<span id="mensual_gold" hidden>{{plan_Gold_mensual.0.costo}}</span>
+								<span class="card-press__divider"></span>
+								<span id="gold-time">/ Año + </span>
+								<span>{{plan_Gold_Anual.0.descuento}}% de Dsct. Por apertura</span>
+							</p>
+							<ul class="card-list">
+								<li>{{plan_Gold_Anual.0.linea1}}</li>
+								<li>{{plan_Gold_Anual.0.linea2}}</li>
+								<li>{{plan_Gold_Anual.0.linea3}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea4}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea5}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea6}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea7}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea8}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea9}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea10}}</li>
+							</ul>
+							<a href="#" class="btn btn-block btn-primary">
+								<span>Obtener Plan</span>
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</div>
+					</div>
+				</div><!-- Planes Anuales -->
+			</div>
+		</section>
+		<!-- Section Planes -->
+
+		<!-- Section Artistas -->
+		<section class="section-center py-5">
+			<div class="section-center__content">
+				<h2 class="section-center__title">Artistas en BackArtist</h2>
+				<h3 class="section-center__subtitle">Somos la zona VIP de los artistas</h3>
+
+				<div class="container">
+				<div class="grid-artist">
+						<img src="/assets/img/logo-artista-1.png" alt="Logo de Angel Sanchez">
+						<img src="/assets/img/logo-artista-2.png" alt="Logo de DJ Carlos UG">
+						<img src="/assets/img/logo-artista-3.png" alt="Logo de Antonio Linares">
+						<img src="/assets/img/logo-artista-4.png" alt="Logo de Erick Song">
+						<img src="/assets/img/logo-artista-5.png" alt="Logo de DJ Rolo">
+						<img src="/assets/img/logo-artista-6.png" alt="Logo de DJ Rdix">
+						<img src="/assets/img/logo-artista-7.png" alt="Logo de Deejay Bruce">
+						<img src="/assets/img/logo-artista-8.png" alt="Logo de DJ Cruz">
+						<img src="/assets/img/logo-artista-9.png" alt="Logo de Oscar Fernandez">
+						<img src="/assets/img/logo-artista-10.png" alt="Logo de DJ Tuiz">
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End Section Artistas -->
+
+		<!-- Jumbo Banner -->
+		<div class="jumbo-banner py-5" style="background: linear-gradient(
+					rgba(0, 0, 0, .3) 60%,
+					#05001D),
+				url(/assets/img/background-3.jpg) center / cover;">
+			<div class="jumbo-banner__content wrapper-container">
+				<h2 class="jumbo-banner__title mb-0">
+					<span class="text-primary">Únete a BackArtist</span>,<br>
+					<span class="text-primary">Que vibre cada rincón del</span><br>
+					<span class="text-primary">planeta</span>.
+				</h2>
+
+				<form action="/subscribe" method="get">
+					<div class="input-group mt-5 jumbo-banner__input">
+						<input type="email" name="email" class="form-control" placeholder="Escribe tu correo electrónico" aria-label="Escribe tu correo electrónico" aria-describedby="button-addon2">
+						<div class="input-group-append">
+							<button class="btn btn-primary btn-icon" type="submit" id="button-addon2">Suscribirse <i class="fa fa-angle-right"></i></button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- End Jumbo Banner -->
+	</main>
+{{> footer }}

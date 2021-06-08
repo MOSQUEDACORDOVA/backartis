@@ -1,0 +1,87 @@
+
+
+{{#if product}}
+<script>
+	 Swal.fire("Su pago se proceso con exito gracias por todo")
+</script>
+{{/if}}
+<div class="card-box data-user text-center text-lg-left d-lg-inline-block">
+	<h2 class="data-user__name">{{user.name}} {{user.lastName}}</h2>
+	<p class="data-user__user-name">{{user.userName}}</p>
+</div><!-- data-user -->
+<div class="row box-group">
+	<div class="col-lg-6 mb-4 mb-lg-0">
+		<a href="/share-music" class="card-box card-box--icon shadow h-100">
+			<div class="card-box__icon">
+				<i class="fa fa-share-alt"></i>
+			</div>
+			<div class="card-box__body">
+				<h2 class="card-box__title">Compartir mi música</h2>
+				<p class="card-box__text m-0">Comparte descargas de tu música a cambio de me gusta, publicaciones, comentarios y seguidores.</p>
+			</div>
+		</a><!-- .card-box -->
+	</div><!-- .col-lg-6 -->
+	<div class="col-lg-6">
+		<a href="/backstore" class="card-box card-box--icon shadow new h-100 {{#if user.gold}}{{else}}sb-disabled{{/if}}" {{#if user.gold}}{{else}}data-swal-title="Solo disponible para usuarios Gold"{{/if}}>
+			<div class="new-c">New</div>
+			<div class="card-box__icon">
+				<i class="fa fa-user"></i>
+			</div>
+			<div class="card-box__body">
+				<h2 class="card-box__title">BackStore</h2>
+				<p class="card-box__text m-0">Ahora puedes subir tus pistas y obras de arte de forma rápida y fácil. Tus fans te lo agradecerán.</p>
+			</div>
+		</a><!-- .card-box -->
+	</div><!-- .col-lg-6 -->
+</div><!-- .row -->
+<div class="card-box shadow"><!-- Aquí se aplica el height solo por la seccion fans -->
+	<nav class="card-box__nav" id="gates-navigation">
+		<ul class="nav flex-column flex-md-row align-items-center justify-content-md-between">
+			<li class="nav-item mb-4 mb-md-0">
+				<a class="nav-link active" href="/dashboard/filegate"><label style="cursor: pointer;"><i class="fa fa-download "> </i>File Gate</label></a>
+			</li>
+			<li class="nav-item mb-4 mb-md-0">
+				<a class="nav-link {{#if user.basic}}sb-disabled{{/if}}" href="/dashboard/bondgate" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}><label style="cursor: pointer;"><i class="fa fa-link"></i>Bond Gate</label></a> 
+			</li>
+			<li class="nav-item">
+				<a class="nav-link {{#if user.gold}}{{else}}sb-disabled{{/if}}" href="/dashboard/backstore" {{#if user.gold}}{{else}}data-swal-title="Solo disponible para usuarios Gold"{{/if}}><label style="cursor: pointer;"><i class="fa fa-cart-arrow-down"></i> BackStore</label></a>
+			</li>
+		</ul>
+	</nav>
+	<div class="grid-gates">
+{{#each gates as |item i|}}		<article class="gate-item">
+			<a href="/gate/{{item.id}}" class="gate-item__img">
+				<img src="/assets/uploads/{{item.imagen}}" alt="Gate 1">
+			</a>
+			<div class="gate-item__body">
+ <h3 class="gate-item__author"> {{item.nombre_artista}}</h3>
+			
+				<h3 class="gate-item__title">{{item.titulo}}</h3>
+				<div class="gate-item__statistics">
+					<p><i class="fa fa-eye"></i>751</p>
+					<p><i class="fa fa-download"></i>279</p>
+					<p><i class="fa fa-envelope"></i>30</p>
+				</div>
+				<form action="/dashboard/id_delete.prueba"  method="POST">
+
+				</form>
+				<div class="gate-item__options">
+					<a href="/borrar/{{item.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="#" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					<a href="#" class="gate-item__option">
+						<i class="fab fa-soundcloud"></i>
+					</a>
+					<a href="#" class="gate-item__option">
+						<i class="fa fa-share-alt"></i>
+					</a>
+				</div>
+			</div>
+		</article>
+		{{/each}}<!-- .gate-item -->
+
+	</div><!-- .grid-gates -->
+</div><!-- .card-box -->

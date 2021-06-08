@@ -1,0 +1,41 @@
+<h1 class="dashboard-title">Compartir mi música</h1>
+
+<div class="card-box card-box--share-music shadow card-box--bg-celeste position-relative">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon dashboard__card-box-header">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-share-alt"></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title">Compartir mi música</h2>
+					<p class="card-box__text card-box__text--md">Comparte descargas de tu música a cambio de me gusta, publicaciones, comentarios y seguidores.</p>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<a href="/create-file-gate" class="card-box card-box--icon card-box--mini-icon mb-5 h-auto">
+		<div class="card-box__icon">
+			<i class="fa fa-download"></i>
+		</div>
+		<div class="card-box__body">
+			<h2 class="card-box__title">File Gate</h2>
+			<p class="card-box__text card-box__text--md">Comparte descargas de tu música en nuestros servidores a cambio de me gusta, publicaciones, comentarios y seguidores.</p>
+		</div>
+	</a>
+
+	<a href="/create-bond-gate" class="card-box card-box--icon card-box--mini-icon h-auto {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+		<div class="card-box__icon">
+			<i class="fa fa-link"></i>
+		</div>
+		<div class="card-box__body">
+			<h2 class="card-box__title">Bond Gate</h2>
+			<p class="card-box__text card-box__text--md">Comparte descargas de tu música en otros servidores a cambio de me gusta, publicaciones, comentarios y seguidores.</p>
+		</div>
+	</a>
+
+	<a href="/dashboard" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

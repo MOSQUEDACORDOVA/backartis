@@ -1,0 +1,257 @@
+	{{#if msg}}
+	<!-- Sweet Alert -->
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!--jQuery -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+	$( document ).ready(function() {
+    if ( $("#msgs").length ) {
+     let mensaje = `{{msg}}`;
+	 console.log("mensaje");
+	 Swal.fire(mensaje)
+	}
+});
+
+	 
+</script>
+<label id="msgs"></label>
+{{/if}}
+<div class="card-box data-user text-center text-lg-left d-lg-inline-block">
+	<h2 class="data-user__name">{{user.name}} {{user.lastName}}</h2>
+	<p class="data-user__user-name">{{user.tipo}}</p>
+</div><!-- data-user -->       
+<div class="card-box shadow"><!-- Aquí se aplica el height solo por la seccion fans -->
+	<nav class="card-box__nav" id="gates-navigation">
+		<ul class="nav flex-column flex-md-row align-items-center justify-content-md-between">
+			<li class="nav-item mb-4 mb-md-0">
+				<a class="nav-link active" href="/admin_dash"><label style="cursor: pointer;"><i class="fa fa-users "> </i>Usuarios</label></a>
+			</li>
+			<li class="nav-item mb-4 mb-md-0">
+				<a class="nav-link " href="/index_admin/bannes" ><label style="cursor: pointer;"><i class="fa fa-ad"></i>Banner</label></a> 
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/planes" ><label style="cursor: pointer;"><i class="fa fa-book"></i> Planes</label></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/aboutus" ><label style="cursor: pointer;"><i class="fa fa-address-card"></i> Sobre Nosotros</label></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/cupones" ><label style="cursor: pointer;"><i class="fa fa-align-center"></i> Cupones</label></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/ventas" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i> Ventas</label></a>
+			</li>
+		</ul>
+	</nav>
+	{{#if planes}}<div><a class="" href="/agregar_plan" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Plan</label></a></i></div>{{/if}}
+	<div class="grid-gates" style="max-height: 500px;{{#if planes}} grid-template-columns: 1fr ;{{/if}}{{#if aboutUs}} grid-template-columns: 1fr ;{{/if}}{{#if cupones}} grid-template-columns: 1fr ;{{/if}}{{#if ventas}} grid-template-columns: 1fr ;{{/if}}">
+
+	{{#if aboutUs}}<div><a class="" href="/aboutus_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
+	{{#if cupones}}<div><a class="" href="/cupones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
+		
+		{{#each usuarios as |user i|}}	 <article class="gate-item">
+			<a href="#" class="gate-item__img">
+				<img src="/assets/uploads/{{user.photo}}" alt="Gate 1">
+			</a>
+			<div class="gate-item__body">
+ 			<h3 class="gate-item__author">{{user.name}} {{user.lastName}}</h3>
+			
+				<h3 class="gate-item__title">{{user.tipo}}</h3>
+
+				<form action="/dashboard/id_delete.prueba"  method="POST">
+
+				</form>
+				<div class="gate-item__options">
+					<a href="/borrar_user/{{user.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/editar_user/{{user.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div>
+			</div>
+		</article>
+	{{/each}}<!-- .gate-item -->
+	
+	{{#if planes}}
+<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Tipo
+								</th>
+								<th class="text-xs-center">
+									Costo
+								</th>
+								<th class="text-xs-center">
+									Modo
+								</th> 
+								<th class="text-xs-center">
+									Opciones
+								</th> 
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each planes_parsed as |plan i|}}	 
+			<tr>
+				<td>{{plan.tipo_create}}</td>
+				<td>${{plan.costo}}</td>
+				<td> {{plan.modo}}</td>
+				<td><div class="gate-item__options">
+					<a href="/borrar_plan/{{plan.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/editar_plan/{{plan.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	</tbody> 
+ 			</table>
+	<!-- .gate-item -->
+	{{/if}}
+	{{#if aboutUs_parsed}}
+<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Teléfono
+								</th>
+								<th class="text-xs-center">
+									Whatsapp
+								</th>
+								<th class="text-xs-center">
+									Correo
+								</th> 
+								<th class="text-xs-center">
+									Facebook
+								</th> 
+								<th class="text-xs-center">
+									Opciones
+								</th> 
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each aboutUs_parsed as |about i|}}	 
+			<tr>
+				<td>{{about.telefono}}</td>
+				<td>{{about.ws}}</td>
+				<td>{{about.correo}}</td>
+				<td>{{about.facebook}}</td>
+				<td><div class="gate-item__options">
+					<a href="/borrar_about/{{about.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/edit_aboutus/{{about.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	</tbody> 
+ 			</table>
+	<!-- .gate-item -->
+	{{/if}}
+
+	{{#if cupones}}
+<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Nº Cupon
+								</th>
+								<th class="text-xs-center">
+									Cupon
+								</th>
+								<th class="text-xs-center">
+									Fecha creacion
+								</th>
+								<th class="text-xs-center">
+									Fecha final
+								</th> 
+								<th class="text-xs-center">
+									Valor
+								</th> 
+								<th class="text-xs-center">
+									Opciones
+								</th> 
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each cuponoes_parsed as |cupon i|}}	 
+			<tr>
+				<td>{{cupon.numero_cupon}}</td>
+				<td>{{cupon.nombre_cupon}}</td>
+				<td>{{cupon.fecha_inicio}}</td>
+				<td>{{cupon.fecha_final}}</td>
+				<td>{{cupon.valor}}</td>
+				<td><div class="gate-item__options">
+					<a href="/borrar_cupon/{{cupon.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/edit_cupon/{{cupon.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	</tbody> 
+ 			</table>
+	<!-- .gate-item -->
+	{{/if}}
+
+	{{#if ventas}}
+<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Tipo de venta
+								</th>
+								<th class="text-xs-center">
+									Fecha de venta
+								</th>
+								<th class="text-xs-center">
+									Numero de referencia
+								</th>
+								<th class="text-xs-center">
+									Metodo de Pago
+								</th> 
+								<th class="text-xs-center">
+									Monto
+								</th> 
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each ventas_parsed as |venta i|}}	 
+			<tr>
+				<td>{{venta.tipo_compra}}</td>
+				<td>{{venta.createdAt}}</td>
+				<td>{{venta.numero_referencia}}</td>
+				<td>{{venta.metodo_pago}}</td>
+				<td>{{venta.monto}}</td>
+				
+				</tr>		
+	{{/each}}
+	</tbody> 
+ 			</table>
+	<!-- .gate-item -->
+	{{/if}}
+	
+	</div><!-- .grid-gates -->
+</div><!-- .card-box -->

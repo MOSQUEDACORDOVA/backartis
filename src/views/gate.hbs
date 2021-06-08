@@ -1,0 +1,603 @@
+{{> header }}
+<style>
+	/* Style the form */
+#regForm {
+  /*background-color: #ffffff;
+  margin: 100px auto;
+  padding: 40px;*/
+  width: 70%;
+  min-width: 300px;
+}
+
+/* Style the input fields */
+input {
+  padding: 10px;
+  width: 100%;
+  font-size: 17px;
+  font-family: Raleway;
+  border: 1px solid #aaaaaa;
+}
+
+/* Mark input boxes that gets an error on validation: */
+input.invalid {
+  background-color: #ffdddd;
+}
+
+/* Hide all steps by default: */
+.tab {
+  display: none;
+  width: 350px;
+}
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+/* Mark the active step: */
+.step.active {
+  opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: #04AA6D;
+}
+
+
+a.ytboton {    position: relative;
+    display: block;
+    width: 150px;
+    /* height: 24px; */
+    padding: 6px 6px 6px 34px;
+    background: #B31217;
+    color: white;
+    line-height: 16px;
+    /* font-size: 12px; */
+    text-decoration: none;
+    font-family: arial;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 10px;
+    font-weight: bold;
+	cursor: pointer;}
+a.ytboton:before {content:"\25B6";position: absolute;top: 6px;left: 8px;padding: 1px 5px;background: white;color: #B31217;border-radius: 3px;font-size: 10px;box-sizing: border-box;line-height: 12px;}
+
+
+.tweet{
+  color:#ffffff;
+  font-weight:bold;
+  display:inline-block;
+  padding:6px;
+  text-align:center;
+  cursor:pointer;
+  outline:0;
+  background-color:#55ACEE;
+  border-radius: 10px;
+  width: 150px;
+}
+.instagram{
+  color:#ffffff;
+  font-weight:bold;
+  display:inline-block;
+  padding:6px;
+  text-align:center;
+  cursor:pointer;
+  outline:0;
+ background: #f09433; 
+background: -moz-linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
+background: -webkit-linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); 
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', endColorstr='#bc1888',GradientType=1 );
+  border-radius: 10px;
+  width: 150px;
+}
+
+
+.soundc{
+	color: #fff;
+    background-color: #f43010;
+    border-color: #f43010;
+    width: 150px;
+    padding: 6px;
+    text-align: center;
+    border-radius: 10px;
+}
+.soundc a{
+	text-decoration: none;
+	color: white;
+}
+.spotify{
+  color:#fff;
+  font-weight:bold;
+  display:inline-block;
+  padding:6px;
+  text-align:center;
+  cursor:pointer;
+  outline:0;
+  background-color:#2ebd59;
+  border-radius: 10px;
+  width: 150px;
+}
+.deezer{
+  color:#fff;
+  font-weight:bold;
+  display:inline-block;
+  padding:6px;
+  text-align:center;
+  cursor:pointer;
+  outline:0;
+  background-color:#ef5466;
+  border-radius: 10px;
+  width: 150px;
+}
+.tiktok{
+  color:#fff;
+  font-weight:bold;
+  display:inline-block;
+  padding:6px;
+  text-align:center;
+  cursor:pointer;
+  outline:0;
+  background-color:#EE1D52;
+  border-radius: 10px;
+  width: 150px;
+}
+.mixcloud{
+  color:#fff;
+  font-weight:bold;
+  display:inline-block;
+  padding:6px;
+  text-align:center;
+  cursor:pointer;
+  outline:0;
+  background-color:rgb(80, 0, 255);
+  border-radius: 10px;
+  width: 150px;
+}
+.facebook{
+  color:#fff;
+  font-weight:bold;
+  display:inline-block;
+  padding:6px;
+  text-align:center;
+  cursor:pointer;
+  outline:0;
+  background-color:#3B5998;
+  border-radius: 10px;
+  width: 150px;
+}
+.facebook:hover, .spotify:hover, .deezer:hover, .tiktok:hover,.mixcloud:hover,.tweet:hover,.instagram:hover,.soundc a:hover{
+	text-decoration: none;
+	color: white;
+}
+
+.btn_disabled {
+    background-color: #e4d9b7;
+}
+.btn:enabled {
+    background-color: #D9AD26;
+}
+
+</style>
+<script>
+
+</script>
+
+<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.js"></script>
+<!-- Google Analytics -->
+
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<!-- End Google Analytics -->	
+
+<script>
+	
+window.fbAsyncInit = function () {
+	
+console.log("o")
+    FB.Event.subscribe('edge.create', function (response) {
+        Swal.fire('Gracias por dar Like')
+		let link = document.getElementById('descargar_link')
+					link.style.pointerEvents = null;
+					//	link.style.color = 'blue';
+		console.log("lo")
+        });
+   
+    FB.Event.subscribe('edge.remove', function (response) {
+        Swal.fire({
+  title: 'Error!',
+  text: 'No le has dado like a nuestra pagina',
+  icon: 'error',
+  confirmButtonText: 'OK'
+})
+		let link = document.getElementById('descargar_link')
+					link.style.pointerEvents = 'none';
+		console.log("d")
+    });
+};
+
+(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id))
+        return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://connect.facebook.net/es_ES/sdk.js#xfbml=1&version=v2.7&appId=1533357533669938";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+	function start() {
+  // 2. Initialize the JavaScript client library.
+  gapi.client.init({
+    'apiKey': 'AIzaSyCtCOX6tqnOxQZMIeXpA0X_IcP6X2p7FJU',
+    // clientId and scope are optional if auth is not required.
+    'clientId': '425427803550-5hcacf2hmbmj1k2nm1o1a5c6cg5kgk8j.apps.googleusercontent.com',
+    'scope': 'profile',
+  }).then(function() {
+    // 3. Initialize and make the API request.
+    return gapi.client.request({
+      'path': 'https://people.googleapis.com/v1/people/me?requestMask.includeField=person.names',
+    })
+  }).then(function(response) {
+    console.log(response.result);
+  }, function(reason) {
+    console.log('Error: ' + reason.result.error.message);
+  });
+};
+// 1. Load the JavaScript client library.
+gapi.load('client', start);
+
+</script>
+<script>
+	function addSubscription() {
+		// Replace this channel ID with the channel ID you want to subscribe to
+		var channelId = 'UC9gFih9rw0zNCK3ZtoKQQyA';
+		var resource = {
+		  snippet: {
+			resourceId: {
+			  kind: 'youtube#channel',
+			  channelId: channelId
+			}
+		  }
+		};
+	  
+		try {
+		  var response = YouTube.Subscriptions.insert(resource, 'snippet');
+		  console.log(response);
+		} catch (e) {
+		  if(e.message.match('subscriptionDuplicate')) {
+			console.log('Cannot subscribe; already subscribed to channel: ' + channelId);
+		  } else {
+			console.log('Error adding subscription: ' + e.message);
+		  }
+		}
+	  }
+			
+	var currentTab = 0; // Current tab is set to be the first tab (0)
+showTab(currentTab); // Display the current tab
+
+function showTab(n) {
+  // This function will display the specified tab of the form ...
+  var x = document.getElementsByClassName("tab");
+  x[n].style.display="block"
+  //x[n].style.display = "block";
+  // ... and fix the Previous/Next buttons:
+  if (n == 0) {
+    document.getElementById("prevBtn").style.display = "none";
+  } else {
+    document.getElementById("prevBtn").style.display = "none";
+
+  }
+  if (n == (x.length - 1)) {
+    document.getElementById("nextBtn").innerHTML = "";
+	document.getElementById("nextBtn").setAttribute('disabled','disabled');
+  } else {
+    document.getElementById("nextBtn").innerHTML = "<i class='fa fa-angle-right' style='display:none'></i>";
+	document.getElementById("nextBtn").removeAttribute("disabled");
+  }
+  // ... and run a function that displays the correct step indicator:
+  fixStepIndicator(n)
+}
+	function nextPrev(n) {
+  // This function will figure out which tab to display
+  var x = document.getElementsByClassName("tab");
+  // Exit the function if any field in the current tab is invalid:
+  if (n == 1 && !validateForm()) return false;
+  // Hide the current tab:
+  x[currentTab].style.display = "none";
+  // Increase or decrease the current tab by 1:
+  currentTab = currentTab + n;
+  // if you have reached the end of the form... :
+  if (currentTab >= x.length) {
+    //...the form gets submitted:
+    document.getElementById("regForm").submit();
+    return false;
+  }
+  // Otherwise, display the correct tab:
+  showTab(currentTab);
+}
+
+function validateForm() {
+  // This function deals with validation of the form fields
+  var x, y, i, valid = true;
+  x = document.getElementsByClassName("tab");
+  y = x[currentTab].getElementsByTagName("input");
+  // A loop that checks every input field in the current tab:
+ // for (i = 0; i < y.length; i++) {
+    // If a field is empty...
+   // if (y[i].value == "") {
+      // add an "invalid" class to the field:
+    //  y[i].className += " invalid";
+      // and set the current valid status to false:
+    //  valid = false;
+   // }
+ // }
+  // If the valid status is true, mark the step as finished and valid:
+  if (valid) {
+    document.getElementsByClassName("step")[currentTab].className += " finish";
+  }
+  return valid; // return the valid status
+}
+
+function fixStepIndicator(n) {
+  // This function removes the "active" class of all steps...
+  var i, x = document.getElementsByClassName("step");
+  for (i = 0; i < x.length; i++) {
+    x[i].className = x[i].className.replace(" active", "");
+  }
+  //... and adds the "active" class to the current step:
+  x[n].className += " active";
+}
+
+</script>
+
+
+<div id="fb-root"></div>
+	<main class="container-fluid main-gate">
+		<div class="row">
+			<div class="col-md-8 px-0 main-gate__main d-flex justify-content-center align-items-center" style="background-image: url(/assets/uploads/{{gate.imagen}});">
+				{{#if gate.show_watermarker}}
+				
+				{{else}} <div class="watermark">
+					<div class="watermark__img">
+						<img src="{{#if gate.user_logo}}/assets/uploads/{{gate.user_logo}}   {{else}}/assets/img/logo-ba-dark.jpg {{/if}}" alt="BackArtist Logo" >
+					</div>
+					<div class="watermark__body">
+						<h2 class="watermark__title">BackArtist</h2>
+					</div>
+				</div>   {{/if}}
+				<button class="btn-play">
+					<i class="fa fa-pause"></i>
+				</button>
+
+				<div class="music-bar">
+					<button class="music-bar__icon" type="button">
+						<i class="fa fa-music"></i>
+					</button>
+
+					<div class="music-bar__bar">
+						<div class="music-bar__bar-status"></div>
+					</div>
+				</div>
+
+			</div><!-- .col-md-8 -->
+			<div class="col-md-4 px-0">
+				
+				<section class="bg-gradient main-gate__aside text-white" {{#if gate.color}}style="background: {{gate.color}};" {{/if}}>
+					<div class="main-gate__user">
+						<div class="main-gate__user-img">
+							<img src="/assets/uploads/{{user.photo}}" alt="DJ Homero">
+						</div>
+						<div class="main-gate__user-body">
+							<h2 class="main-gate__name">{{gate.nombre_artista}}</h2>
+							<p class="main-gate__user-name">{{user.userName}}</p>
+						</div>
+						
+					</div>
+		
+					<h1 class="main-gate__title" {{#if gate.color_titulo}}style="color: {{gate.color_titulo}};" {{/if}}>{{gate.titulo}}</h1>
+					<p class="main-gate__desc" {{#if gate.color_descrip}}style="color: {{gate.color_descrip}};" {{/if}}>{{gate.descripcion}}</p>
+
+					<form id="regForm" action="">
+
+<!-- One "tab" for each step in the form: -->
+{{#if gate.like_facebook}}
+<div class="tab">
+	<!--<div class="fb-like" data-href="{{gate.url_facebook}}" data-width="" data-layout="button" data-action="like" data-size="large" data-share="false"></div>-->
+	<a class="facebook div_share" id="div_share" ><i class="fab fa-facebook" style="padding-right: 16px;"></i> Me gusta</a>
+	<label class="label_url" hidden>{{gate.url_facebook}}</label>				
+</div>{{/if}}
+
+ {{#if gate.compartir_facebook}}	
+<div class="tab">
+	<a class="facebook div_share" id="div_share" ><i class="fab fa-facebook" style="padding-right: 16px;"></i> Compartir</a>
+	<label class="label_url" hidden>{{gate.url_facebook}}</label>	
+	
+	<!--<div class="fb-share-button" data-href="{{gate.url_facebook}}" data-layout="button_count" data-size="small"><a target="_blank" href="{{gate.url_facebook}}" class="fb-xfbml-parse-ignore">Compartir</a></div>-->
+				
+</div>{{/if}}
+
+{{#if gate.suscribirse_youtube}}<div class="tab">
+	<a class="ytboton div_share" id="div_share" >Suscribirse</a>
+	<label class="label_url" hidden>{{gate.url_youtube}}</label>		
+</div>{{/if}}
+
+{{#if gate.seguir_twitter}}<div class="tab">
+	<a class="tweet dark div_share" id="div_share" ><i class="fab fa-twitter" style="padding-right: 16px;"></i> Follow</a>
+	<label class="label_url" hidden>{{gate.url_twitter}}</label>
+	<a class="tweet div_share" id="div_share2" ><i class="fab fa-twitter"></i> Compartir</a>
+	<label class="label_url" hidden>http://twitter.com/share?text=Gracias por compartir {{gate.url_twitter}} "</label>
+			
+</div>{{/if}}
+{{#if gate.seguir_soundcloud}}<div class="tab">
+	<div class="soundc"><a class="div_share" id="div_share" ><i class="fab fa-soundcloud" style="padding-right: 16px;"></i> SoundCloud</a></div>
+	<label class="label_url" hidden>{{gate.url_souncloud}}</label>
+			
+</div>{{/if}}
+{{#if gate.seguir_instagram}}<div class="tab">
+	<a class="instagram div_share" id="div_share" > <i class="fab fa-instagram" style="padding-right: 16px;"></i> Instagram</a>
+	<label class="label_url" hidden>{{gate.url_instagram}}</label>
+			
+</div>{{/if}}
+{{#if gate.seguir_spotify}}<div class="tab">
+ 
+			<a class="spotify div_share" id="div_share" > <i class="fab fa-spotify" style="padding-right: 16px;"></i> Spotify</a>
+			<label class="label_url" hidden>{{gate.url_spotify}}</label>
+			
+</div>{{/if}}
+{{#if gate.seguir_deezer}}<div class="tab">
+ 
+			<a class="deezer div_share" id="div_share" ><i class="fab fa-deezer" style="padding-right: 16px;"></i> Deezer</a>
+			<label class="label_url" hidden>{{gate.url_deezer}}</label>
+			
+</div>{{/if}}
+{{#if gate.seguir_tiktok}}<div class="tab">
+ 
+			<a class="tiktok div_share" id="div_share" ><i class="fab fa-tiktok" style="padding-right: 16px;"></i> Tiktok</a>
+			<label class="label_url" hidden>{{gate.url_facebook}}</label>
+			
+</div>{{/if}}
+{{#if gate.seguir_mixcloud}}<div class="tab">
+ 
+			<a class="mixcloud div_share" id="div_share" ><i class="fab fa-mixcloud" style="padding-right: 16px;"></i> Mixcloud</a>
+			<label class="label_url" hidden>{{gate.url_mixcloud}}</label>
+			
+</div>{{/if}}
+
+
+<div style="overflow:auto;">
+  <div style="float:right;display: grid;grid-template-columns: 104px 104px; margin-top: 15px;">
+    <button type="button" id="prevBtn" onclick="nextPrev(-1)" style="margin-right: 5px; background: transparent; color: white; font-size: 20px;border: none;"><i class="fa fa-angle-left"></i></button>
+    <button type="button" id="nextBtn" onclick="nextPrev(1)" style="background: transparent; color: white; font-size: 20px;border: none;"><i class="fa fa-angle-right"></i></button>
+  </div>
+</div>
+
+<!-- Circles which indicates the steps of the form: -->
+<div style="text-align:center;margin-top:40px;" hidden>
+  {{#if gate.like_facebook}}<span class="step"></span>{{/if}}
+  {{#if gate.compartir_facebook}}<span class="step"></span>{{/if}}
+  {{#if gate.suscribirse_youtube}}<span class="step"></span>{{/if}}
+  {{#if gate.seguir_twitter}}<span class="step"></span>{{/if}}
+  {{#if gate.seguir_soundcloud}}<span class="step"></span>{{/if}}
+  {{#if gate.seguir_instagram}}<span class="step"></span>{{/if}}
+  {{#if gate.seguir_spotify}}<span class="step"></span>{{/if}}
+  {{#if gate.seguir_deezer}}<span class="step"></span>{{/if}}
+  {{#if gate.seguir_tiktok}}<span class="step"></span>{{/if}}
+  {{#if gate.seguir_mixcloud}}<span class="step"></span>{{/if}}
+</div>
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					<div style="display: grid;margin-bottom: 25px;grid-template-columns: 1fr;">
+
+
+
+					<a href="#" class="btn btn-primary btn-block btn_disabled" id="descargar_link" style="pointer-events: none;">Descargar <i class="fa fa-angle-right"></i></a>
+
+					<footer class="main-gate__footer">
+						<div class="row align-items-center">
+							<div class="col-12">
+								<nav class="social-nav text-center">
+									{{#if gate.like_facebook}}
+									<a href="{{gate.url_facebook}}" class="social-nav__link">
+										<i class="fab fa-facebook-square"></i>
+									</a>
+									{{/if}}
+									{{#if gate.seguir_twitter}}
+									<a href="" class="social-nav__link">
+										<i class="fab fa-twitter-square"></i>
+									</a>
+									{{/if}}
+									{{#if gate.suscribirse_youtube}}<a href="" class="social-nav__link">
+										<i class="fab fa-youtube-square"></i>
+									</a>{{/if}}
+									{{#if gate.seguir_soundcloud}}<a href="" class="social-nav__link">
+										<i class="fab fa-soundcloud"></i>
+									</a>{{/if}}
+									{{#if gate.seguir_instagram}}<a href="" class="social-nav__link">
+										<i class="fab fa-instagram-square"></i>
+									</a>{{/if}}
+									{{#if gate.seguir_spotify}}<a href="" class="social-nav__link">
+										<i class="fab fa-spotify"></i>
+									</a>{{/if}}
+									{{#if gate.seguir_deezer}}<a href="" class="social-nav__link">
+										<i class="fab fa-deezer"></i>
+									</a>{{/if}}
+									{{#if gate.seguir_tiktok}}<a href="" class="social-nav__link">
+										<i class="fab fa-tiktok"></i>
+									</a>{{/if}}
+								</nav>
+							</div>
+							<div class="col-12 my-4">
+								<ul class="nav site-footer__nav justify-content-center">
+									<li class="nav-item">
+										<a class="nav-link" href="#">Términos y condiciones</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#">Políticas de Privacidad</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#">Ayuda</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#">Soporte</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="#">Preguntas frecuente</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</footer>
+				</section>
+			</div><!-- .col-md-4 -->
+		</div><!-- .row -->
+	</main><!-- .container-fluid -->
+{{> footer }}

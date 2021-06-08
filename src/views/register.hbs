@@ -1,0 +1,30 @@
+<a href="/" class="btn-return-landing">
+	<i class="fa fa-times"></i>
+</a>
+<h2 class="box-contact__title text-center">Sé parte de nuestra familia</h2>
+{{#if messages}}
+	{{#showAlerts messages}}
+	{{/showAlerts}}
+{{/if}}
+<form method="post" action="/register" class="form-contact" autocomplete="off">
+	<input type="text" class="form-control" placeholder="Nombre" required name="name">
+	<input type="text" class="form-control" placeholder="Apellido" required name="lastName">
+	<input type="email" class="form-control" placeholder="Correo" required name="email">
+	<input type="password" class="form-control" placeholder="Contraseña" required name="password">
+	<input type="password" class="form-control" placeholder="Confirmar contraseña" required name="confirmPassword">
+	<button type="submit" class="btn btn-primary btn-block">Crear cuenta <i class="fa fa-angle-right"></i></button>
+	<div class="o-separator"></div>
+	<a href="/auth/facebook" class="btn btn-gray btn-block btn-login-with">
+		<i class="fab fa-facebook"></i>
+		Continuar con Facebook
+	</a>
+	<a href="#" class="btn btn-gray btn-block btn-login-with">
+		<img src="/assets/img/google-icon.png" alt="Icono de Google" class="btn-social-icon">
+		Continuar con Google
+	</a>
+	<a href="#" class="btn btn-gray btn-block btn-login-with">
+		<i class="fab fa-soundcloud"></i>
+		Continuar con SoundCloud
+	</a>
+	<p class="text-center text-desc mb-0">Si continúas, aceptas los <strong>Términos del servicio</strong> y la <strong>Política de privacidad</strong> de nuestro sitio.</p>
+</form>

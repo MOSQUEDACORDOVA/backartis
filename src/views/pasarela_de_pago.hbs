@@ -1,0 +1,200 @@
+<script>
+function showPago(id){
+	if ($('#'+id).is(':visible')) {
+  $('#'+id).hide();
+}else{
+	$('#'+id).show(); 
+}
+	
+}
+</script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<h1 class="dashboard-title">Mi cuenta</h1>
+
+<div class="card-box shadow position-relative calculate-height">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-user-edit" style="transform: translateX(.1em);"></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0" id="pasarale_name">{{pageName}}</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+	<div class="grid-plans grid-plans--dashboard" style="grid-template-columns: 1fr">
+		<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Producto
+								</th>
+								<th class="text-xs-center">
+                  Cantidad
+								</th>
+								<th class="text-xs-center">
+									Precio
+								</th> 
+								<th class="text-xs-center">
+									Metodo de Pago
+								</th> 
+							</tr>
+						</thead>
+						<tbody >
+			<tr>
+				<td>PLAN: {{product}}</td>
+					
+					<td>1</td>
+					<td>$ {{amount}}</td>
+					<td>
+          <input type="radio" onclick="showPago('MP')" name="metodo_pago" value="Mercado Pago" >Mercado Pago 
+          
+          
+          <input type="radio" id="tarjeta" name="metodo_pago" value="PayPal" onclick="showPago('paypal')">PayPal</a></td>
+					
+				</tr>
+				</tbody> 
+ 			</table>
+		<div class="card card-plan" >
+			<div class="card-body" id="MP" style="display: none;">
+<script
+  src="https://www.mercadopago.com.pe/integrations/v1/web-payment-checkout.js"
+  data-preference-id='{{global}}'>
+</script>
+
+<!--<script type="text/javascript" src="https://static
+-content-qas.vnforapps.com/v2/js/checkout.js"
+        data-sessiontoken = {{sessionKey}}
+        data-channel = 'web',
+        data-merchantid = {{merchantId}}
+        data-formbuttoncolor = '#D80000',
+        data-purchasenumber = {{purchaseNumber}}
+        data-amount = {{amount}}
+        data-expirationminutes= '5',
+        data-buttonsize = 'MEDIUM',
+        data-buttoncolor = 'GRAY',
+        data-merchantname = 'Universidad Continental',
+        data-timeouturl = '/visa/timeout',
+		data-userId = {{userId}}>
+  </script>-->
+				
+			</div>
+	<div class="card-body" id="paypal" style="display: none;">
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+<div id="paypal-button"></div>
+
+<script>
+  paypal.Button.render({
+    env: 'sandbox', // Or 'production'
+    // Set up the payment:
+    // 1. Add a payment callback
+    payment: function(data, actions) {
+      // 2. Make a request to your server
+      return actions.request.post('/my-api/create-payment/', {
+        product:`{{product}}`,
+		userId:`{{userId}}`,
+        amount:  `{{amount}}`
+      })
+        .then(function(res) {
+          // 3. Return res.id from the response
+          return res.id;
+        });
+    },
+    // Execute the payment:
+    // 1. Add an onAuthorize callback
+    onAuthorize: function(data, actions) {
+      // 2. Make a request to your server
+      return actions.request.post('/my-api/execute-payment/', {
+        paymentID: data.paymentID,
+        payerID:   data.payerID,
+		 product:`{{product}}`,
+		 userId:`{{userId}}`,
+        amount:  `{{amount}}`
+      })
+        .then(function(res) {
+          // 3. Show the buyer a confirmation message.
+		  let status = res.status;
+		  if (status==="success"){
+	let timerInterval
+Swal.fire({
+  title: 'Pago Exitoso!',
+  html: `Su pago se procesó con éxito gracias por todo`,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading()
+    timerInterval = setInterval(() => {
+      const content = Swal.getHtmlContainer()
+      if (content) {
+        const b = content.querySelector('b')
+        if (b) {
+          b.textContent = Swal.getTimerLeft()
+        }
+      }
+    }, 100)
+  },
+  willClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+	window.location.href = '/dashboard';
+  }
+})
+ 
+
+		  }else{
+			  let timerInterval
+Swal.fire({
+  title: 'Error en el pago!',
+ // html: `${{ACTION_DESCRIPTION}}`,
+  timer: 2500,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading()
+    timerInterval = setInterval(() => {
+      const content = Swal.getHtmlContainer()
+      if (content) {
+        const b = content.querySelector('b')
+        if (b) {
+          b.textContent = Swal.getTimerLeft()
+        }
+      }
+    }, 100)
+  },
+  willClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+	//window.location.href = '/dashboard';
+  }
+})
+		  }
+        });
+    }
+  }, '#paypal-button');
+</script>
+			</div>
+
+
+			
+		</div>
+	</div>
+
+
+
+	<a href="/dashboard" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

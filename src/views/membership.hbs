@@ -1,0 +1,118 @@
+	{{#if msg}}
+	<!-- Sweet Alert -->
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<!--jQuery -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+	$( document ).ready(function() {
+    if ( $("#msgs").length ) {
+     let mensaje = `{{msg}}`;
+	 console.log("mensaje");
+	 Swal.fire(mensaje)
+	}
+});
+
+	 
+</script>
+<label id="msgs"></label>
+{{/if}}
+<h1 class="dashboard-title">Membresía</h1>
+
+<div class="card-box shadow position-relative">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-trophy"></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0">Mejorar membresía</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<div class="text-center">
+		<div class="select-plan select-plan--theme mb-3" id="select-plan">
+			<span id="opt-1" class="select-plan__option" data-plan="mensual">Mensual</span>
+			<span id="opt-2" class="select-plan__option active" data-plan="anual">Anual</span>
+		</div>
+	</div>
+
+
+	<div class="grid-plans grid-plans--dashboard">
+		<div class="card card-plan">
+			<div class="card-body">
+				<h3 class="card-title">
+					<span class="card-title-icon">
+						<i class="far fa-heart"></i>
+					</span>
+					<span>VIP {{#showCurrentMembership user.membership 'VIP'}}{{/showCurrentMembership}}</span>
+				</h3>
+				<p class="card-press card-press--light">
+								<span class="card-press__dollar">$</span>
+								<span id="vip-press">{{plan_VIP_Anual.0.costo}}</span>
+								<span id="anual_vip" hidden>{{plan_VIP_Anual.0.costo}}</span>
+								<span id="mensual_vip" hidden>{{plan_VIP_Mensual.0.costo}}</span>
+								<span class="card-press__divider"></span>
+								<span id="vip-time">/ Año + </span>
+								<span>{{plan_VIP_Anual.0.descuento}}% de Dsct. Por apertura</span>
+							</p>
+				<ul class="card-list">
+								<li>{{plan_VIP_Anual.0.linea1}}</li>
+								<li>{{plan_VIP_Anual.0.linea2}}</li>
+								<li>{{plan_VIP_Anual.0.linea3}}</li>
+								<li class="">{{plan_VIP_Anual.0.linea4}}</li>
+								<li class="">{{plan_VIP_Anual.0.linea5}}</li>
+								<li class="">{{plan_VIP_Anual.0.linea6}}</li>
+								<li class="">{{plan_VIP_Anual.0.linea7}}</li>
+								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea8}}</li>
+								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea9}}</li>
+								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea10}}</li>
+							</ul>
+				{{#showBtnMembership user.membership 'VIP' 'primary' 'change-membership/vip' plan_VIP_Anual.0.costo }}{{/showBtnMembership}}
+				{{#showBtnMembershipCupon user.membership 'VIP' 'primary' 'membershipCupon' }}{{/showBtnMembershipCupon}}
+				
+			</div>
+		</div>
+		<div class="card card-plan card-plan--primary">
+			<div class="card-body">
+				<h3 class="card-title">
+					<span class="card-title-icon">
+						<i class="far fa-chart-bar"></i>
+					</span>
+					<span>Gold {{#showCurrentMembership user.membership 'Gold'}}{{/showCurrentMembership}}</span>
+				</h3>
+				<p class="card-press card-press--light">
+					<span class="card-press__dollar">$</span>
+								<span id="gold-press">{{plan_Gold_Anual.0.costo}}</span>
+								<span id="anual_gold" hidden>{{plan_Gold_Anual.0.costo}}</span>
+								<span id="mensual_gold" hidden>{{plan_Gold_mensual.0.costo}}</span>
+								<span class="card-press__divider"></span>
+								<span id="gold-time">/ Año + </span>
+								<span>{{plan_Gold_Anual.0.descuento}}% de Dsct. Por apertura</span>
+				</p>
+				<ul class="card-list">
+					<li>{{plan_Gold_Anual.0.linea1}}</li>
+								<li>{{plan_Gold_Anual.0.linea2}}</li>
+								<li>{{plan_Gold_Anual.0.linea3}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea4}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea5}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea6}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea7}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea8}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea9}}</li>
+								<li class="">{{plan_Gold_Anual.0.linea10}}</li>
+				</ul>
+				{{#showBtnMembership user.membership 'Gold' 'light' 'change-membership/gold' plan_Gold_Anual.0.costo }}{{/showBtnMembership}}
+				{{#showBtnMembershipCupon user.membership 'Gold' 'light' 'membershipCupon' }}{{/showBtnMembershipCupon}}
+			</div>
+		</div>
+	</div><!-- Planes Anuales -->
+
+	<a href="/dashboard" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

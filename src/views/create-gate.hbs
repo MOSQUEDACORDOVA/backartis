@@ -1,0 +1,38 @@
+<h1 class="dashboard-title">
+	{{#if backstore}}Vender mi música{{else}}Compartir mi música{{/if}}
+</h1>
+
+<div class="card-box shadow position-relative calculate-height">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					{{#if backstore}}
+					<i class="fa fa-money-bill-wave-alt"></i>
+					{{else}}
+						{{#if bondGate }}
+							<i class="fa fa-link"></i>
+						{{else}}
+							<i class="fa fa-download"></i>
+						{{/if}}
+					{{/if}}
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0">
+						{{#if backstore}}Crear puerta de descarga para la venta{{/if}}
+						{{#if fileGate}}Crear File Gate{{/if}}
+						{{#if bondGate}}Crear Bond Gate{{/if}}
+					</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<!-- Form Steps -->
+	{{> form-steps }}
+	<!-- End Form Steps -->
+
+	<a href="/dashboard" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

@@ -1,0 +1,128 @@
+{{> header }}
+	<!-- Dashboard Header -->
+	<header class="dashboard-header">
+		<div class="container-fluid">
+			<div class="row align-items-center">
+				<div class="col-8 text-center text-md-left">
+					<a href="/dashboard" class="dashboard-header__logo">
+						<img src="/assets/img/logo-ba.png" alt="Logo BackArtist" class="dashboard-header__logo-img">
+						<h2 class="dashboard-header__logo-text">BackArtist</h2>
+					</a>
+				</div>
+				<div class="col-4 d-flex align-items-center justify-content-center justify-content-md-end">
+					<a href="/dashboard" class="notifications" style="margin-right: 1rem;">
+						<i class="fa fa-house-user"></i>
+					</a>
+					<a href="#" class="notifications notifications--resived" id="notifications">
+						<i class="far fa-bell"></i>
+					</a>
+					<button class="account-options" id="account-options">
+						<i class="fa fa-ellipsis-v"></i>
+					</button>
+					<div id="header-toggle-elements">
+						<ul id="list-notifications" class="list-notifications">
+							{{!-- <li class="list-notifications__item text-center">No hay notificaciones</li> --}}
+							<li class="list-notifications__item">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</li>
+							<li class="list-notifications__item">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</li>
+						</ul>
+						<ul class="list-account-options" id="list-account-options">
+							<li class="list-account-options__title">
+								Opciones de la cuenta
+							</li>
+							<li>
+								<a href="#" class="btn btn-primary btn-block op">Ayuda</a>
+							</li>
+							<li>
+								<a href="/fans" class="btn btn-primary btn-block op">Fans</a>
+							</li>
+							{{#if user.admin}}
+							<li>
+								<a href="/admin_dash" class="btn btn-primary btn-block op">Administrador</a>
+							</li>{{/if}}
+							<li>
+								<a href="/close-session" class="btn btn-primary btn-block op">Cerrar Sesión</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- End dshboard Header -->
+
+	<main class="container-fluid main-dashboard" {{#if admin_dash1}}style="grid-template-columns: 150px 1fr;" {{/if}}>
+		<section>
+			<div class="text-center">
+				<a href="/update-profile" class="user-img__container">
+					<img src="{{#if user.photo}}/assets/uploads/{{user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Usuario {{user.name}} {{user.lastName}}" class="user-img">
+					<div class="user-img__effect"></div>
+				</a>
+			</div>
+			<!-- Con Text Aling se alinean elementos inline e inline-block -->
+			<div class="text-center user-statistics__container" style="max-height: 600px;">
+				<div class="card-box shadow">
+					<div class="user-statistics">
+						<p class="user-statistics__title"><i class="fa fa-download"></i>Gates</p>
+						<p class="user-statistics__number">{{cont_gates}}</p>
+						<p class="user-statistics__desc"></p>
+					</div><!-- .user-statistics -->
+					{{#if admin_dash1}}{{else}}
+					<div class="user-statistics">
+						<p class="user-statistics__title"><i class="fa fa-eye"></i>Fans</p>
+						<p class="user-statistics__number">19.459</p>
+						<p class="user-statistics__desc"></p>
+					</div><!-- .user-statistics -->
+					<div class="user-statistics">
+						<p class="user-statistics__title"><i class="fa fa-user-plus"></i>Añadidos</p>
+						<p class="user-statistics__number">2.847</p>
+						<p class="user-statistics__desc"></p>
+					</div><!-- .user-statistics -->
+					{{/if}}
+				</div>
+			</div>
+		</section><!-- .col-md-2 -->
+		<section>
+
+			{{{ body }}}
+			
+		</section><!-- .col-md-7 -->
+		{{#if admin_dash1}}{{else}}
+		<aside>
+			<div class="card-box h-100 shadow" style="max-height: 742.36px; position: relative; overflow: hidden;     height: 740px !important;">
+				<h2 class="card-box__title card-box__title--lg">Billetera</h2>
+				<div class="widget-box backcoins {{#if user.basic}}sb-disabled{{/if}}">
+					<h2 class="backcoins__title">BackCoins</h2>
+					<p class="backcoins__subtitle m-0">Saldo:</p>
+					<p class="backcoins__saldo">{{user.backcoins}}</p>
+					{{!-- <p class="backcoins__saldo">999.00</p> --}}
+					<a href="/wallet" class="btn btn-block btn-light" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>Depositar <i class="fa fa-angle-right"></i></a>
+					<a href="#" class="widget-box__info">?</a>
+
+					<!-- Burbujas -->
+					<div class="bubles">
+						<div class="buble"></div>
+						<div class="buble"></div>
+						<div class="buble"></div>
+						<div class="buble"></div>
+					</div>
+					<!-- Fin de Burbujas -->
+				</div>
+				<h2 class="card-box__title card-box__title--lg">Membresía</h2>
+				<div class="widget-box membership text-center">
+					<h2 class="membership__title {{#if user.vip}}text-uppercase{{/if}}">{{user.membership}}</h2>
+					<p class="membership__subtitle">{{#getMembershipDesc user.membership}}{{/getMembershipDesc}}</p>
+					<a href="/membership" class="btn btn-block btn-primary">Mejorar <i class="fa fa-angle-right"></i></a>
+					<a href="#" class="widget-box__info">?</a>
+				</div>
+
+				<div style="height: 150px; overflow: hidden; position: absolute; bottom: 0; left: 0;" class="d-none d-xl-block"><svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;"><path d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: hsl(240, 100%, 90%)"></path></svg></div>
+			</div>
+		</aside>
+		{{/if}}
+		<!-- .col-md-3 -->
+	</main><!-- .container -->
+{{> footer }}

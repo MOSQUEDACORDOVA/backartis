@@ -1,0 +1,126 @@
+<div class="card-box shadow position-relative calculate-height">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-user-edit" style="transform: translateX(.1em);"></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0">{{pageName}}</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<form action="/actualizar_usuario" method="post" class="p-to-btn" autocomplete="off" id="form-update-profile" enctype='multipart/form-data'>
+	<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{parsed_user.id}}" hidden>
+		<div class="form-update-account">
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="name">Actualiza nombre</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-music"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="name" name="name" placeholder="Nombre" required value="{{parsed_user.name}}">
+				</div>
+			</div><!-- .form-update-accound__item -->
+			
+			<div class="form-update-account__item">
+				<p class="form-steps__title--label form-steps__title text-left" for="user-name">Añade una foto de perfil</p>
+				<div class="drop-area__wrapper divider">
+					<div class="drop-area" id="upload-user-img">
+						<input type="file" id="profile-img" accept="image/*" class="d-none" name='photo'>
+						<input type="text" id="profile_img_"  class="form-control-steps" name='photo1' value="{{parsed_user.photo}}" hidden>
+						<div class="drop-content flex-column">
+							<div class="drop-icon mr-0 mb-2" id="drop-icon">
+								<i class="fa fa-upload"></i>
+							</div>
+							<div class="info-drop">
+								<label for="profile-img">Elije un archivo</label>
+							</div>
+						</div>
+						<div id="resultado"></div>
+					</div>
+					<img src="{{#if parsed_user.photo}}/assets/uploads/{{parsed_user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Foto de perfil">
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="last-name">Actualiza apellido</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-music"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="last-name" name="last_name" placeholder="Apellido" required value="{{parsed_user.lastName}}">
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item total-cols">
+				<label class="form-steps__title" for="user-name">Actualiza nombre de usuario</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-user"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="user-name" name="user_name" placeholder="Usuario" value="{{parsed_user.userName}}">
+				</div>
+				<label class="form-steps__title" for="password">Tipo de Usuario</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-user"></i>
+					</div>
+					<select class="form-control-steps" id="tipo" name="tipo" required>	
+						<option value="{{parsed_user.tipo}}">{{parsed_user.tipo}}</option>
+						<option value="Administrador">Administrador</option>
+						<option value="Basico">Basico</option>
+						
+					</select>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item total-cols">
+					<label class="form-steps__title" for="password">Membresia</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-user"></i>
+					</div>
+					<select class="form-control-steps" id="tipo" name="membresia" required>	
+						<option value="{{parsed_user.membership}}">{{parsed_user.membership}}</option>
+						<option value="Gold">Gold</option>
+						<option value="VIP">VIP</option>
+						<option value="Basic">Basic</option>
+						
+					</select>
+				</div>
+				</div>
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="password">Actualiza contraseña</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-user"></i>
+					</div>
+					<input type="password" class="form-control-steps" id="password" name="password" placeholder="Contraseña" autocomplete="off" required>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="confirm-password">Confirmar contraseña</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-user"></i>
+					</div>
+					<input type="password" class="form-control-steps" id="confirm-password" name="confirmpassword" placeholder="Contraseña" autocomplete="off" required>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item total-cols">
+				<label class="form-steps__title" for="email">Actualiza correo</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-envelope"></i>
+					</div>
+					<input type="email" class="form-control-steps" id="email" name="email" placeholder="Correo" required value="{{parsed_user.email}}">
+				</div>
+			</div><!-- .form-update-accound__item -->
+		</div><!-- .form-update-account -->
+		<button type="submit" disabled class="btn btn-primary btn-x-lg form-steps__btn">Guardar <i class="fa fa-angle-right"></i></button>
+	</form>
+
+	<a href="/admin_dash" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

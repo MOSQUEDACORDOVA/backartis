@@ -1,0 +1,81 @@
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{#if product}}
+<script>
+	let timerInterval
+Swal.fire({
+  title: 'Pago Exitoso!',
+  html: `Su pago se procesó con éxito gracias por todo`,
+  timer: 2000,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading()
+    timerInterval = setInterval(() => {
+      const content = Swal.getHtmlContainer()
+      if (content) {
+        const b = content.querySelector('b')
+        if (b) {
+          b.textContent = Swal.getTimerLeft()
+        }
+      }
+    }, 100)
+  },
+  willClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+	window.location.href = '/dashboard';
+  }
+})
+ 
+	 
+</script>
+{{/if}}
+
+{{#if errores}}
+<script>
+let timerInterval
+Swal.fire({
+  title: 'Error en el pago!',
+ // html: `${{ACTION_DESCRIPTION}}`,
+  timer: 2500,
+  timerProgressBar: true,
+  didOpen: () => {
+    Swal.showLoading()
+    timerInterval = setInterval(() => {
+      const content = Swal.getHtmlContainer()
+      if (content) {
+        const b = content.querySelector('b')
+        if (b) {
+          b.textContent = Swal.getTimerLeft()
+        }
+      }
+    }, 100)
+  },
+  willClose: () => {
+    clearInterval(timerInterval)
+  }
+}).then((result) => {
+  /* Read more about handling dismissals below */
+  if (result.dismiss === Swal.DismissReason.timer) {
+    console.log('I was closed by the timer')
+	window.location.href = '/dashboard';
+  }
+})
+	
+</script>
+
+{{/if}}
+
+
+<h1 class="dashboard-title"></h1>
+
+<div class="card-box shadow position-relative calculate-height">
+
+	<a href="/dashboard" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->
