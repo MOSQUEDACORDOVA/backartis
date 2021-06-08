@@ -1507,8 +1507,8 @@ class validateInput {
 	jQuery(".div_share").click(function(event) {
 		var that = $(this);
 		//var href = document.getElementById('url_facebook').innerHTML
-		//var post1 = that.parents('.label_url');
-		var post = that.parents('.label_url').prevObject[0].nextElementSibling.innerText;
+		var post = that.parents('.label_url');
+		//var post = that.parents('.label_url').prevObject[0].nextElementSibling.innerText;
 		var last = document.getElementById("nextBtn").innerHTML
 		console.log(post)
         var url = post;
