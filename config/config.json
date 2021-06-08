@@ -3,7 +3,7 @@
     "username": "bef9a651ee054d",
     "password": "7139c364 ",
     "database": "heroku_d3ab0a1b9873300",
-    "host": "localhost",
+    "host": "us-cdbr-east-04.cleardb.com",
     "dialect": "mysql"
   },
   "test": {
