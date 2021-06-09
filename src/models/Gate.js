@@ -253,8 +253,7 @@ const Gates = db.define('gates', {
 		allowNull: true,
 	},descargas: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true
 	},
 	
 });
