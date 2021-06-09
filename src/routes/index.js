@@ -123,6 +123,8 @@ router.get('/create-bond-gate', authController.authenticatedUser, gatesControlle
 router.get('/backstore', authController.authenticatedUser, gatesController.formBackstore);
 router.post('/create-gate', authController.authenticatedUser, gatesController.createGate);
 
+router.get('/downgate/:id/:id_gate', authController.authenticatedUser, gatesController.downloadGate);
+
 router.get('/gate/:id', gatesController.viewGate);
 router.get('/track/:enlace', gatesController.viewGatePersonalizado);
 

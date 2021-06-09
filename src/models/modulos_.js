@@ -850,4 +850,43 @@ consultarCuponMembership(consultar) {
 			})
 		});
 		},
+
+
+		obtenerGateforDown(id) {
+			return new Promise((resolve, reject) => {
+			
+			Gates.findAll({ 
+				where: {
+					id: id,
+				} }
+			)
+			.then(res => {
+				let ress= JSON.stringify(res)
+				resolve(ress);
+			  console.log(id);
+			})
+			.catch(err => {
+			  console.log(err)
+			})
+			});
+			},
+		actualizarGateDownload(id,descarga) {
+			let now= new Date();
+			fecha=now.toString();
+			return new Promise((resolve, reject) => {
+		
+			Gates.update({ descargas:descarga }, {
+				where: {
+					id: id,
+				}})
+			.then(about => {
+				let aboutes= JSON.stringify(about)
+				resolve(aboutes);
+			  console.log(aboutes);
+			})
+			.catch(err => {
+			  console.log(err)
+			})
+		});
+		},
 	}

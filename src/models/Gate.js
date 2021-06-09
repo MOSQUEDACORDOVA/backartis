@@ -251,6 +251,10 @@ const Gates = db.define('gates', {
 	},	url_mixcloud: {
 		type: DataTypes.TEXT,
 		allowNull: true,
+	},descargas: {
+		type: DataTypes.TEXT,
+		allowNull: false,
+		defaultValue: 0
 	},
 	
 });
