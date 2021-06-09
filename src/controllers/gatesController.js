@@ -1,5 +1,7 @@
 const Gates = require('../models/modulos_');
 const Sequelize = require('sequelize');
+const path = require('path');
+let fs = require('fs');
 
 exports.viewGate = (req, res) => {
 	//console.log(req.user);
@@ -168,3 +170,44 @@ exports.deleteGate = async (req, res) => {
 		})
 	
 }
+
+exports.downloadGate = (req, res) => {
+	let archivo = req.params.id;
+	var parametro_buscar = req.params.id_gate;
+	//console.log(parametro_buscar)
+	var fileName = String(archivo); // The default name the browser will use
+	//var filePath =__dirname + '/../public/assets/uploads/'; // Or format the path using the `id` rest param
+	//console.log(fileName)
+	var filePath = path.join(__dirname, '/../public/assets/uploads/', fileName)
+	
+    
+	//let absPath = path.join(__dirname, '/my_files/', filename);
+	console.log(filePath);
+
+	Gates
+	.obtenerGateforDown(parametro_buscar).then((resultado)=>{
+		let parsed = JSON.parse(resultado)[0];
+		let cont= parsed.length;
+		let down = parsed.descargas;
+
+		let cont_down = parseInt(down) + 1;
+		console.log(cont_down);
+		Gates
+		.actualizarGateDownload(parametro_buscar,cont_down ).then((resultado)=>{
+			
+			res.download(filePath, (err) => {
+				if (err) {
+				  console.log(err);
+				}
+			});
+
+
+		})
+	})
+	
+    //res.download(filePath);    
+
+
+	
+}
+
