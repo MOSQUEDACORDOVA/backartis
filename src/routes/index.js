@@ -11,7 +11,7 @@ const passport = require('passport');
 const FileController = require('../models/upload');
 const fileController = new FileController();
 const {Niubiz} = require('@curiosity/niubiz');
-//const EmailCtrl = require('../controllers/mailCtrl');
+const EmailCtrl = require('../controllers/mailCtrl');
 const visa = new Niubiz({
   user: 'integraciones@niubiz.com.pe',
   password: '_7z3@8fF',
@@ -40,7 +40,7 @@ router.post('/register', userController.createUser);
 
 
 //email route
-//router.post('/subscribe', EmailCtrl.sendEmail);
+router.post('/subscribe', EmailCtrl.sendEmail);
 // Buscar cuenrta
 router.get('/search-account', userController.formSearchAccount);
 router.post('/search-account', userController.sendToken);
