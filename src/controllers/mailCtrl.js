@@ -5,7 +5,9 @@ exports.sendEmail = function(req, res){
 	const {email} = req.body;
 // Definimos el transporter
     var transporter = nodemailer.createTransport({
-        service: 'Gmail',
+         host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, 
         auth: {
             user: 'josearzolay287@gmail.com',
             pass: 'geekjjaa2012'
