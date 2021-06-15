@@ -4,7 +4,7 @@
   "description": "Proyecto para que los usuarios hagan publicidad de sus redes sociales.",
   "main": "index.js",
   "scripts": {
-    "start": "node src index.js",
+    "start": "node src",
     "dev": "nodemon src"
   },
   "author": "Homer Moncayo",
@@ -23,6 +23,7 @@
     "fbgraph": "^1.4.4",
     "mercadopago": "^1.5.7",
     "mysql2": "^2.2.5",
+    "nodemailer": "^6.6.1",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth": "^2.0.0",
