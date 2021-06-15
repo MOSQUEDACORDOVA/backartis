@@ -63,6 +63,34 @@
 				</a>
 			</div>
 			<!-- Con Text Aling se alinean elementos inline e inline-block -->
+			{{#if admin_dash1}}
+			<div class="text-center user-statistics__container" style="max-height: 600px;">
+				<div class="card-box shadow box_admin">
+						<nav class="card-box__nav" id="gates-navigation" >
+		<ul class="nav flex-column flex-md-row align-items-center justify-content-md-between">
+			<li class="nav-item mb-4 mb-md-0">
+				<a class="nav-link active" href="/admin_dash"><label style="cursor: pointer;"><i class="fa fa-users "> </i>Usuarios</label></a>
+			</li>
+			<li class="nav-item mb-4 mb-md-0">
+				<a class="nav-link " href="/banner" ><label style="cursor: pointer;"><i class="fa fa-ad"></i>Banner</label></a> 
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/planes" ><label style="cursor: pointer;"><i class="fa fa-book"></i> Planes</label></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/aboutus" ><label style="cursor: pointer;"><i class="fa fa-address-card"></i> Nosotros</label></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/cupones" ><label style="cursor: pointer;"><i class="fa fa-align-center"></i> Cupones</label></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/ventas" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i> Ventas</label></a>
+			</li>
+		</ul>
+	</nav>
+				</div>
+			</div>
+			{{else}}
 			<div class="text-center user-statistics__container" style="max-height: 600px;">
 				<div class="card-box shadow">
 					<div class="user-statistics">
@@ -70,7 +98,7 @@
 						<p class="user-statistics__number">{{cont_gates}}</p>
 						<p class="user-statistics__desc"></p>
 					</div><!-- .user-statistics -->
-					{{#if admin_dash1}}{{else}}
+					
 					<div class="user-statistics">
 						<p class="user-statistics__title"><i class="fa fa-eye"></i>Fans</p>
 						<p class="user-statistics__number">19.459</p>
