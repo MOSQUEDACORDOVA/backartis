@@ -26,6 +26,7 @@ require('./models/Planes');
 require('./models/Sobre_nosotros');
 require('./models/Cupones');
 require('./models/Pagos');
+require('./models/Banner');
 
 // Crear el servidor de express
 const app = express();
