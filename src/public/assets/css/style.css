@@ -20,6 +20,25 @@ html {
     padding-top: 5px;
 	cursor: pointer;
 }
+
+.img_gate{
+	padding: 10px;
+	border-radius: 20px;
+	width: 90%;
+}
+.box_admin{
+	width: 170px;
+}
+.box_admin nav{
+	background-color: transparent;
+    padding: 0
+}
+
+.box_admin li, .box_admin a{
+	margin-right: 0;
+	margin-bottom: 5px !important;
+}
+
 @media screen and (min-width: 500px) {
 	html {
 		font-size: 16px;

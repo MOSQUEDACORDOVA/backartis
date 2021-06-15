@@ -23,33 +23,13 @@
 	<p class="data-user__user-name">{{user.tipo}}</p>
 </div><!-- data-user -->       
 <div class="card-box shadow"><!-- Aquí se aplica el height solo por la seccion fans -->
-	<nav class="card-box__nav" id="gates-navigation">
-		<ul class="nav flex-column flex-md-row align-items-center justify-content-md-between">
-			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link active" href="/admin_dash"><label style="cursor: pointer;"><i class="fa fa-users "> </i>Usuarios</label></a>
-			</li>
-			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link " href="/index_admin/bannes" ><label style="cursor: pointer;"><i class="fa fa-ad"></i>Banner</label></a> 
-			</li>
-			<li class="nav-item">
-				<a class="nav-link " href="/planes" ><label style="cursor: pointer;"><i class="fa fa-book"></i> Planes</label></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link " href="/aboutus" ><label style="cursor: pointer;"><i class="fa fa-address-card"></i> Sobre Nosotros</label></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link " href="/cupones" ><label style="cursor: pointer;"><i class="fa fa-align-center"></i> Cupones</label></a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link " href="/ventas" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i> Ventas</label></a>
-			</li>
-		</ul>
-	</nav>
+
 	{{#if planes}}<div><a class="" href="/agregar_plan" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Plan</label></a></i></div>{{/if}}
-	<div class="grid-gates" style="max-height: 500px;{{#if planes}} grid-template-columns: 1fr ;{{/if}}{{#if aboutUs}} grid-template-columns: 1fr ;{{/if}}{{#if cupones}} grid-template-columns: 1fr ;{{/if}}{{#if ventas}} grid-template-columns: 1fr ;{{/if}}">
+	<div class="grid-gates" style="max-height: 500px; grid-template-columns: 1fr ;">
 
 	{{#if aboutUs}}<div><a class="" href="/aboutus_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
-	{{#if cupones}}<div><a class="" href="/cupones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
+	{{#if cupones}}<div><a class="" href="/cupones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Cupon</label></a></i></div>{{/if}}
+	{{#if banners}}<div><a class="" href="/banner_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Banner</label></a></i></div>{{/if}}
 		
 		{{#each usuarios as |user i|}}	 <article class="gate-item">
 			<a href="#" class="gate-item__img">
@@ -252,6 +232,44 @@
  			</table>
 	<!-- .gate-item -->
 	{{/if}}
-	
+		{{#if banners}}
+<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Nombre
+								</th>
+								<th class="text-xs-center">
+									Link
+								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
+								
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each banners_parsed as |banner i|}}	 
+			<tr>
+				<td>{{banner.nombre}}</td>
+				<td>{{banner.link}}</td>
+				<td><div class="gate-item__options">
+					<a href="/borrar_banner/{{banner.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/edit_banner/{{banner.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	</tbody> 
+ 			</table>
+	<!-- .gate-item -->
+	{{/if}}
 	</div><!-- .grid-gates -->
 </div><!-- .card-box -->

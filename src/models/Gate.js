@@ -27,8 +27,8 @@ const Gates = db.define('gates', {
 		}
 	},
 	url_fuente: {
-		type: DataTypes.STRING,
-		allowNull: false,
+		type: DataTypes.TEXT,
+		allowNull: true,
 		validate: {
 			notEmpty: {
 				msg: 'La URL fuente es obligatorio'
@@ -36,8 +36,8 @@ const Gates = db.define('gates', {
 		}
 	},
 	genero: {
-		type: DataTypes.STRING,
-		allowNull: false,
+		type: DataTypes.TEXT,
+		allowNull: true,
 		validate: {
 			notEmpty: {
 				msg: 'El genero es obligatorio'
@@ -45,13 +45,13 @@ const Gates = db.define('gates', {
 		}
 	},
 	archivo: {
-		type: DataTypes.STRING,
-		allowNull: false,
+		type: DataTypes.TEXT,
+		allowNull: true,
 		defaultValue: 0
 	},
 	nombre_artista: {
-		type: DataTypes.STRING,
-		allowNull: false,
+		type: DataTypes.TEXT,
+		allowNull: true,
 		validate: {
 			notEmpty: {
 				msg: 'El nombre de artista es obligatorio'
@@ -59,8 +59,8 @@ const Gates = db.define('gates', {
 		}
 	},
 	titulo: {
-		type: DataTypes.STRING,
-		allowNull: false,
+		type: DataTypes.TEXT,
+		allowNull: true,
 		validate: {
 			notEmpty: {
 				msg: 'El titulo es obligatorio'
@@ -68,8 +68,8 @@ const Gates = db.define('gates', {
 		}
 	},
 	descripcion: {
-		type: DataTypes.STRING,
-		allowNull: false,
+		type: DataTypes.TEXT,
+		allowNull: true,
 		validate: {
 			notEmpty: {
 				msg: 'La descripcion es obligatoria'
@@ -77,8 +77,8 @@ const Gates = db.define('gates', {
 		}
 	},
 	tema: {
-		type: DataTypes.STRING,
-		allowNull: false,
+		type: DataTypes.TEXT,
+		allowNull: true,
 		validate: {
 			notEmpty: {
 				msg: 'El tema es obligatorio'
@@ -86,27 +86,23 @@ const Gates = db.define('gates', {
 		}
 	},
 	imagen: {
-		type: DataTypes.STRING,
-		allowNull: false,
-		defaultValue: 0
+		type: DataTypes.TEXT,
+		allowNull: true,
 	},
 	color: {
-		type: DataTypes.STRING,
-		allowNull: false,
-		defaultValue: 0
+		type: DataTypes.TEXT,
+		allowNull: true,
 	},
 	color_titulo: {
-		type: DataTypes.STRING,
-		allowNull: false,
-		defaultValue: 0
+		type: DataTypes.TEXT,
+		allowNull: true,
 	},
 	color_descrip: {
-		type: DataTypes.STRING,
-		allowNull: false,
-		defaultValue: 0
+		type: DataTypes.TEXT,
+		allowNull: true,
 	},
 	privacidad: {
-		type: DataTypes.STRING,
+		type: DataTypes.TEXT,
 		allowNull: false,
 		validate: {
 			notEmpty: {
@@ -116,7 +112,7 @@ const Gates = db.define('gates', {
 	},
 
 	enlace_perzonalizado: {
-		type: DataTypes.STRING,
+		type: DataTypes.TEXT,
 		allowNull: false,
 		validate: {
 			notEmpty: {
@@ -128,11 +124,11 @@ const Gates = db.define('gates', {
 		type: DataTypes.DATE
 	},
 	otro_gender: {
-		type: DataTypes.STRING,
+		type: DataTypes.TEXT,
 		allowNull: true,
 	},
 	nuevo_lanzamiento: {
-		type: DataTypes.STRING,
+		type: DataTypes.TEXT,
 		allowNull: true,
 	},
 	
@@ -236,7 +232,11 @@ const Gates = db.define('gates', {
 	},	omitir_tiktok: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-	},	seguir_mixcloud: {
+	},	
+	url_tiktok: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},seguir_mixcloud: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 	},	repost_mixcloud: {
@@ -255,6 +255,7 @@ const Gates = db.define('gates', {
 		type: DataTypes.TEXT,
 		allowNull: true
 	},
+	
 	
 });
 

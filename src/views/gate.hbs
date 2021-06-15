@@ -359,13 +359,107 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
 
-</script>
 
+
+//Funcion para pausar o darle play 
+function togglePlay() {
+	if (player.paused){
+			toggleIcon();	
+		return player.play();
+	} else {
+
+		  toggleIcon();	
+		return player.pause();
+	}
+}
+//Funcion para cambiar el icono play o pause
+function toggleIcon() {
+	var element = document.getElementById("iconPlay")
+	var item_val= element.classList.item(1);
+	//console.log(item_val);
+	if (item_val==="fa-pause") {
+	element.classList.remove("fa-pause");
+    element.classList.add("fa-play");
+	
+	}else{
+		element.classList.remove("fa-play");
+		element.classList.add("fa-pause");
+		//console.log(item_val);
+	}
+}
+
+
+//Funcion para convertir segundos a minutos y horas
+function secondsToString(seconds) {
+	var hour="";
+	if (seconds>3600){
+		hour = Math.floor(seconds / 3600);
+		hour = (hour < 10)? '0' + hour : hour;
+		hour+=":"
+	}
+   var minute = Math.floor((seconds / 60) % 60);
+  minute = (minute < 10)? '0' + minute : minute;
+  var second = seconds % 60;
+  second = (second < 10)? '0' + second : second;
+  return hour  + minute + ':' + second;
+}
+
+function updateProgress() {
+	if (player.currentTime >0){
+		const barra = document.getElementById('progress_')
+		barra.value = (player.currentTime / player.duration) * 100
+		
+		var duracionSegundos= player.duration.toFixed(0);
+		dura=secondsToString(duracionSegundos);
+		var actualSegundos = player.currentTime.toFixed(0)
+		actual=secondsToString(actualSegundos);
+		
+		duracion= actual +' / '+ dura
+	//	document.getElementById('timer').innerText=duracion 
+	}
+	if (player.ended){
+	 toggleIcon();	
+		return player.pause();
+	} 
+}
+
+//Funcion para que al dar click sobre la barra de progeso se permita adelantar
+var progress= document.getElementById('progress_')
+progress.addEventListener('click', adelantar);
+function adelantar(e){
+	const scrubTime = (e.offsetX / progress.offsetWidth) * player.duration;
+	player.currentTime = scrubTime;
+	//console.log(e);
+}
+</script>
+<style>
+.imgd:before {
+  filter: blur(2px);
+  content: "";
+  position: absolute;
+  height: 100%; 
+  width: 100%;
+  background: url(/assets/uploads/{{gate.imagen}});
+  background-size: cover;
+  z-index: -1;
+ -webkit-transform-origin: top left;
+ background-position: center;
+}
+
+.container{
+  z-index:99999;
+}
+
+</style>
 
 <div id="fb-root"></div>
 	<main class="container-fluid main-gate">
 		<div class="row">
-			<div class="col-md-8 px-0 main-gate__main d-flex justify-content-center align-items-center" style="background-image: url(/assets/uploads/{{gate.imagen}});">
+			<div class="col-md-8 px-0 main-gate__main d-flex justify-content-center align-items-center imgd">
+
+      <div class="img_gate">
+						<img src="/assets/uploads/{{gate.imagen}}" alt="BackArtist Logo" style="border-radius: 20px;">
+					</div>
 				{{#if gate.show_watermarker}}
 				
 				{{else}} <div class="watermark">
@@ -376,18 +470,24 @@ function fixStepIndicator(n) {
 						<h2 class="watermark__title">BackArtist</h2>
 					</div>
 				</div>   {{/if}}
-				<button class="btn-play">
-					<i class="fa fa-pause"></i>
+				<button class="btn-play" onclick="togglePlay();" style="position: absolute;" >
+					<i class="fa fa-play" id="iconPlay"></i>
 				</button>
+
+  <audio id="player" ontimeupdate="updateProgress();" src="/assets/uploads/{{gate.archivo}}">
+		                    <source  id="source" />	
+		                    Audio no soportado	
+	                    </audio>
+
+
+
 
 				<div class="music-bar">
 					<button class="music-bar__icon" type="button">
 						<i class="fa fa-music"></i>
 					</button>
 
-					<div class="music-bar__bar">
-						<div class="music-bar__bar-status"></div>
-					</div>
+						<progress id="progress_" value="0" max="100" style="width: 100%;" ></progress>
 				</div>
 
 			</div><!-- .col-md-8 -->
@@ -421,7 +521,9 @@ function fixStepIndicator(n) {
  {{#if gate.compartir_facebook}}	
 <div class="tab">
 	<a class="facebook div_share" id="div_share" ><i class="fab fa-facebook" style="padding-right: 16px;"></i> Compartir</a>
-	<label class="label_url" hidden>{{gate.url_facebook}}</label>	
+	<label class="label_url" hidden>https://web.facebook.com/sharer/sharer.php?kid_directed_site=0&sdk=joey&u={{gate.url_facebook}}&&ref=plugin&src=share_button
+    
+    </label>	
 	
 	<!--<div class="fb-share-button" data-href="{{gate.url_facebook}}" data-layout="button_count" data-size="small"><a target="_blank" href="{{gate.url_facebook}}" class="fb-xfbml-parse-ignore">Compartir</a></div>-->
 				

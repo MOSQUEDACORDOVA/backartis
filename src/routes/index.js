@@ -11,6 +11,7 @@ const passport = require('passport');
 const FileController = require('../models/upload');
 const fileController = new FileController();
 const {Niubiz} = require('@curiosity/niubiz');
+const EmailCtrl = require('../controllers/mailCtrl');
 const visa = new Niubiz({
   user: 'integraciones@niubiz.com.pe',
   password: '_7z3@8fF',
@@ -24,6 +25,7 @@ const paypal = require('../controllers/paypal');
 
 // Landing Page
 router.get('/', landingController.showLandingPage);
+//router.get('//:msg', landingController.showLandingPage);
 
 // Iniciar sesión
 router.get('/login', userController.formLogin);
@@ -36,6 +38,9 @@ router.get('/close-session', userController.closeSesion);
 router.get('/register', userController.formCreateUser);
 router.post('/register', userController.createUser);
 
+
+//email route
+router.post('/subscribe', EmailCtrl.sendEmail);
 // Buscar cuenrta
 router.get('/search-account', userController.formSearchAccount);
 router.post('/search-account', userController.sendToken);
@@ -44,10 +49,13 @@ router.post('/search-account/:token', userController.updatePassword);
 
 // Dashboard
 router.get('/dashboard', authController.authenticatedUser, gatesController.getGates);
+router.get('/dashb/:msg', authController.authenticatedUser, gatesController.getGates);
 router.get('/dashboard/:gates', authController.authenticatedUser, gatesController.getGates);
 router.get('/dashboard/:gates/:productUdpt', authController.authenticatedUser, gatesController.getGates);
 router.post('/dashboard', authController.authenticatedUser, gatesController.createGate);
-router.get('/borrar/:id_', gatesController.deleteGate);
+router.get('/borrar/:id_', authController.authenticatedUser,gatesController.deleteGate);
+router.get('/editar_/:id', authController.authenticatedUser,gatesController.formEditFileGate);
+router.post('/guardar_gate_edit', authController.authenticatedUser, gatesController.updateGate);
 
 
 // Dashboard Admin
@@ -72,6 +80,15 @@ router.post('/save_aboutus', authController.authenticatedUser, adminDash.save_ab
 router.get('/edit_aboutus/:id', authController.authenticatedUser, adminDash.editabout);
 router.post('/save_edit_aboutus', authController.authenticatedUser, adminDash.savePlanEdited);
 router.get('/borrar_about/:id', authController.authenticatedUser, adminDash.deleteAbout);
+
+
+router.get('/banner', authController.authenticatedUser, adminDash.bannersGet);
+router.get('/banner/:msg', authController.authenticatedUser, adminDash.bannersGet);
+router.get('/banner_create', authController.authenticatedUser, adminDash.addBanner);
+router.post('/banner_save', authController.authenticatedUser, adminDash.save_banner);
+router.get('/edit_banner/:id', authController.authenticatedUser, adminDash.editBanner);
+router.post('/save_edit_banner', authController.authenticatedUser, adminDash.sEditedBanner);
+router.get('/borrar_banner/:id', authController.authenticatedUser, adminDash.deleteBanner);
 
 
 router.get('/ventas', authController.authenticatedUser, adminDash.getPagos);

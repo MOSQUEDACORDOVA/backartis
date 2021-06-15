@@ -2,6 +2,8 @@ const Gates = require('../models/modulos_');
 const Sequelize = require('sequelize');
 const path = require('path');
 let fs = require('fs');
+//var mediaserver = require('mediaserver');
+//var multer = require('multer');
 
 exports.viewGate = (req, res) => {
 	//console.log(req.user);
@@ -44,8 +46,13 @@ console.log(req_buscar);
 			//let cont= parsed_user.length
 			console.log(parsed_user);
 			
+
+			//var cancion = path.join(__dirname, 'canciones', parsed.archivo);
+			//mediaserver.pipe(req, res, cancion);
+
+
 			res.render('gate', {
-				pageName: 'Gate',
+				pageName: parsed.titulo,
 				gate: parsed,
 				user: parsed_user,
 				//cont_gates:cont,
@@ -66,6 +73,43 @@ exports.formCreateFileGate = (req, res) => {
 		fileGate: true,
 		user
 	});
+}
+
+
+exports.formEditFileGate = (req, res) => {
+	const user = res.locals.user;
+	const id_user = res.locals.user.id
+	var parametro_buscar = req.params.id;
+	var backstore,	fileGate,	bondGate  = false
+
+
+	Gates
+		.obtenerGate(parametro_buscar,id_user).then((resultado)=>{
+			let parsed = JSON.parse(resultado)[0];
+			let cont= parsed.length
+			if (parsed.tipo_create ==="filegate") {
+				fileGate = true	
+			}
+			if (parsed.tipo_create ==="bondgate") {
+				bondGate = true				
+
+			}
+			if (parsed.tipo_create ==="backstore") {
+				backstore = true			
+
+			}
+			console.log(parsed);
+				res.render('create-gate-edit', {
+					pageName: 'Edit File Gate',
+					gate: parsed,
+					dashboardPage: true,
+					fileGate: true,
+					user,
+					backstore,	fileGate,	bondGate
+					//cont_gates:total_gates,
+				});
+
+		})
 }
 
 exports.formCreateBondGate = (req, res) => {
@@ -101,13 +145,13 @@ exports.formBackstore = (req, res) => {
 exports.createGate = (req, res) => {
 	var id_user = req.user.id;
 	 console.log(req.body);
-	const {url_demo,gender,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create} = req.body;
+	const {url_demo,gender,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,url_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create} = req.body;
 
 	//console.log(url_demo+"-"+gender+"-"+other_gender+"-"+url_track+"-"+artist_name+"-"+music_title+"-"+music_desc+"-"+music_price+"-"+color+"-"+show_watermarker+"-"+desing_social+"-"+user_logo+"-"+privacity+"-"+gate_link+"-"+promotion+"-"+suscribir_youtube+"-"+omitir_youtube+"-"+url_youtube+"-"+nombre_youtube+"-"+like_facebook+"-"+compartir_facebook+"-"+omitir_facebook+"-"+url_facebook+"-"+seguir_twitter+"-"+compartir_twitter+"-"+omitir_twitter+"-"+url_twitter+"-"+seguir_soundcloud+"-"+compartir_soundcloud+"-"+repost_souncloud+"-"+omitir_souncloud+"-"+url_souncloud+"-"+seguir_instagram+"-"+omitir_instagram+"-"+url_instagram+"-"+seguir_spotify+"-"+omitir_spotify+"-"+url_spotify+"-"+seguir_deezer+"-"+guardar_deezer+"-"+omitir_deezer+"-"+url_deezer+"-"+seguir_tiktok+"-"+omitir_tiktok+"-"+seguir_mixcloud+"-"+repost_mixcloud+"-"+like_mixcloud+"-"+omitir_mixcloud+"-"+url_mixcloud);
 
 	Gates.insertargates(
 			
-		{url_demo,gender,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create, id_user}
+		{url_demo,gender,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,url_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create, id_user}
 	
 		).then((respuesta) => {
 		//	console.log(respuesta);				
@@ -120,12 +164,37 @@ return res.status(500).send("Error actualizando"+err);
 res.redirect('/dashboard/filegate')
 
 }
+exports.updateGate = (req, res) => {
+	var id_user = req.user.id;
+	 console.log(req.body);
+	const {id_gate,url_demo,gender,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,url_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create} = req.body;
+
+	//console.log(url_demo+"-"+gender+"-"+other_gender+"-"+url_track+"-"+artist_name+"-"+music_title+"-"+music_desc+"-"+music_price+"-"+color+"-"+show_watermarker+"-"+desing_social+"-"+user_logo+"-"+privacity+"-"+gate_link+"-"+promotion+"-"+suscribir_youtube+"-"+omitir_youtube+"-"+url_youtube+"-"+nombre_youtube+"-"+like_facebook+"-"+compartir_facebook+"-"+omitir_facebook+"-"+url_facebook+"-"+seguir_twitter+"-"+compartir_twitter+"-"+omitir_twitter+"-"+url_twitter+"-"+seguir_soundcloud+"-"+compartir_soundcloud+"-"+repost_souncloud+"-"+omitir_souncloud+"-"+url_souncloud+"-"+seguir_instagram+"-"+omitir_instagram+"-"+url_instagram+"-"+seguir_spotify+"-"+omitir_spotify+"-"+url_spotify+"-"+seguir_deezer+"-"+guardar_deezer+"-"+omitir_deezer+"-"+url_deezer+"-"+seguir_tiktok+"-"+omitir_tiktok+"-"+seguir_mixcloud+"-"+repost_mixcloud+"-"+like_mixcloud+"-"+omitir_mixcloud+"-"+url_mixcloud);
+
+	Gates.updategates(
+			
+		{id_gate,url_demo,gender,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,url_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create, id_user}
+	
+		).then((respuesta) => {
+		//	console.log(respuesta);				
+	})
+		.catch(err => {
+return res.status(500).send("Error actualizando"+err);
+});
+//redirect('/dashboard');
+let msg =tipo_create+" actualizado con exito";
+res.redirect('/dashb/'+msg)
+
+}
 
 exports.getGates = async (req, res) => {
 	let parametro_buscar = req.params.gates;
 	let product = req.params.productUdpt;
 	var id_user = req.user.id;
-
+	let msg =false;
+	if (req.params.msg) {
+		msg =req.params.msg;
+	}
 	if (typeof product=== 'undefined') {
 		product= false;
 		
@@ -150,6 +219,7 @@ exports.getGates = async (req, res) => {
 					product,
 					dashboardPage: true,
 					cont_gates:total_gates,
+					msg
 				});
 
 		})

@@ -1,7 +1,15 @@
 const Modulo_BD = require('../models/modulos_');
 
 exports.showLandingPage = (req, res) => {
+	let msg =false;
+	if (req.query.msg) {
+		msg =req.query.msg;
+	}
+	Modulo_BD
+		.obtenerBanners().then((resultado)=>{
+			const parsedBanner = JSON.parse(resultado);
 
+		
 	Modulo_BD
 		.totalPlanes().then((resultado)=>{
 			let parsed = JSON.parse(resultado);
@@ -29,10 +37,11 @@ exports.showLandingPage = (req, res) => {
 				if (parsed[i].tipo_create === "Gold" && parsed[i].modo === "Mensual") {
 					plan_Gold_mensual.push(parsed[i])
 				}
-				//console.log(plan_basico_Mensual)
+				
 				//const element = array[index];
 				
 			}
+			console.log(parsedBanner)
 			res.render('home', {
 				pageName: 'Inicio',
 				landingPage: true,
@@ -41,9 +50,11 @@ exports.showLandingPage = (req, res) => {
 				plan_Gold_Anual,
 				plan_VIP_Mensual,
 				plan_Gold_mensual,
+				msg,
+				parsedBanner,
 				layout: false
 			});
 
 		})
-
+	})
 }

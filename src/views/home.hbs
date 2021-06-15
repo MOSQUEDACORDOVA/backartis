@@ -1,4 +1,21 @@
 {{> header }}
+{{#if msg}}
+	<!-- Sweet Alert -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+	$( document ).ready(function() {
+    if ( $("#msgs").length ) {
+     let mensaje = `{{msg}}`;
+	 console.log("mensaje");
+	 Swal.fire(mensaje)
+	}
+});
+
+	 
+</script>
+<label id="msgs"></label>
+{{/if}}
 	<main>
 		<!-- Jumbo Banner -->
 		<div class="jumbo-banner" style="background: linear-gradient(
@@ -83,7 +100,7 @@
 				<div class="text-center">
 					<div class="select-plan" id="select-plan">
 						<span id="opt-1" class="select-plan__option" data-plan="mensual">Mensual</span>
-						<span id="opt-2" class="select-plan__option active" data-plan="anual">Anual<span>17 % Dsct.</span></span>
+						<span id="opt-2" class="select-plan__option active" data-plan="anual">Anual<!--<span>17 % Dsct.</span>--></span>
 					</div>
 				</div>
 				<div class="grid-plans show" id="grid-plans">
@@ -130,8 +147,8 @@
 								<span id="anual_vip" hidden>{{plan_VIP_Anual.0.costo}}</span>
 								<span id="mensual_vip" hidden>{{plan_VIP_Mensual.0.costo}}</span>
 								<span class="card-press__divider"></span>
-								<span id="vip-time">/ Año + </span>
-								<span>{{plan_VIP_Anual.0.descuento}}% de Dsct. Por apertura</span>
+								<span id="vip-time">/ Año  </span>
+								<!--<span>{{plan_VIP_Anual.0.descuento}}% de Dsct. Por apertura</span>-->
 							</p>
 							<ul class="card-list">
 								<li>{{plan_VIP_Anual.0.linea1}}</li>
@@ -165,8 +182,8 @@
 								<span id="anual_gold" hidden>{{plan_Gold_Anual.0.costo}}</span>
 								<span id="mensual_gold" hidden>{{plan_Gold_mensual.0.costo}}</span>
 								<span class="card-press__divider"></span>
-								<span id="gold-time">/ Año + </span>
-								<span>{{plan_Gold_Anual.0.descuento}}% de Dsct. Por apertura</span>
+								<span id="gold-time">/ Año  </span>
+								<!--<span>{{plan_Gold_Anual.0.descuento}}% de Dsct. Por apertura</span>-->
 							</p>
 							<ul class="card-list">
 								<li>{{plan_Gold_Anual.0.linea1}}</li>
@@ -199,16 +216,9 @@
 
 				<div class="container">
 				<div class="grid-artist">
-						<img src="/assets/img/logo-artista-1.png" alt="Logo de Angel Sanchez">
-						<img src="/assets/img/logo-artista-2.png" alt="Logo de DJ Carlos UG">
-						<img src="/assets/img/logo-artista-3.png" alt="Logo de Antonio Linares">
-						<img src="/assets/img/logo-artista-4.png" alt="Logo de Erick Song">
-						<img src="/assets/img/logo-artista-5.png" alt="Logo de DJ Rolo">
-						<img src="/assets/img/logo-artista-6.png" alt="Logo de DJ Rdix">
-						<img src="/assets/img/logo-artista-7.png" alt="Logo de Deejay Bruce">
-						<img src="/assets/img/logo-artista-8.png" alt="Logo de DJ Cruz">
-						<img src="/assets/img/logo-artista-9.png" alt="Logo de Oscar Fernandez">
-						<img src="/assets/img/logo-artista-10.png" alt="Logo de DJ Tuiz">
+					{{#each parsedBanner as |banner i|}}
+						<img src="/assets/uploads/{{banner.photo}}" alt="Logo de {{banner.nombre}}">
+						{{/each}}
 					</div>
 				</div>
 			</div>
@@ -227,7 +237,7 @@
 					<span class="text-primary">planeta</span>.
 				</h2>
 
-				<form action="/subscribe" method="get">
+				<form action="/subscribe" method="post">
 					<div class="input-group mt-5 jumbo-banner__input">
 						<input type="email" name="email" class="form-control" placeholder="Escribe tu correo electrónico" aria-label="Escribe tu correo electrónico" aria-describedby="button-addon2">
 						<div class="input-group-append">

@@ -1,0 +1,342 @@
+<script>
+function show(id_mostar, id_ocultar){
+	var div_activo = document.getElementById(id_mostar)
+
+	if ($("#"+id_mostar).is(':visible')){
+	
+		$("#"+id_mostar).hide();
+
+	}else{
+
+		$("#"+id_mostar).show();
+		$("#"+id_ocultar).hide();	
+	}
+}
+	function copyToClipboard(elemento) {
+		var $temp = $("<input>")
+		$("body").append($temp);
+		$temp.val($(elemento).text()).select();
+		document.execCommand("copy");
+		$temp.remove();
+		Swal.fire('Enlace copiado en el portapapeles')
+	  }
+	  function color_maingate(id_1, id_2){
+		let colorInput = document.getElementById(id_2);
+		let pintar = document.getElementById(id_1);
+		pintar.setAttribute('style','color:' +colorInput.value);
+		console.log(id_1 +id_2)
+	}
+	function color_back(id_1, id_2){
+		let colorInput = document.getElementById(id_2);
+		let pintar = document.getElementById(id_1);
+		pintar.setAttribute('style','background:' +colorInput.value);
+		console.log(id_1 +id_2)
+	}
+</script>
+
+<div class="card-box shadow position-relative calculate-height">
+
+	
+						<form id="" action="/guardar_gate_edit" method="post">
+						{{#if backstore}}<input type="text"  name="tipo_create" value="backstore" hidden>{{/if}}
+						{{#if fileGate}}<input type="text"  name="tipo_create" value="filegate" hidden>{{/if}}
+						{{#if bondGate}}<input type="text"  name="tipo_create" value="bondgate" hidden>{{/if}}
+						<input type="text"  name="id_gate" value="{{gate.id}}" hidden>
+<!-- One "tab" for each step in the form: -->
+
+<div class="tab">
+	<div class="form-row">
+		{{#if backstore}}{{else}}
+		<div class="col-12 col-md-6 mb-3">
+			<div class="input-and-title">
+				<h2 class="form-steps__title">URL de MixCloud</h2>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-globe"></i>
+					</div>
+					<input type="url" class="form-control-steps" id="url-demo" name="url_demo" placeholder="https://" required  value="{{gate.url_fuente}}">
+				</div>
+			</div>	
+		</div>
+			{{/if}}
+		<div class="col-12 col-md-6 mb-3">
+<div class="input-and-title">
+			<h2 class="form-steps__title">Género de tu título</h2>
+			<div class="form-control-steps__container mb-3">
+				<div class="form-control-steps__placeholder">
+					<i class="fa fa-music"></i>
+				</div>
+				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
+				<select name="gender" id="gender" class="form-control-steps">
+					<option value="{{gate.genero}}" selected>{{gate.genero}}</option>
+					<option value="bachata">Bachata</option>
+					<option value="baladas">Baladas</option>
+					<option value="bolero">Bolero</option>
+					<option value="criollo">Criollo</option>
+					<option value="cumbia">Cumbia</option>
+					<option value="disco">Disco</option>
+					<option value="electronica">Electrónica</option>
+					<option value="fiesta">Fiesta</option>
+					<option value="hip-hop">Hip Hop</option>
+					<option value="hauyno">Huayno</option>
+					<option value="infantil">Infantil</option>
+					<option value="latin">Latin</option>
+					<option value="lambada">Lambada</option>
+					<option value="mambo">Mambo</option>
+					<option value="merengue">Merengue</option>
+					<option value="moombahton">Moombahton</option>
+					<option value="reggae">Reggae</option>
+					<option value="reggaeton">Reggaeton</option>
+					<option value="rock">Rock</option>
+					<option value="salsa">Salsa</option>
+					<option value="saya">Saya</option>
+					<option value="techno">Techno</option>
+					<option value="tematicos">Temáticos</option>
+					<option value="trap">Trap</option>
+					<option value="tribal">Tribal</option>
+					<option value="vallenato">Vallenato</option>
+					<option value="villera">Villera</option>
+					<option value="pop">Pop</option>
+					<option value="transiciones">Transiciones</option>
+					<option value="other">Otros</option>
+				</select>
+			</div>
+		</div>
+
+
+		</div>
+
+
+
+
+
+
+	</div>				
+</div>
+
+
+{{#if bondGate}}<div class="tab">
+		
+		
+			<div class="input-and-title">
+				<h2 class="form-steps__title">Ingresa la URL de tu track</h2>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-globe"></i>
+					</div>
+					<input type="url" class="form-control-steps" id="url-track" name="url_track" placeholder="https://" required>
+				</div>
+			</div>
+		
+</div>{{/if}}	
+
+<div class="tab" style="margin-bottom: 10px;">
+	<div class="form-row">
+			<div class="col-12 col-md-6 mb-3">
+				<label class="form-steps__title" for="artist-name">Ingresa el nombre del artista</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-user"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="artist-name" name="artist_name" placeholder="Nombre del artista" required value="{{gate.nombre_artista}}">
+				</div>
+			</div><!-- .col-md-6 -->
+			<div class="col-12 col-md-6 mb-3">
+				<label class="form-steps__title" for="music-title">Ingresa el título</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-music"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="music-title" name="music_title" placeholder="Título" required value="{{gate.titulo}}">
+				</div>
+			</div><!-- .col-md-6 -->
+		</div><!-- .form-row -->
+		<label class="form-steps__title" for="music-desc">Descripción</label>
+		<div class="form-control-steps__container {{#if backstore}}mb-3{{/if}}">
+			<div class="form-control-steps__placeholder">
+				<i class="fa fa-user"></i>
+			</div>
+			<input type="text" class="form-control-steps" id="music-desc" name="music_desc" placeholder="Descripción de la pista" required value="{{gate.descripcion}}">
+		</div>
+		{{#if backstore}}
+		<label class="form-steps__title" for="music-price">Precio</label>
+		<div class="form-control-steps__container">
+			<div class="form-control-steps__placeholder">
+				<i class="fa fa-coins"></i>
+			</div>
+			<input type="number" class="form-control-steps" id="music-price" name="music_price" placeholder="Precio de la pista" required value="{{gate.music_price}}">
+		</div>
+		{{/if}}
+			
+</div>
+<div class="tab"  id="diseño" style="display: none;">
+	<div class="row">
+			<div class="col-md-7">
+				<div class="desing-preview">
+					<div class="desing-preview__content" style="background-image: url({{#if gate.imagen}}/assets/uploads/{{gate.imagen}}{{else}}/assets/img/concierto-2.jpg{{/if}}); background-size: cover;">
+						<div class="before"></div>
+						<div class="watermark">
+							<div class="watermark__img">
+								<img src="{{#if gate.user_logo}}/assets/uploads/{{gate.user_logo}}{{else}}/assets/img/logo-ba-dark.jpg{{/if}}" alt="BackArtist Logo" id="logo-change">
+							</div>
+							<div class="watermark__body">
+								<h2 class="watermark__title">BackArtist</h2>
+							</div>
+						</div>
+
+						<div class="drop-area" id="drop-upload-flyer">
+							<input type="file" id="upload-flyer" accept="image/*" class="d-none">
+							<input type="text" id="img_flyer"  class="form-control-steps" name='img_flyer' value="{{gate.imagen}}" hidden>
+							<input type="text" id="logo_flyer"  class="form-control-steps" name='user_logo' value="{{gate.user_logo}}" hidden>
+							<div class="drop-content">
+								<div class="drop-icon" id="drop-icon">
+									<i class="fa fa-upload"></i>
+								</div>
+								<div class="info-drop">
+									<label for="upload-flyer">Elije un archivo</label>
+									<div id="resultado_imagen"></div>
+								</div>
+							</div>
+							
+						</div>
+
+						<div class="music-bar">
+							<button class="music-bar__icon">
+								<i class="fa fa-music"></i>
+							</button>
+
+							<div class="music-bar__bar">
+								<div class="music-bar__bar-status"></div>
+							</div>
+						</div>
+					</div>
+					<div class="desing-preview__aside bg-gradient" id="color_bg">
+						<div class="main-gate__user">
+							<div class="main-gate__user-img">
+								<img src="https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg" alt="DJ Homero">
+							</div>
+							<div class="main-gate__user-body text-white">
+								<h2 class="main-gate__name">{{gate.nombre_artista}}</h2>
+								<p class="main-gate__user-name">{{user.userName}}</p>
+							</div>
+						</div>
+						
+						<p class="main-gate__title" id="color_title">{{gate.titulo}} <label class="input-color-label" for="input-color_titulo" >
+  			<i class="fas fa-brush" style="margin-left: 15px; color: {{gate.color_titulo}};cursor: pointer;" ></i></label>				 </p>
+								
+						<p class="main-gate__desc"  id="color_descrip">{{gate.descripcion}} <label class="input-color-label" for="input-color_descripcion">
+  		<i class="fas fa-brush" style="margin-left: 15px; color: {{gate.color_descrip}};cursor: pointer;" ></i></label></p>
+						<input type="color" name="color_titulo" id="input-color_titulo" style="opacity:0" onchange="color_maingate('color_title','input-color_titulo')">
+						<input type="color" name="color_descripcion" id="input-color_descripcion" style="opacity:0" onchange="color_maingate('color_descrip','input-color_descripcion')">
+						<footer class="main-gate__footer">
+							<div class="row align-items-center">
+								<div class="col-12">
+									<nav class="social-nav text-center">
+										<a href="" class="social-nav__link">
+											<i class="fab fa-facebook-square"></i>
+										</a>
+										<a href="" class="social-nav__link">
+											<i class="fab fa-twitter-square"></i>
+										</a>
+										<a href="" class="social-nav__link">
+											<i class="fab fa-youtube-square"></i>
+										</a>
+										<a href="" class="social-nav__link">
+											<i class="fab fa-soundcloud"></i>
+										</a>
+										<a href="" class="social-nav__link">
+											<i class="fab fa-instagram-square"></i>
+										</a>
+										<a href="" class="social-nav__link">
+											<i class="fab fa-spotify"></i>
+										</a>
+										<a href="" class="social-nav__link">
+											<i class="fab fa-deezer"></i>
+										</a>
+										<a href="" class="social-nav__link">
+											<i class="fab fa-tiktok"></i>
+										</a>
+									</nav>
+								</div>
+								<div class="col-12 my-1">
+									<ul class="nav site-footer__nav justify-content-center">
+										<li class="nav-item">
+											<a class="nav-link" href="#">Enlace</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#">Enlace</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#">Enlace</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" href="#">Enlace</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</footer>
+					</div>
+				</div>
+			</div><!-- .col-md-6 -->
+			<div class="col-md-5">
+				<div class="form-row mb-4">
+					<div class="col-7">
+						<div class="label" style="margin-bottom: calc(1em + 25px);">Tema:</div>
+						<div class="select-plan select-plan--theme" id="select-plan" style="transform: translateY(-50%);">
+							<span id="opt-1" class="select-plan__option" data-plan="claro">Claro</span>
+							<span id="opt-2" class="select-plan__option active" data-plan="obscuro">Obscuro</span>
+						</div>
+					</div><!-- .col-7 -->
+					<div class="col-5">
+						<label class="label" for="color">Color:</label>
+						<div class="input-color-wrapper">
+							<input type="color" name="color" id="color" onchange="color_back('color_bg','color')">
+						</div>
+					</div><!-- .col-7 -->
+				</div><!-- .form-row -->
+
+				<label class="checkbox-style mb-4 {{#if user.gold}}{{else}}sb-disabled{{/if}}" {{#if user.gold}}{{else}}data-swal-title="Solo disponible para usuarios Gold"{{/if}}>
+					<input type="checkbox" name="show_watermarker" id="show-watermarker" {{#if user.gold}}{{else}}disabled{{/if}}>
+					<span class="checkbox-style__circle"></span>
+					Eliminar el logotipo de BackArtist
+				</label>
+
+				<label class="checkbox-style mb-4">
+					<input type="checkbox" name="desing_social" id="desing-social" checked>
+					<span class="checkbox-style__circle"></span>
+					Mostrar redes sociales
+				</label>
+
+				<label class="checkbox-style mb-0 {{#if user.gold}}{{else}}sb-disabled{{/if}}" {{#if user.gold}}{{else}}data-swal-title="Solo disponible para usuarios Gold"{{/if}}>
+					<input type="file" name="user_logo1" id="user-logo" class="d-none" {{#if user.gold}}{{else}}disabled{{/if}}>
+					<span class="checkbox-style__circle"></span>
+					Usar mi logo
+				</label>
+				<div id="output-user-logo"></div>
+			</div><!-- col-md-6 -->
+		</div><!-- .row -->
+		<div id="output-upload-flyer"></div>
+  
+	
+			
+</div>
+<div class="tab" id="steps_redes" style="display: none;">
+	{{> section-steps-edit }}
+			
+</div>
+
+
+<div style="overflow:auto; display: grid;  grid-template-columns: 1fr 1fr 1fr;margin-top: 15px">
+	{{#if backstore}}{{else}}<button type="button" class="btn btn-primary btn-x-lg" style="width: 50%;margin-left: auto;margin-right: auto;padding: .5em 1.5em;" onclick="show('steps_redes','diseño')">Redes </button>{{/if}}
+  <button type="submit" class="btn btn-primary btn-x-lg " style="width: 50%;margin-left: auto;margin-right: auto;padding: .5em 1.5em;">Guardar <i class="fa fa-angle-right"></i></button>
+  <button type="button" class="btn btn-primary btn-x-lg " style="width: 50%;margin-left: auto;margin-right: auto;padding: .5em 1.5em;" onclick="show('diseño','steps_redes')">Diseño </i></button>
+</div>
+
+<!-- Circles which indicates the steps of the form: -->
+
+</form>
+	<a href="/dashboard" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

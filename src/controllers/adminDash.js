@@ -31,7 +31,7 @@ exports.dashboard = (req, res) => {
 exports.updateProfile = (req, res) => {
 	let id_buscar = req.params.id;
 //	var id_user = req.user.id;
-
+let admin_dash1= true;
 	Modulo_BD
 		.obtenerUserforGate(id_buscar).then((resultado)=>{
 			let parsed_user = JSON.parse(resultado)[0];
@@ -42,6 +42,7 @@ exports.updateProfile = (req, res) => {
 		pageName: 'Actualizar Perfil del Usuario',
 		dashboardPage: true,
 		parsed_user,
+		admin_dash1
 		
 	});
 
@@ -527,4 +528,113 @@ exports.getPagos = (req, res) => {
 				});
 
 		})
+}
+
+
+// BANNER
+exports.bannersGet = (req, res) => {
+	//console.log(req.params.gates);
+	let msg =false;
+	if (req.params.msg) {
+		msg =req.params.msg;
+	}
+	
+	let admin_dash1= true;
+	Modulo_BD
+		.obtenerBanners().then((resultado)=>{
+			let parsed = JSON.parse(resultado);
+			let cont= parsed.length
+			let banners = true;
+			//console.log(parsed);
+				res.render("index_admin", {
+					//usuarios: parsed,
+					dashboardPage: true,
+					cont_user:cont,
+					banners_parsed: parsed,
+					banners,
+					admin_dash1,
+					msg,
+				});
+
+		})
+}
+
+exports.addBanner = (req, res) => {
+	
+	let userID = req.user.id;
+				res.render("create_banner", {
+					pageName: "Crear Banner",
+					dashboardPage: true,
+					userID,
+				});
+}
+
+exports.save_banner = async (req, res) => {
+	const {id,link,	photo1,	nombre} = req.body;	
+		var msg ="";
+		Modulo_BD.guardarBanner(id,link,	photo1,	nombre).then((result) => {
+				console.log(result);
+				if (result==="0") {
+					msg ="Ya banner existe, porfavor verifique";
+				}else{
+					msg ="Banner guardado con exito";	
+				}
+				res.redirect('/banner/'+msg)
+		})
+			.catch(err => {
+	return res.status(500).send("Error actualizando"+err);
+});
+	
+}
+
+exports.editBanner = (req, res) => {
+	let id_buscar = req.params.id;
+//	var id_user = req.user.id;
+	let admin_dash1= true;
+
+	Modulo_BD
+		.obtenerBannerforedit(id_buscar).then((resultado)=>{
+			let parsed_banner = JSON.parse(resultado)[0];
+			let cont= parsed_banner.length
+		console.log(parsed_banner);
+
+	res.render('edit_banner', {
+		pageName: 'Editar Banner',
+		dashboardPage: true,
+		parsed_banner,
+		admin_dash1
+		
+	});
+
+		})
+}
+
+exports.sEditedBanner = async (req, res) => {
+	const {id,link,	photo1,	nombre} = req.body;	
+
+		Modulo_BD.saveEditedBanner(id,link,	photo1,	nombre).then((result) => {
+				console.log(result);
+				
+		})
+			.catch(err => {
+	return res.status(500).send("Error actualizando"+err);
+});
+let msg ="Banner actualizado con exito";
+res.redirect('/banner/'+msg)	
+
+}
+exports.deleteBanner = async (req, res) => {
+	let parametro_buscar = req.params.id;
+
+	Modulo_BD
+		.deleteBanner(parametro_buscar).then((resultado)=>{
+			//let parsed = JSON.parse(resultado);
+			//let cont= parsed.length
+			console.log(resultado);
+			
+			let msg ="Banner eliminado con exito";
+			res.redirect('/banner/'+msg)	
+
+		})
+	
 }

@@ -1063,7 +1063,7 @@ class validateInput {
 			<li>Descripción: <span>${musicDesc.value}</span></li>
 			${urlDemo ? `<li>Fuente: <span>${urlDemo.value}</span></li>` : ''}
 			<li>Género: <span>${gender.options[gender.selectedIndex].textContent}</span></li>
-			<li>Enlace: <span id="p1">https://backartis.herokuapp.com/track/${gateLink.value.toLowerCase()}</span><i class="fa fa-copy" onclick="copyToClipboard('#p1')"  style="margin-left: 5px; cursor: pointer;"></i></li>
+			<li>Enlace: <span id="p1">https://backartishost/track/${gateLink.value.toLowerCase()}</span><i class="fa fa-copy" onclick="copyToClipboard('#p1')"  style="margin-left: 5px; cursor: pointer;"></i></li>
 		`;
 
 		previewList.innerHTML = html;
@@ -1507,8 +1507,9 @@ class validateInput {
 	jQuery(".div_share").click(function(event) {
 		var that = $(this);
 		//var href = document.getElementById('url_facebook').innerHTML
-		//var post = that.parents('.label_url');
-		var post = that.parents('.label_url').prevObject[0].nextElementSibling.innerText;
+		var post1 = that.parents('.label_url');
+		var post = that.parents('.label_url').prevObject[0].nextElementSibling.innerHTML;
+		
 		var last = document.getElementById("nextBtn").innerHTML
 		console.log(post)
         var url = post;
@@ -1562,6 +1563,14 @@ class validateInput {
 })();
 // Boton Copiar Portapapeles
 (() => {
+	var progress= document.getElementById('progress_')
+progress.addEventListener('click', adelantar);
+function adelantar(e){
+	const scrubTime = (e.offsetX / progress.offsetWidth) * player.duration;
+	player.currentTime = scrubTime;
+	//console.log(e);
+}
+
 			
 	var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab); // Display the current tab
@@ -1639,3 +1648,4 @@ function fixStepIndicator(n) {
 }
 	
 })();
+// Validaciones de banner

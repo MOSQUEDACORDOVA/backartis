@@ -1,0 +1,64 @@
+<div class="card-box shadow position-relative calculate-height">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-user-edit" style="transform: translateX(.1em);"></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0">{{pageName}}</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<form action="/save_edit_banner" method="post" class="p-to-btn" autocomplete="off" id="form-create-plan" enctype='multipart/form-data'>
+	<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{parsed_banner.id}}" hidden>
+		<div class="form-update-account">
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="name">Nombre</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-music"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="nombre" name="nombre" placeholder="Nombre" value="{{parsed_banner.nombre}}" required >
+				</div>
+			</div><!-- .form-update-accound__item -->
+			
+			<div class="form-update-account__item">
+				<p class="form-steps__title--label form-steps__title text-left" for="user-name">Añade una foto</p>
+				<div class="drop-area__wrapper divider">
+					<div class="drop-area" id="upload-user-img">
+						<input type="file" id="profile-img" accept="image/*" class="d-none" name='photo'>
+						<input type="text" id="profile_img_"  class="form-control-steps" name='photo1' value="{{parsed_banner.photo}}" hidden>
+						<div class="drop-content flex-column">
+							<div class="drop-icon mr-0 mb-2" id="drop-icon">
+								<i class="fa fa-upload"></i>
+							</div>
+							<div class="info-drop">
+								<label for="profile-img">Elije un archivo</label>
+							</div>
+						</div>
+						<div id="resultado"></div>
+					</div>
+					<img src="{{#if parsed_banner.photo}}/assets/uploads/{{parsed_banner.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Foto">
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="last-name">Link</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-music"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="link" name="link" placeholder="Link" value="{{parsed_banner.link}}"required>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			
+		</div><!-- .form-update-account -->
+		<button type="submit" disabled class="btn btn-primary btn-x-lg form-steps__btn">Guardar <i class="fa fa-angle-right"></i></button>
+	</form>
+
+	<a href="/admin_dash" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->
