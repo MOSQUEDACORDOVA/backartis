@@ -1,13 +1,23 @@
 const Modulo_BD = require('../models/modulos_');
 const nodemailer = require('nodemailer');
+
+
 // email sender function
 exports.sendEmail = function(req, res){
 	const {email} = req.body;
+    Modulo_BD
+    .guardarSuscripcion('suscripcion_landing',email).then((resultado)=>{
+        if (resultado=="0") {
+            console.log("Email ya registrado en sistema");
+            let msg="Email ya registrado en sistema.";
+        res.redirect('/?msg='+msg)
+        }else{
+          
 // Definimos el transporter
     var transporter = nodemailer.createTransport({
-         host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, 
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true, 
         auth: {
             user: 'josearzolay287@gmail.com',
             pass: 'geekjjaa2012'
@@ -29,9 +39,14 @@ transporter.sendMail(mailOptions, function(error, info){
        // res.send(500, err.message);
     } else {
         console.log("Email sent fine");
-		let msg="Gracias por suscribirte, pronto recibiras noticias nuestras en tu correo.";
-		res.redirect('/?msg='+msg)
+        let msg="Gracias por suscribirte, pronto recibiras noticias nuestras en tu correo.";
+        res.redirect('/?msg='+msg)	 
+     
+        
       //  res.status(200).jsonp(req.body);
     }
+});
+
+}
 });
 };

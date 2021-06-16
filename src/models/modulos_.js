@@ -8,6 +8,8 @@ const Sobre_nosotros = require('../models/Sobre_nosotros');
 const Cupones = require('../models/Cupones');
 const Pagos = require('../models/Pagos');
 const Banner = require('../models/Banner');
+const Suscripciones = require('../models/Suscripciones');
+
 module.exports = {
 	
 	actualizarUser(id, nombre, apellido, userN,mail,photo, tipo,membresia) { //Actualizar datos del usuario
@@ -473,17 +475,30 @@ tema="Oscuro";
 
 return new Promise((resolve, reject) => {
 
+	Gates.findOne({ 
+				where: {
+					enlace_perzonalizado:arreglo.gate_link
+				} }
+			)
+			.then(res => {
+				console.log(res);
+				if (!res) {
+					// Item not found, create a new one
+					Gates.create({ id_usuario: id_usuario,tipo_create: arreglo.tipo_create,url_fuente: arreglo.url_demo,	genero: arreglo.gender, archivo: arreglo.archivo1,	nombre_artista: arreglo.artist_name,	titulo: arreglo.music_title,	descripcion: arreglo.music_desc,tema: tema,imagen: arreglo.img_flyer,color: color,color_titulo: color_titulo,color_descrip: color_descripcion,	privacidad: arreglo.privacity,	nuevo_lanzamiento: nuevo_lanzamiento,otro_gender: other_gender,	url_track: url_track,music_price: music_price,		show_watermarker: show_watermarker,user_logo: user_logo,	suscribir_youtube:suscribir_youtube,	omitir_youtube:omitir_youtube,	url_youtube:url_youtube,nombre_youtube:nombre_youtube,	like_facebook:like_facebook,compartir_facebook:compartir_facebook,omitir_facebook:omitir_facebook,url_facebook:url_facebook,		seguir_twitter:seguir_twitter,	compartir_twitter:compartir_twitter,	omitir_twitter: omitir_twitter,url_twitter: url_twitter,	seguir_soundcloud: seguir_soundcloud,compartir_soundcloud: compartir_soundcloud,	repost_souncloud: repost_souncloud,	omitir_souncloud: omitir_souncloud,url_souncloud: url_souncloud,	seguir_instagram: seguir_instagram,	omitir_instagram: omitir_instagram,url_instagram: url_instagram,	seguir_spotify:seguir_spotify,	omitir_spotify:omitir_spotify,	url_spotify:url_spotify,seguir_deezer:seguir_deezer,	guardar_deezer:guardar_deezer,	omitir_deezer:omitir_deezer,	url_deezer:url_deezer,		seguir_tiktok:seguir_tiktok,omitir_tiktok:omitir_tiktok,url_tiktok:url_tiktok,	seguir_mixcloud:seguir_mixcloud,repost_mixcloud:repost_mixcloud,like_mixcloud:like_mixcloud,	omitir_mixcloud:omitir_mixcloud,url_mixcloud:url_mixcloud, enlace_perzonalizado:arreglo.gate_link,fecha_registro:fecha })
+					.then(gate => {
+						let gatees= JSON.stringify(gate)
+						resolve(gatees);
+					  console.log(gatees);
+					})
+					.catch(err => {
+					  console.log(err)
+					})
+				}else{
+					resolve ("0")
+				}
+			});
 
-
-			Gates.create({ id_usuario: id_usuario,tipo_create: arreglo.tipo_create,url_fuente: arreglo.url_demo,	genero: arreglo.gender, archivo: arreglo.archivo1,	nombre_artista: arreglo.artist_name,	titulo: arreglo.music_title,	descripcion: arreglo.music_desc,tema: tema,imagen: arreglo.img_flyer,color: color,color_titulo: color_titulo,color_descrip: color_descripcion,	privacidad: arreglo.privacity,	nuevo_lanzamiento: nuevo_lanzamiento,otro_gender: other_gender,	url_track: url_track,music_price: music_price,		show_watermarker: show_watermarker,user_logo: user_logo,	suscribir_youtube:suscribir_youtube,	omitir_youtube:omitir_youtube,	url_youtube:url_youtube,nombre_youtube:nombre_youtube,	like_facebook:like_facebook,compartir_facebook:compartir_facebook,omitir_facebook:omitir_facebook,url_facebook:url_facebook,		seguir_twitter:seguir_twitter,	compartir_twitter:compartir_twitter,	omitir_twitter: omitir_twitter,url_twitter: url_twitter,	seguir_soundcloud: seguir_soundcloud,compartir_soundcloud: compartir_soundcloud,	repost_souncloud: repost_souncloud,	omitir_souncloud: omitir_souncloud,url_souncloud: url_souncloud,	seguir_instagram: seguir_instagram,	omitir_instagram: omitir_instagram,url_instagram: url_instagram,	seguir_spotify:seguir_spotify,	omitir_spotify:omitir_spotify,	url_spotify:url_spotify,seguir_deezer:seguir_deezer,	guardar_deezer:guardar_deezer,	omitir_deezer:omitir_deezer,	url_deezer:url_deezer,		seguir_tiktok:seguir_tiktok,omitir_tiktok:omitir_tiktok,url_tiktok:url_tiktok,	seguir_mixcloud:seguir_mixcloud,repost_mixcloud:repost_mixcloud,like_mixcloud:like_mixcloud,	omitir_mixcloud:omitir_mixcloud,url_mixcloud:url_mixcloud, enlace_perzonalizado:arreglo.gate_link,fecha_registro:fecha })
-		.then(gate => {
-			let gatees= JSON.stringify(gate)
-			resolve(gatees);
-		  console.log(gatees);
-		})
-		.catch(err => {
-		  console.log(err)
-		})
+		
 
 
       });
@@ -1290,4 +1305,38 @@ consultarCuponMembership(consultar) {
 				})
 			});
 			},
+
+			guardarSuscripcion(tipo,correo) {
+				let now= new Date();
+				fecha=now.toString();
+				return new Promise((resolve, reject) => {
+					Suscripciones.findOne({ 
+						where: {
+							tipo:tipo,
+							correo:correo
+						} }
+					)
+					.then(res => {
+						console.log(res);
+						if (!res) {
+							// Item not found, create a new one
+							Suscripciones.create({ tipo:tipo,correo:correo })
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  console.log(respuesta);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+						}else{
+							resolve ("0")
+						}
+					})
+				
+			});
+			},
+
+
+
 	}

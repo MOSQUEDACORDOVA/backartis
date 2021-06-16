@@ -1,5 +1,8 @@
 const Modulo_BD = require('../models/modulos_');
-
+const scdl = require('soundcloud-downloader').default
+	const fs = require('fs');
+	const path = require('path');
+//const {getStreamUrls} = require('mixcloud-audio')
 
 exports.dashboard = (req, res) => {
 	const user = res.locals.user;
@@ -76,10 +79,18 @@ exports.changeMembership = (req, res) => {
 exports.changeMembershipCupon = (req, res) => {
 	const user = res.locals.user;
 	const {cupon} = req.body;
+
 	Modulo_BD
 	.consultarCuponMembership(cupon).then((resultado)=>{
 		let parsed = JSON.parse(resultado)[0];
+		console.log (parsed)
 
+		if (typeof parsed === 'undefined') {
+			let msg = "El cupón no existe favor verificar"
+			res.redirect('/membership/'+msg)
+		}else{
+			
+		
 		//Comprobamos que tenga formato correcto
 		var Fecha_aux = parsed.fecha_final.split("-");
 		var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
@@ -171,7 +182,7 @@ exports.changeMembershipCupon = (req, res) => {
 								res.redirect('/membership/'+msg)
 						}	
 		}
-	
+	}
 	})
 	
 }
@@ -197,3 +208,33 @@ exports.fansPage = (req, res) => {
 		user
 	});
 }
+
+
+exports.mixcloud = (req, res) => {
+	
+	
+	const SOUNDCLOUD_URL = 'https://soundcloud.com/djtowa/sessions-10-towa-studio92-junio-2021'
+	//const CLIENT_ID = 'asdhkalshdkhsf'
+	scdl.getInfo(SOUNDCLOUD_URL).then(stream => {
+		console.log(stream.title)
+		var titulo = stream.title
+		//stream.pipe(fs.createWriteStream('audio.mp3'))
+	scdl.download(SOUNDCLOUD_URL).then(stream2 => {
+		//console.log(stream2)
+		//stream.download()
+		var filePath = path.join(__dirname, '/../public/assets/uploads/', titulo+'.mp3')
+		const file = fs.createWriteStream(filePath);
+		stream2.pipe(file);
+		file.on("finish", function() {
+			file.close(() => {
+			 console.log("Listo")
+			});
+		   });
+	})	
+	})
+
+	
+}
+
+
+

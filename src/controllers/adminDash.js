@@ -115,6 +115,7 @@ exports.deleteUser = async (req, res) => {
 			//let parsed = JSON.parse(resultado);
 			//let cont= parsed.length
 			console.log(resultado);
+			
 			res.redirect('/admin_dash');
 
 		})

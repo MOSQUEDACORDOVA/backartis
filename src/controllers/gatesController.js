@@ -45,17 +45,16 @@ console.log(req_buscar);
 			let parsed_user = JSON.parse(resultado)[0];
 			//let cont= parsed_user.length
 			console.log(parsed_user);
-			
-
-			//var cancion = path.join(__dirname, 'canciones', parsed.archivo);
-			//mediaserver.pipe(req, res, cancion);
-
+			let bondGate = false;
+			if (parsed.tipo_create == "bondgate") {
+				bondGate = true;
+			}
 
 			res.render('gate', {
 				pageName: parsed.titulo,
 				gate: parsed,
 				user: parsed_user,
-				//cont_gates:cont,
+				bondGate,
 				layout: false
 			});			
 		})
@@ -144,6 +143,7 @@ exports.formBackstore = (req, res) => {
 
 exports.createGate = (req, res) => {
 	var id_user = req.user.id;
+	const user = res.locals.user;
 	 console.log(req.body);
 	const {url_demo,gender,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,url_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create} = req.body;
 
@@ -154,14 +154,39 @@ exports.createGate = (req, res) => {
 		{url_demo,gender,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,url_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create, id_user}
 	
 		).then((respuesta) => {
-		//	console.log(respuesta);				
+		//	console.log(respuesta);
+			let backstore =  false;
+			let bondGate = false;
+			let fileGate =  false;
+			if (tipo_create == "filegate") {
+				fileGate = true
+			}
+			if (tipo_create == "bondgate") {
+				bondGate = true
+			}
+			if (tipo_create == "backstore") {
+				backstore = true
+			}
+		if (respuesta == "0") {
+			let msg = "El enlace personalizado ya existe porfavor verifique el nombre, y vuelva a intentarlo";
+			console.log(msg)
+			res.render('create-gate', {
+				pageName: 'BackStore',
+				dashboardPage: true,
+				fileGate,bondGate,backstore,user,
+				msg
+			});
+		}else{
+			res.redirect('/dashboard/filegate')			
+		}
+			
 	})
 		.catch(err => {
 return res.status(500).send("Error actualizando"+err);
 });
 //redirect('/dashboard');
 
-res.redirect('/dashboard/filegate')
+
 
 }
 exports.updateGate = (req, res) => {

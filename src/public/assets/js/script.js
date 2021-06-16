@@ -1063,7 +1063,7 @@ class validateInput {
 			<li>Descripción: <span>${musicDesc.value}</span></li>
 			${urlDemo ? `<li>Fuente: <span>${urlDemo.value}</span></li>` : ''}
 			<li>Género: <span>${gender.options[gender.selectedIndex].textContent}</span></li>
-			<li>Enlace: <span id="p1">https://backartishost/track/${gateLink.value.toLowerCase()}</span><i class="fa fa-copy" onclick="copyToClipboard('#p1')"  style="margin-left: 5px; cursor: pointer;"></i></li>
+			<li>Enlace: <span id="p1">https://backartis.herokuapp.com/track/${gateLink.value.toLowerCase()}</span><i class="fa fa-copy" onclick="copyToClipboard('#p1')"  style="margin-left: 5px; cursor: pointer;"></i></li>
 		`;
 
 		previewList.innerHTML = html;

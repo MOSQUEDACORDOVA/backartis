@@ -33,12 +33,9 @@
 			<div class="steps-nav__number">2</div>
 		</div>
 	{{/if}}
-		{{#if bondGate}}<div class="steps-nav__item">
+	<div class="steps-nav__item">
 		<div class="steps-nav__number">3</div>
 	</div>
-	{{/if}}
-
-	
 	<div class="steps-nav__item">
 		<div class="steps-nav__number">4</div>
 	</div>
@@ -60,7 +57,7 @@
 
 	<!-- Steps Nav Desc -->
 	<div class="steps-nav__desc">
-		<p>Paso 1 edit</p>
+		<p>Paso 1</p>
 		<p>{{#if backstore}}Género{{else}}Fuente{{/if}}</p>
 	</div>
 	<!-- End Steps Nav Desc -->
@@ -92,12 +89,12 @@
 		{{else}}
 		<section class="section-step show" data-step-desc="Fuente">
 			<div class="input-and-title">
-				<h2 class="form-steps__title">Ingresa la URL de MixCloud</h2>
+				<h2 class="form-steps__title">Ingresa la URL de Sound Cloud</h2>
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-globe"></i>
 					</div>
-					<input type="url" class="form-control-steps" id="url-demo" name="url_demo" placeholder="https://" required  value="{{gate.url_fuente}}">
+					<input type="url" class="form-control-steps" id="url-demo" name="url_demo" placeholder="https://" required>
 				</div>
 			</div>
 			<button type="button" disabled class="btn btn-primary btn-x-lg form-steps__btn">Siguiente <i class="fa fa-angle-right"></i></button>
@@ -117,7 +114,7 @@
 				</div>
 				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 				<select name="gender" id="gender" class="form-control-steps">
-					<option value="{{gate.genero}}" selected>{{gate.genero}}</option>
+					<option value="default" selected>Selecciona el género</option>
 					<option value="bachata">Bachata</option>
 					<option value="baladas">Baladas</option>
 					<option value="bolero">Bolero</option>
@@ -158,8 +155,8 @@
 	<!-- End Section Step -->
 
 	<!-- Section Step -->
-	{{#if bondGate}}<section class="section-step" data-step-desc="Subir">
-		
+	<section class="section-step" data-step-desc="Subir">
+		{{#if bondGate}}
 			<div class="input-and-title">
 				<h2 class="form-steps__title">Ingresa la URL de tu track</h2>
 				<div class="form-control-steps__container">
@@ -169,11 +166,27 @@
 					<input type="url" class="form-control-steps" id="url-track" name="url_track" placeholder="https://" required>
 				</div>
 			</div>
-			
+		{{else}}
+			<h2 class="form-steps__title">Sube el archivo de audio que te gustaría {{#if backstore}}vender{{else}}compartir{{/if}}<br>con los fans ({{#acceptFiles user.membership false}}{{/acceptFiles}})</h2>
 		
+			<div id="upload-audio" class="drop-area">
+				<input type="file" id="music-file" accept="{{#acceptFiles user.membership true}}{{/acceptFiles}}" class="d-none" 
+				data-max-size-file="{{#if user.basic}}10{{/if}}{{#if user.vip}}1000{{/if}}{{#if user.gold}}unlimited{{/if}}">
+				<input type="text" id="archivo1"  class="form-control-steps" name='archivo1' value="" hidden>
+				<div class="drop-content">
+					<div class="drop-icon" id="drop-icon">
+						<i class="fa fa-upload"></i>
+					</div>
+					<div class="info-drop">
+						<label for="music-file">Elije un archivo</label>
+					</div>
+				</div>
+				<div id="resultado_zip"></div>
+			</div>
+		{{/if}}
 		
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn" disabled="">Siguiente <i class="fa fa-angle-right"></i></button>
-	</section>{{/if}}
+	</section>
 	<!-- End Section Step -->
 
 	<!-- Section Step -->
@@ -185,7 +198,7 @@
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-user"></i>
 					</div>
-					<input type="text" class="form-control-steps" id="artist-name" name="artist_name" placeholder="Nombre del artista" required value="{{gate.nombre_artista}}">
+					<input type="text" class="form-control-steps" id="artist-name" name="artist_name" placeholder="Nombre del artista" required>
 				</div>
 			</div><!-- .col-md-6 -->
 			<div class="col-12 col-md-6 mb-3">
@@ -194,7 +207,7 @@
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-music"></i>
 					</div>
-					<input type="text" class="form-control-steps" id="music-title" name="music_title" placeholder="Título" required value="{{gate.titulo}}">
+					<input type="text" class="form-control-steps" id="music-title" name="music_title" placeholder="Título" required>
 				</div>
 			</div><!-- .col-md-6 -->
 		</div><!-- .form-row -->
@@ -203,7 +216,7 @@
 			<div class="form-control-steps__placeholder">
 				<i class="fa fa-user"></i>
 			</div>
-			<input type="text" class="form-control-steps" id="music-desc" name="music_desc" placeholder="Descripción de la pista" required value="{{gate.descripcion}}">
+			<input type="text" class="form-control-steps" id="music-desc" name="music_desc" placeholder="Descripción de la pista" required>
 		</div>
 		{{#if backstore}}
 		<label class="form-steps__title" for="music-price">Precio</label>
@@ -211,7 +224,7 @@
 			<div class="form-control-steps__placeholder">
 				<i class="fa fa-coins"></i>
 			</div>
-			<input type="number" class="form-control-steps" id="music-price" name="music_price" placeholder="Precio de la pista" required value="{{gate.costo}}">
+			<input type="number" class="form-control-steps" id="music-price" name="music_price" placeholder="Precio de la pista" required>
 		</div>
 		{{/if}}
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn" disabled>Siguiente <i class="fa fa-angle-right"></i></button>
@@ -260,14 +273,14 @@
 							</div>
 						</div>
 					</div>
-					<div class="desing-preview__aside bg-gradient" id="color_bg" style="background-color: white;">
+					<div class="desing-preview__aside bg-gradient" id="color_bg">
 						<div class="main-gate__user">
 							<div class="main-gate__user-img">
 								<img src="https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg" alt="DJ Homero">
 							</div>
 							<div class="main-gate__user-body text-white">
-								<h2 class="main-gate__name">Nombre DJ</h2>
-								<p class="main-gate__user-name">@nombreDJ</p>
+								<h2 class="main-gate__name">DJ Homero</h2>
+								<p class="main-gate__user-name">@homeromoncayo</p>
 							</div>
 						</div>
 						

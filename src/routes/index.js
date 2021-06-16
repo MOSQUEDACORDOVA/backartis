@@ -56,6 +56,7 @@ router.post('/dashboard', authController.authenticatedUser, gatesController.crea
 router.get('/borrar/:id_', authController.authenticatedUser,gatesController.deleteGate);
 router.get('/editar_/:id', authController.authenticatedUser,gatesController.formEditFileGate);
 router.post('/guardar_gate_edit', authController.authenticatedUser, gatesController.updateGate);
+router.get('/mix', authController.authenticatedUser,dashboardController.mixcloud);
 
 
 // Dashboard Admin
