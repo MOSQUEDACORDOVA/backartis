@@ -34,7 +34,7 @@ module.exports = {
 		if(str1 !== str2) {
 			return `
 			<form action="${url}" method="post" style="display: grid;grid-template-columns: 1fr 1fr;">
-			<input type="text"   name="cupon" class="form-control-steps" style="width: 90%;	height: 50px;margin-top: 2rem !important;" placeholder="Cupón">
+			<input type="text"   name="cupon" class="form-control-steps" style="width: 90%;	height: 50px;margin-top: 2rem !important;" placeholder="Cupón" required>
 			<input type="submit"   class="btn btn-block btn-${btnClass}" value="Aplicar Cupón">
 			</form>
 			`;
