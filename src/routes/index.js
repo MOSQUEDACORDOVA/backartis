@@ -127,7 +127,7 @@ router.get('/visa/respuesta/pending',  mercadopago.pagar);
 router.post('/my-api/create-payment/', authController.authenticatedUser, paypal.crearpago);
 router.post('/my-api/execute-payment/', authController.authenticatedUser, paypal.procesar);
 
-
+router.post('/recargar_mi_saldo', authController.authenticatedUser, mercadopago.pasarela);
 router.post('/create-order/:token/:product/:amount',  paypal.crearOrden);
 router.post('/handle-approve/:id/:token/:product/:amount/:id_user',  paypal.aprobarOrden);
 
