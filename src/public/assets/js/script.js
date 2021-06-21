@@ -1408,7 +1408,7 @@ class validateInput {
 							let contar_container=(otherContainer.querySelectorAll('.remove-other__btn').length)+1;
 							const oInput = e.target.parentElement.querySelector('input');
 							console.log(oInput.getAttribute('name')+contar_container);
-							let name_input = oInput.getAttribute('name')+contar_container;
+							let name_input = oInput.getAttribute('name');
 							const other = `
 								<div class="add-other mt-3">
 									<input type="url" class="form-control-steps" name="${name_input}" placeholder="${oInput.getAttribute('placeholder')}">

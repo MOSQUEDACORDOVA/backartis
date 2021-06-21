@@ -119,14 +119,20 @@ router.post('/membershipCupon', authController.authenticatedUser, dashboardContr
 // Paserela
 //router.get('/change-membership/vip', authController.authenticatedUser, pasarelacontroller.changeMembership);
 router.post('/change-membership/:tipo', authController.authenticatedUser, mercadopago.pasarela);
-router.get('/visa/respuesta/success', authController.authenticatedUser, mercadopago.pagar);
-router.get('/visa/respuesta/failure', authController.authenticatedUser, mercadopago.pagar);
-router.get('/visa/respuesta/pending', authController.authenticatedUser, mercadopago.pagar);
+router.get('/visa/respuesta/success',  mercadopago.pagar);
+router.get('/visa/respuesta/failure',  mercadopago.pagar);
+router.get('/visa/respuesta/pending',  mercadopago.pagar);
 
 
 router.post('/my-api/create-payment/', authController.authenticatedUser, paypal.crearpago);
 router.post('/my-api/execute-payment/', authController.authenticatedUser, paypal.procesar);
 
+router.post('/guardar_datos_pago_wallet', authController.authenticatedUser, mercadopago.pasarela);
+router.post('/create-order/:token/:product/:amount',  paypal.crearOrden);
+router.post('/handle-approve/:id/:token/:product/:amount/:id_user',  paypal.aprobarOrden);
+
+
+router.get('/backstore_sell/:archivo/:id_gate/:user_id/:costo/:tipo/:correo', mercadopago.pasarela);
 
 
 
@@ -141,7 +147,7 @@ router.get('/create-bond-gate', authController.authenticatedUser, gatesControlle
 router.get('/backstore', authController.authenticatedUser, gatesController.formBackstore);
 router.post('/create-gate', authController.authenticatedUser, gatesController.createGate);
 
-router.get('/downgate/:id/:id_gate', authController.authenticatedUser, gatesController.downloadGate);
+router.get('/downgate/:id/:id_gate/:correo',  gatesController.downloadGate);
 
 router.get('/gate/:id', gatesController.viewGate);
 router.get('/track/:enlace', gatesController.viewGatePersonalizado);
@@ -149,7 +155,11 @@ router.get('/track/:enlace', gatesController.viewGatePersonalizado);
 
 // Billetera
 router.get('/wallet', authController.authenticatedUser, walletController.walletDashboard);
-
+router.get('/wallet/:msg', authController.authenticatedUser, walletController.walletDashboard);
+router.get('/datos_wallet', authController.authenticatedUser, walletController.datos_pagos);
+router.post('/guardar_datos_pago_wallet', authController.authenticatedUser, walletController.saveDatos);
+router.get('/recargar_backcoin', authController.authenticatedUser, walletController.recargar_backcoin);
+router.get('/pagar_backcoins/:id/:product/:amount', authController.authenticatedUser, walletController.descontar_backcoin);
 // Fans
 router.get('/fans', authController.authenticatedUser, dashboardController.fansPage);
 

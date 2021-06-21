@@ -16,9 +16,9 @@
 	 console.log("mensaje");
 	 Swal.fire(mensaje)
 	}
-});
 
-	 
+	
+}); 
 </script>
 <label id="msgs"></label>
 {{/if}}
@@ -46,7 +46,13 @@ function deletegate(id){
 })
 }
  
+ function pruebaclick(){
+	  console.log("ss");
+$("#loading").show();
+ }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <h2 id="loading"style="display:none">Loading...</h2>
 
 <div class="card-box data-user text-center text-lg-left d-lg-inline-block">
 	<h2 class="data-user__name">{{user.name}} {{user.lastName}}</h2>
@@ -112,10 +118,10 @@ function deletegate(id){
 					<a href="#" class="gate-item__option" onclick="deletegate({{item.id}})">
 						<i class="fa fa-trash-alt"></i>
 					</a>
-					<a href="/editar_/{{item.id}}" class="gate-item__option">
+					<a href="/editar_/{{item.id}}" class="gate-item__option" >
 						<i class="fa fa-pen"></i>
 					</a>
-					<a href="/mix" class="gate-item__option">
+					<a href="/mix" class="gate-item__option" onclick="pruebaclick()">
 						<i class="fab fa-soundcloud"></i>
 					</a>
 					<a href="#" class="gate-item__option">

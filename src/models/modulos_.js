@@ -9,6 +9,7 @@ const Cupones = require('../models/Cupones');
 const Pagos = require('../models/Pagos');
 const Banner = require('../models/Banner');
 const Suscripciones = require('../models/Suscripciones');
+const Backcoin = require('../models/Backcoin');
 
 module.exports = {
 	
@@ -254,7 +255,8 @@ if (typeof arreglo.url_youtube=== 'undefined') {
 	var url_youtube=""
 	console.log(url_youtube);
 }else{
-	url_youtube=arreglo.url_youtube;
+	url_youtube=arreglo.url_youtube.toString();
+	console.log(url_youtube);
 }
 if (typeof arreglo.nombre_youtube=== 'undefined') {
 	var nombre_youtube=""
@@ -829,7 +831,8 @@ return new Promise((resolve, reject) => {
 			})
 		
 	});
-    },deletePlan(parametro_buscar) {
+    },
+	deletePlan(parametro_buscar) {
 		return new Promise((resolve, reject) => {
 
 
@@ -1324,7 +1327,37 @@ consultarCuponMembership(consultar) {
 				.then(res => {
 					let respuesta= JSON.stringify(res)
 					resolve(respuesta);
-				  console.log(respuesta);
+				  //console.log(respuesta);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+						}else{
+							resolve ("0")
+						}
+					})
+				
+			});
+			},
+			guardarSuscripcionGate(tipo,correo,id_gate) {
+				let now= new Date();
+				fecha=now.toString();
+				return new Promise((resolve, reject) => {
+					Suscripciones.findOne({ 
+						where: {
+							tipo:tipo,
+							correo:correo
+						} }
+					)
+					.then(res => {
+						console.log(res);
+						if (!res) {
+							// Item not found, create a new one
+							Suscripciones.create({ tipo:tipo,correo:correo, id_gate:id_gate })
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				 // console.log(respuesta);
 				})
 				.catch(err => {
 				  console.log(err)
@@ -1338,5 +1371,140 @@ consultarCuponMembership(consultar) {
 			},
 
 
+
+			//BACKCOIN
+			obtenerBackcoinDataPay(id_user) {
+				return new Promise((resolve, reject) => {
+				Backcoin.findAll({ 
+					where: {
+						id_usuario:id_user,
+					} }
+				)
+				.then(res => {
+					let ress= JSON.stringify(res)
+					resolve(ress);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				});
+			},
+			saveDatosBackcoin(id_user,nombre_apellido,tipo_documento,n_documento,correo,save_pais,save_banco, cuenta) {
+				return new Promise((resolve, reject) => {
+					Backcoin.findOne({ 
+						where: {
+							id_usuario:id_user,
+						} }
+					)
+					.then(res => {
+						console.log(res);
+						if (!res) {
+							// Item not found, create a new one
+							Backcoin.create({id_usuario: id_user,nombre_apellido: nombre_apellido,tipo_documento: tipo_documento,n_documento: n_documento,correo:correo,pais: save_pais,banco:save_banco, cuenta: cuenta })
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(respuesta);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				}else{		
+								Backcoin.update({ id_usuario: id_user,nombre_apellido: nombre_apellido,tipo_documento: tipo_documento,n_documento: n_documento,correo:correo,pais: save_pais,banco:save_banco, cuenta: cuenta}, {
+									where: {
+										id_usuario:id_user,
+									}})
+								.then(resp => {
+									let res= JSON.stringify(resp)
+									resolve(res);
+								 // console.log(res);
+								})
+								.catch(err => {
+								  console.log(err)
+								})
+						}
+					})
+				
+			});
+			},
+
+			recargaBackcoin(id_user,monto) {
+				return new Promise((resolve, reject) => {
+					Backcoin.findOne({ 
+						where: {
+							id_usuario:id_user,
+						} }
+					)
+					.then(res => {
+						console.log(res.dataValues.monto);
+						console.log("aja");
+						var monto_nuevo = parseInt(res.dataValues.monto)+parseInt(monto)
+						console.log(monto_nuevo);
+						console.log(id_user + "usuario");
+							// Item not found, create a new one
+							Backcoin.update({ monto: monto_nuevo}, {
+								where: {
+									id_usuario:id_user,
+								}})
+							.then(resp => {
+								console.log(resp);
+								Usuarios.update({ backcoins: monto_nuevo}, {
+									where: {
+										id:id_user,
+									}})
+								.then(respf => {
+									
+									let res= JSON.stringify(respf)
+									resolve(monto_nuevo);
+								 // console.log(res);
+								})
+								.catch(err => {
+								  console.log(err)
+								});
+							})
+							.catch(err => {
+							  console.log(err)
+							})
+					})
+					})
+			},
+			descontarBackcoin(id_user,monto) {
+				return new Promise((resolve, reject) => {
+					Backcoin.findOne({ 
+						where: {
+							id_usuario:id_user,
+						} }
+					)
+					.then(res => {
+						//console.log(res.dataValues.monto);
+						//console.log("aja");
+						var monto_nuevo = parseInt(res.dataValues.monto)-parseInt(monto)
+						//console.log(monto_nuevo);
+							// Item not found, create a new one
+							Backcoin.update({ monto: monto_nuevo}, {
+								where: {
+									id_usuario:id_user,
+								}})
+							.then(resp => {
+								Usuarios.update({ backcoins: monto_nuevo}, {
+									where: {
+										id:id_user,
+									}})
+								.then(respf => {
+									
+									let res= JSON.stringify(respf)
+									resolve(monto_nuevo);
+								 // console.log(res);
+								})
+								.catch(err => {
+								  console.log(err)
+								});
+							})
+							.catch(err => {
+							  console.log(err)
+							})
+					})
+					})
+			},
 
 	}

@@ -18,23 +18,30 @@ const Backcoin = db.define('backcoin', {
 			}
 		}
 	},
-	cantidad: {
+	nombre_apellido: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El nombre es obligatorio'
-			}
-		}
+		allowNull: true,
+		defaultValue: ""
+	},
+	tipo_documento: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
+	n_documento: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
+	correo: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
 	},
 	monto: {
 		type: DataTypes.TEXT,
 		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El numero es obligatorio'
-			}
-		}
+		defaultValue: ""
 	},
 	tipo: {
 		type: DataTypes.TEXT,
@@ -51,17 +58,26 @@ const Backcoin = db.define('backcoin', {
 		allowNull: true,
 		defaultValue: ""
 	},
-	cantidad: {
+	pais: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
 	},
-	tipo: {
+	banco: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
 	},
-	
+	cuenta: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
+	origen: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
 	
 	
 });

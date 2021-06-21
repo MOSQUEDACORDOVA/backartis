@@ -58,6 +58,43 @@ module.exports = {
 			return membership.toLowerCase() !== 'basic' ? 'audio/*, .zip' : '.zip';
 		}
 		return membership.toLowerCase() !== 'basic' ? '.mp3, .wav, .aiff, .zip' : '.zip';
-	}
+	},
+	URLRSS: (str1, class1, text) => {
+	var aux = str1.split(",");
+	 let cont =	aux.length;
+	 console.log(cont)
+	 var out = "";
+	 for (let i = 0; i < cont; i++) {
+	//	console.log(aux[i])
+		out += `<a class="${class1} div_share" id="div_share" >${text}</a>
+		<label class="label_url" hidden>${aux[i]}</label>`
+		 
+	 }
+	 return out;
+	},
+	URLRSS2: (str1, class1, text, social) => {
+		var aux = str1.split(",");
+		 let cont =	aux.length;
+		 console.log(cont)
+		 var out = "";
+		 if (text == "Compartir" && class1 == "tweet"){
+			var share_tw ="http://twitter.com/share?text=Gracias por compartir"
+			}
+
+		 for (let i = 0; i < cont; i++) {
+		//	console.log(aux[i])
+		if (text == "soundcloud"){
+			out += `<div class="soundc"><a class="div_share" id="div_share" ><i class="fab fa-${social}" style="padding-right: 16px;"></i>${text}</a>
+			<label class="label_url" hidden>${share_tw} ${aux[i]}</label> </div>`
+			}else{
+			out += `<a class="${class1} div_share" id="div_share" ><i class="fab fa-${social}" style="padding-right: 16px;"></i>${text}</a>
+			<label class="label_url" hidden>${share_tw} ${aux[i]}</label>`	
+			}
+			
+			
+			 
+		 }
+		 return out;
+		},
 	
 }

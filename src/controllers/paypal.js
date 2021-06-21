@@ -3,15 +3,13 @@ var request = require('request');
 const BD_conect = require('../models/modulos_');
 // Add your credentials:
 // Add your client ID and secret
-var CLIENT =
-  'AUJoKVGO3q1WA1tGgAKRdY6qx0qQNIQ6vl6D3k7y64T4qh5WozIQ7V3dl3iusw5BwXYg_T5FzLCRguP8';
-var SECRET =
-  'EOw8LNwDhM7esrQ3nHfzKc7xiWnJc83Eawln4YLfUgivfx1LGzu9Mj0F5wlarilXDqdK9Q5aHVo-VGjJ';
+var CLIENT_ID = 'AQEp93PNKe5pQUGK4bMiah30CZzi_9YYP5pw1LqnWELnymhFyIvEQgjYT782ChQrqmSy8tUb81WNMcBF';
+var SECRET = 'EB5Wbz_NTICPraelJFn-5rK1T0tbp87DTmF8TvaQRjL3xckJyYIU4aC_Xbj41KqosgbKk5M4YIjuk__W';
 var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
 express()
   // Set up the payment:
   // 1. Set up a URL to handle requests from the PayPal button
-  exports.crearpago = async (req, res, next) => {
+exports.crearpago = async (req, res, next) => {
     const {amount, product, userId} = req.body;
    // console.log(product)
     // 2. Call /v1/payments/payment to set up the payment
@@ -19,7 +17,7 @@ express()
     {
       auth:
       {
-        user: CLIENT,
+        user: CLIENT_ID,
         pass: SECRET
       },
       body:
@@ -73,7 +71,7 @@ express()
       {
         auth:
         {
-          user: CLIENT,
+          user: CLIENT_ID,
           pass: SECRET
         },
         body:
@@ -105,17 +103,144 @@ express()
         console.log(amount);
         let status = response.body.state;
         let numero_referencia = response.body.id;
-        BD_conect.actualizarUserMembership(userId,product).then(()=>{
+
+        if (product == "Backcoin-Wallet") {
+          console.log(product)
+        }else{
+          BD_conect.actualizarUserMembership(userId,product).then(()=>{
           res.locals.user.membership=product;
           //res.render('complete_pay', {product, dashboardPage:true});
          BD_conect.guardarPago(userId,status,numero_referencia,amount,product, 'Paypal').then(()=>{
-            //req.user.membership=producto;
-      
+            //req.user.membership=producto;     
             
             res.render('complete_pay', {product, dashboardPage:true});
+
         })
         })
-        //console.log(response)
+          
+        }
       });
   }
 // Run `node ./server.js` in your terminal
+
+
+
+exports.crearOrden = async (req, res, next) => {
+ //console.log(req.params.token)
+ var token = req.params.token
+ var amount = req.params.amount
+  var product = req.params.product
+ console.log(product)
+  // 2. Call /v1/payments/payment to set up the payment
+  request.post('https://api-m.sandbox.paypal.com/v2/checkout/orders', {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+ token,
+                "PayPal-Partner-Attribution-Id": "FLAVORsb-qjuoo6097065_MP"
+            },
+            body: {
+                "intent": "CAPTURE",
+                "purchase_units": [{
+                  "description": product,
+                  "amount": {
+                      "value": parseFloat(amount),
+                      "currency_code": "USD",
+                      "breakdown": {
+                          "item_total": {
+                              "currency_code": "USD",
+                              "value": parseFloat(amount)
+                          },
+                      }
+                  },
+                  "items": [
+                      {
+                          "unit_amount": {
+                              "currency_code": "USD",
+                              "value": parseFloat(amount)
+                          },
+                          "quantity": "1",
+                          "name": product,
+                      },
+                  ],
+              }],
+            },
+            json: true
+        },function(err, response, body) {
+            if (err) {
+                console.error(err);
+                return res.sendStatus(500);
+            }
+            console.log (response.body)
+            res.json({
+                id: body.id
+            });
+        });
+}
+
+exports.aprobarOrden = async (req, res, next) => {
+  
+  var OrderID = req.params.id;
+  var token = req.params.token
+  var amount = req.params.amount
+  var product = req.params.product
+  console.log(token)
+  request.post('https://api-m.sandbox.paypal.com/v2/checkout/orders/' + OrderID + '/capture', {
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token,
+          "PayPal-Partner-Attribution-Id": "FLAVORsb-qjuoo6097065_MP"
+      }
+  }, function(err, response, body) {
+      if (err) {
+          console.error(err);
+          return res.sendStatus(500);
+      }
+     
+      let payment = JSON.parse(response.body).purchase_units
+      
+      let numero_referencia = payment[0].payments.captures[0].id
+      let status = payment[0].payments.captures[0].status
+      console.log (status)
+      const userId = req.params.id_user;
+      let errores = false;
+      console.log (userId)
+      if (product == "Backcoin"  || product == "backstore") {
+
+        BD_conect.recargaBackcoin(userId,amount).then((res)=>{
+          console.log(res + "b");
+        
+          if (product == "backstore") {
+            
+          }else{
+          req.user.backcoins=res;
+
+          }
+        
+          
+       })
+        BD_conect.guardarPago(userId,status,numero_referencia,amount,product,'Paypal').then((resp)=>{
+            console.log(resp)
+
+         res.json(
+          {
+            status: "ok"
+          });
+             // res.render('complete_pay', {product, dashboardPage:true});
+                 
+          
+       })
+      }else{
+        BD_conect.actualizarUserMembership(userId,product).then(()=>{
+        res.locals.user.membership=product;
+        //res.render('complete_pay', {product, dashboardPage:true});
+       BD_conect.guardarPago(userId,status,numero_referencia,amount,product, 'Paypal').then(()=>{
+          //req.user.membership=producto;     
+          
+          res.render('complete_pay', {product, dashboardPage:true});
+
+      })
+      })
+        
+      }
+  });
+}

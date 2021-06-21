@@ -1,7 +1,8 @@
 const Modulo_BD = require('../models/modulos_');
 const scdl = require('soundcloud-downloader').default
-	const fs = require('fs');
-	const path = require('path');
+const fs = require('fs');
+const path = require('path');
+const Swal = require('sweetalert2');
 //const {getStreamUrls} = require('mixcloud-audio')
 
 exports.dashboard = (req, res) => {
@@ -211,23 +212,43 @@ exports.fansPage = (req, res) => {
 
 
 exports.mixcloud = (req, res) => {
-	
-	
+	const user = res.locals.user;
 	const SOUNDCLOUD_URL = 'https://soundcloud.com/djtowa/sessions-10-towa-studio92-junio-2021'
 	//const CLIENT_ID = 'asdhkalshdkhsf'
 	scdl.getInfo(SOUNDCLOUD_URL).then(stream => {
-		console.log(stream.title)
 		var titulo = stream.title
 		//stream.pipe(fs.createWriteStream('audio.mp3'))
 	scdl.download(SOUNDCLOUD_URL).then(stream2 => {
-		//console.log(stream2)
+		//console.log(req.headers)
 		//stream.download()
 		var filePath = path.join(__dirname, '/../public/assets/uploads/', titulo+'.mp3')
 		const file = fs.createWriteStream(filePath);
+		var len = 0;
+		console.log("aqui");
+			stream2.on("data", function(chunk) {
+		
+				len += chunk.length;
+	
+				// percentage downloaded is as follows
+			var percent = (len / 1000) * 100;
+				console.log(percent)
+				});
 		stream2.pipe(file);
 		file.on("finish", function() {
+		//	res.download(filePath, (err) => {
+		//		if (err) {
+			//	  console.log(err);
+		//		}
+			//	fs.unlinkSync(filePath)
+			//	console.log('File removed')
+				  
+				
+		//	});
+
 			file.close(() => {
 			 console.log("Listo")
+			 let msg ="Archivo creadop";
+			res.redirect('/dashb/'+msg)
 			});
 		   });
 	})	

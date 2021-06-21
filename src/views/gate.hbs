@@ -5,7 +5,7 @@
   /*background-color: #ffffff;
   margin: 100px auto;
   padding: 40px;*/
-  width: 70%;
+  width: 95%;
   min-width: 300px;
 }
 
@@ -54,7 +54,7 @@ input.invalid {
 
 a.ytboton {    position: relative;
     display: block;
-    width: 150px;
+    width: 100%;
     /* height: 24px; */
     padding: 6px 6px 6px 34px;
     background: #B31217;
@@ -67,7 +67,10 @@ a.ytboton {    position: relative;
     text-align: center;
     border-radius: 10px;
     font-weight: bold;
-	cursor: pointer;}
+	cursor: pointer;
+  margin-bottom: 10px;
+  
+  }
 a.ytboton:before {content:"\25B6";position: absolute;top: 6px;left: 8px;padding: 1px 5px;background: white;color: #B31217;border-radius: 3px;font-size: 10px;box-sizing: border-box;line-height: 12px;}
 
 
@@ -187,10 +190,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f09433', end
 }
 
 </style>
-<script>
-
-</script>
-
 <!-- jQuery -->
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.js"></script>
 <!-- Google Analytics -->
@@ -431,6 +430,41 @@ function adelantar(e){
 	player.currentTime = scrubTime;
 	//console.log(e);
 }
+
+function showRSS(id_mostar1,id_mostar2,id_ocultar){
+	var div_activo = document.getElementById(id_mostar1)
+
+	if ($("#"+id_mostar1).is(':visible')){
+	
+		$("#"+id_mostar1).hide();
+
+	}else{
+
+		$("#"+id_mostar1).show();
+    $("#"+id_mostar2).show();
+		$("#"+id_ocultar).hide();	
+	}
+}
+function guardar_correo(correo, tipo){
+  if (tipo == "back"){
+  var div_activo = document.getElementById('backstore_link');
+  const item = document.createElement('a');
+  div_activo.setAttribute('href', "/backstore_sell/{{gate.archivo}}/{{gate.id}}/{{gate.id_usuario}}/{{gate.music_price}}/backstore/"+correo);
+  $('#nextBtn').click();
+  }else{
+    var div_activo = document.getElementById('descargar_link');
+  const item = document.createElement('a');
+  div_activo.setAttribute('href', "/downgate/{{gate.archivo}}/{{gate.id}}/"+correo);
+  $('#nextBtn').click();
+  }
+	
+ // item.insertBefore(item, div_activo);
+}
+
+function sub(){
+  let formulario = document.getElementById('form_datos_wallet')
+  formulario.submit();
+}
 </script>
 <style>
 .imgd:before {
@@ -449,11 +483,62 @@ function adelantar(e){
 .container{
   z-index:99999;
 }
+.none{
+display: none;}
+/* Estilos del contenedor */
+.containerS {
+  padding: 1rem 1.5rem;
+  width: 95%;
+  height: 100px;
+  background-color: {{gate.color}};
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  color: #333;
+  font-family: sans-serif;
+  text-align: justify;
+  line-height: 1.3;
+  overflow: auto;
+}
 
+.containerS p:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+/* Tamaño del scroll */
+.containerS::-webkit-scrollbar {
+  width: 8px;
+  display: none;
+}
+
+ /* Estilos barra (thumb) de scroll */
+.containerS::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 4px;
+}
+
+.containerS::-webkit-scrollbar-thumb:active {
+  background-color: #ffff;
+}
+
+.containerS::-webkit-scrollbar-thumb:hover {
+  background: #b3b3b3;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+ /* Estilos track de scroll */
+.containerS::-webkit-scrollbar-track {
+  background: #e1e1e1;
+  border-radius: 4px;
+}
+
+.containerS::-webkit-scrollbar-track:hover, 
+.containerS::-webkit-scrollbar-track:active {
+  background: #d4d4d4;
+}
 </style>
 
 <div id="fb-root"></div>
-	<main class="container-fluid main-gate">
+	<main class="S-fluid main-gate">
 		<div class="row">
 			<div class="col-md-8 px-0 main-gate__main d-flex justify-content-center align-items-center imgd">
 
@@ -508,8 +593,20 @@ function adelantar(e){
 					<h1 class="main-gate__title" {{#if gate.color_titulo}}style="color: {{gate.color_titulo}};" {{/if}}>{{gate.titulo}}</h1>
 					<p class="main-gate__desc" {{#if gate.color_descrip}}style="color: {{gate.color_descrip}};" {{/if}}>{{gate.descripcion}}</p>
 
-					<form id="regForm" action="">
+<form id="regForm" action="" class="none">
+<div class="tab">
+	<!--<div class="fb-like" data-href="{{gate.url_facebook}}" data-width="" data-layout="button" data-action="like" data-size="large" data-share="false"></div>-->
+	<input type="text" class="form-control-steps" id="mail" name="mail" placeholder="Ingrese su correo" onchange="guardar_correo(this.value,'{{#if backstore}}back{{else}}otro{{/if}}')" style="background-color: white;">			
+</div>
 
+{{#if backstore}}
+<div class="tab">
+    <a href="/backstore_sell/{{gate.archivo}}/{{gate.id}}/{{gate.id_usuario}}/{{gate.music_price}}/backstore" class="btn btn-primary btn-block btn_disabled" id="backstore_link">Ir a la Pasarela <i class="fa fa-angle-right"></i></a>
+
+</div>
+
+
+{{else}}
 <!-- One "tab" for each step in the form: -->
 {{#if gate.like_facebook}}
 <div class="tab">
@@ -529,55 +626,49 @@ function adelantar(e){
 				
 </div>{{/if}}
 
-{{#if gate.suscribir_youtube}}<div class="tab">
-	<a class="ytboton div_share" id="div_share" >Suscribirse</a>
-	<label class="label_url" hidden>{{gate.url_youtube}}</label>		
+{{#if gate.suscribir_youtube}}<div class="tab containerS">
+{{#URLRSS gate.url_youtube 'ytboton' 'Suscribirse'}}{{/URLRSS}}	
+
 </div>{{/if}}
 
-{{#if gate.seguir_twitter}}<div class="tab">
-	<a class="tweet dark div_share" id="div_share" ><i class="fab fa-twitter" style="padding-right: 16px;"></i> Follow</a>
-	<label class="label_url" hidden>{{gate.url_twitter}}</label>
-	<a class="tweet div_share" id="div_share2" ><i class="fab fa-twitter"></i> Compartir</a>
-	<label class="label_url" hidden>http://twitter.com/share?text=Gracias por compartir {{gate.url_twitter}} "</label>
+{{#if gate.seguir_twitter}}<div class="tab containerS">
+  {{#URLRSS2 gate.url_twitter 'tweet dark' 'Follow' 'twitter' }}{{/URLRSS2}}	
+
 			
 </div>{{/if}}
-{{#if gate.seguir_soundcloud}}<div class="tab">
-	<div class="soundc"><a class="div_share" id="div_share" ><i class="fab fa-soundcloud" style="padding-right: 16px;"></i> SoundCloud</a>
-  <label class="label_url" hidden>{{gate.url_souncloud}}</label>
+{{#if gate.compartir_twitter}}<div class="tab containerS">
+  {{#URLRSS2 gate.url_twitter 'tweet' 'Compartir' 'twitter'}}{{/URLRSS2}}	
+  
+			
+</div>{{/if}}
+{{#if gate.seguir_soundcloud}}<div class="tab containerS">
+  {{#URLRSS2 gate.url_souncloud 'soundc' 'SoundCloud' 'soundcloud'}}{{/URLRSS2}}	
+
   </div>
 	
 			
 </div>{{/if}}
-{{#if gate.seguir_instagram}}<div class="tab">
-	<a class="instagram div_share" id="div_share" > <i class="fab fa-instagram" style="padding-right: 16px;"></i> Instagram</a>
-	<label class="label_url" hidden>{{gate.url_instagram}}</label>
+{{#if gate.seguir_instagram}}<div class="tab containerS">
+  {{#URLRSS2 gate.url_instagram 'instagram' 'Instagram' 'instagram'}}{{/URLRSS2}}	
 			
 </div>{{/if}}
-{{#if gate.seguir_spotify}}<div class="tab">
- 
-			<a class="spotify div_share" id="div_share" > <i class="fab fa-spotify" style="padding-right: 16px;"></i> Spotify</a>
-			<label class="label_url" hidden>{{gate.url_spotify}}</label>
+{{#if gate.seguir_spotify}}<div class="tab containerS">
+ {{#URLRSS2 gate.url_spotify 'spotify' 'Spotify' 'spotify'}}{{/URLRSS2}}	
 			
 </div>{{/if}}
-{{#if gate.seguir_deezer}}<div class="tab">
- 
-			<a class="deezer div_share" id="div_share" ><i class="fab fa-deezer" style="padding-right: 16px;"></i> Deezer</a>
-			<label class="label_url" hidden>{{gate.url_deezer}}</label>
+{{#if gate.seguir_deezer}}<div class="tab containerS">
+  {{#URLRSS2 gate.url_deezer 'deezer' 'Deezer' 'deezer'}}{{/URLRSS2}}
+						
+</div>{{/if}}
+{{#if gate.seguir_tiktok}}<div class="tab containerS">
+ {{#URLRSS2 gate.url_tiktok 'tiktok' 'Tiktok' 'tiktok'}}{{/URLRSS2}}
 			
 </div>{{/if}}
-{{#if gate.seguir_tiktok}}<div class="tab">
- 
-			<a class="tiktok div_share" id="div_share" ><i class="fab fa-tiktok" style="padding-right: 16px;"></i> Tiktok</a>
-			<label class="label_url" hidden>{{gate.url_facebook}}</label>
+{{#if gate.seguir_mixcloud}}<div class="tab containerS">
+ {{#URLRSS2 gate.url_mixcloud 'mixcloud' 'Mixcloud' 'mixcloud'}}{{/URLRSS2}}
 			
 </div>{{/if}}
-{{#if gate.seguir_mixcloud}}<div class="tab">
- 
-			<a class="mixcloud div_share" id="div_share" ><i class="fab fa-mixcloud" style="padding-right: 16px;"></i> Mixcloud</a>
-			<label class="label_url" hidden>{{gate.url_mixcloud}}</label>
-			
-</div>{{/if}}
-
+{{/if}}
 
 <div style="overflow:auto;">
   <div style="float:right;display: grid;grid-template-columns: 104px 104px; margin-top: 15px;">
@@ -588,10 +679,12 @@ function adelantar(e){
 
 <!-- Circles which indicates the steps of the form: -->
 <div style="text-align:center;margin-top:40px;" hidden>
+  <span class="step"></span>
   {{#if gate.like_facebook}}<span class="step"></span>{{/if}}
   {{#if gate.compartir_facebook}}<span class="step"></span>{{/if}}
   {{#if gate.suscribir_youtube}}<span class="step"></span>{{/if}}
   {{#if gate.seguir_twitter}}<span class="step"></span>{{/if}}
+  {{#if gate.compartir_twitter}}<span class="step"></span>{{/if}}
   {{#if gate.seguir_soundcloud}}<span class="step"></span>{{/if}}
   {{#if gate.seguir_instagram}}<span class="step"></span>{{/if}}
   {{#if gate.seguir_spotify}}<span class="step"></span>{{/if}}
@@ -602,53 +695,16 @@ function adelantar(e){
 
 </form>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-					<div style="display: grid;margin-bottom: 25px;grid-template-columns: 1fr;">
-
-
-
-					<a href="/downgate/{{gate.archivo}}/{{gate.id}}" class="btn btn-primary btn-block btn_disabled" id="descargar_link" style="pointer-events: none;">Descargar <i class="fa fa-angle-right"></i></a>
+<div style="display: grid;margin-bottom: 25px;grid-template-columns: 1fr;" >
+  	<button class="btn btn-primary btn-block " id="descargar_show" onclick ="showRSS('descargar_link','regForm','descargar_show')">Descargar <i class="fa fa-angle-right"></i></button>
+    {{#if backstore}}{{else}}
+					<a href="/downgate/{{gate.archivo}}/{{gate.id}}" class="btn btn-primary btn-block btn_disabled none" id="descargar_link" style="pointer-events: none;">Descargar <i class="fa fa-angle-right"></i></a>{{/if}}
 
 					<footer class="main-gate__footer">
 						<div class="row align-items-center">
 							<div class="col-12">
 								<nav class="social-nav text-center">
+                  
 									{{#if gate.like_facebook}}
 									<a href="{{gate.url_facebook}}" class="social-nav__link">
 										<i class="fab fa-facebook-square"></i>
@@ -703,5 +759,5 @@ function adelantar(e){
 				</section>
 			</div><!-- .col-md-4 -->
 		</div><!-- .row -->
-	</main><!-- .container-fluid -->
+	</main><!-- .S-fluid -->
 {{> footer }}

@@ -1,5 +1,88 @@
-<h1 class="dashboard-title">Mi billetera</h1>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+	$( document ).ready(function() {
+// otro genero
+	const pais = document.getElementById('pais');
+	const otro_pais = document.getElementById('otro_pais');
+	const banco = document.getElementById('banco_peru');
+	const otro_banco = document.getElementById('otro_pais_banco');
+	const cuenta= document.getElementById('cuenta');
+	
+	if(pais && otro_pais) {
+		const btnGender = pais.parentElement.parentElement.parentElement.querySelector('button[data-step-page]');
+		otro_pais.addEventListener('input', () => {
+			if(otro_pais.validity.valid) {
+				otro_pais.removeAttribute('disabled');
+			}else {
+				otro_pais.setAttribute('disabled', 'true');
+			}
+		});
 
+		pais.addEventListener('change', () => {
+			const option = pais.options[pais.selectedIndex].value;
+
+			if(option === 'Otros') {
+				otro_pais.removeAttribute('disabled');
+				otro_pais.setAttribute('required', 'true');
+				//btnGender.setAttribute('disabled', 'true');
+
+				otro_banco.removeAttribute('disabled');
+				otro_banco.setAttribute('required', 'true');
+				otro_banco.setAttribute('readonly', 'true');
+
+				banco.setAttribute('disabled', 'disabled');
+				cuenta.setAttribute('disabled', 'disabled');
+			}else if(option === 'Perú') {
+				otro_pais.value = '';
+				otro_pais.setAttribute('disabled', 'true');
+				//btnGender.setAttribute('disabled', 'true');
+
+				otro_banco.setAttribute('disabled', 'true');
+				banco.removeAttribute('disabled');
+				cuenta.removeAttribute('disabled');
+			}else {
+				otro_pais.value = '';
+				otro_pais.setAttribute('disabled', 'true');
+				//btnGender.removeAttribute('disabled');
+
+				otro_banco.setAttribute('disabled', 'true');
+				otro_banco.removeAttribute('readonly');
+				banco.removeAttribute('disabled');
+				cuenta.removeAttribute('disabled');
+			}
+		});
+	}
+
+$( ".onlynum" ).keypress(function(evt) {
+   
+    // code is the decimal ASCII representation of the pressed key.
+    var code = (evt.which) ? evt.which : evt.keyCode;
+    
+    if(code==8) { // backspace.
+      return true;
+    } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else{ // other keys.
+      return false;
+    }
+});	
+});
+</script>
+{{#if msg}}
+<script>
+	$( document ).ready(function() {
+    if ( $("#msgs").length ) {
+     let mensaje = `{{msg}}`;
+	 console.log("mensaje");
+	 Swal.fire(mensaje)
+	}
+}); 
+</script>
+<label id="msgs"></label>
+{{/if}}
+
+<h1 class="dashboard-title">Mi billetera</h1>
 <div class="card-box card-box--share-music shadow card-box--bg-celeste position-relative">
 	<div class="row">
 		<div class="col-xl-7">
@@ -22,11 +105,12 @@
 			</div>
 		</div>
 		<div class="col-lg-6 d-lg-flex flex-column justify-content-between" style="font-size: 14px;">
-			<a href="#" class="btn btn-primary btn-block mb-3 mb-lg-0">Recargar mi saldo</a>
+			<a href="/recargar_backcoin" class="btn btn-primary btn-block mb-3 mb-lg-0">Recargar mi saldo</a>
 			<a href="#" class="btn btn-primary btn-block mb-3 mb-lg-0">Realizar pagos</a>
-			<a href="#" class="btn btn-primary btn-block mb-3 mb-lg-0">Mis datos de pago</a>
+			<a href="/datos_wallet" class="btn btn-primary btn-block mb-3 mb-lg-0">Mis datos de pago</a>
 		</div>
-		<div class="col-12" style="margin-top: 1.5rem;">
+
+		{{#if movimientos}}<div class="col-12" style="margin-top: 1.5rem;">
 			<table class="table table-striped table-hover">
 				<p class="text-center font-weight-bold h3" style="margin-bottom: 1.5rem;">Últimos movimientos</p>
 				<thead class="thead-dark">
@@ -76,7 +160,145 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>{{/if}}
+		{{#if datos_pagos}}	<div class="col-12" style="margin-top: 1.5rem;">
+			<form action="/guardar_datos_pago_wallet" method="post" class="p-to-btn" autocomplete="off" id="form_datos_wallet" enctype='multipart/form-data'>
+			<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{user.id}}" hidden />
+		<div class="form-update-account">
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Nombre y Apellido</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fas fa-file-signature"></i>
+						</div>
+				
+					<input type="text" class="form-control-steps"  id="nombre_apellido" name="nombre_apellido" placeholder="Nombre y Apellido" required {{#if parsed}}value="{{parsed.nombre_apellido}}"{{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item" style="grid-row-end: 1;">
+				<label class="form-steps__title" for="text">Tipo de documento</label>
+				<div class="form-control-steps__container mb-3">
+					<div class="form-control-steps__placeholder">
+						<i class="fas fa-project-diagram"></i>
+					</div>
+					<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
+					<select class="form-control-steps" id="tipo_documento" name="tipo_documento" required style="background-color: #11111108;">	
+						{{#if parsed}}<option value="{{parsed.tipo_documento}}" selected>{{parsed.tipo_documento}}</option>{{/if}}
+						<option value="DNI">DNI</option>
+						<option value="C.E">C.E</option>
+						<option value="Pasaporte">Pasaporte</option>						
+					</select>
+				</div>
+				
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Número de documento</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fas fa-file-signature"></i>
+						</div>
+				
+					<input type="text" class="form-control-steps onlynum"  id="n_documento" name="n_documento" placeholder="Número de documento" required {{#if parsed}}value="{{parsed.n_documento}}"{{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Correo</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fas fa-file-signature"></i>
+						</div>
+				
+					<input type="mail" class="form-control-steps"  id="correo" name="correo" placeholder="Correo electrónico" required {{#if parsed}}value="{{parsed.correo}}"{{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title">Selecciona el país</label>
+			<div class="form-control-steps__container mb-3">
+				<div class="form-control-steps__placeholder">
+					<i class="fa fa-music"></i>
+				</div>
+				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
+				<select name="pais" id="pais" class="form-control-steps" style="background-color: #11111108;" >
+				{{#if pais_o}}<option value="Otros">Otros</option>{{else}}	{{#if parsed}}<option value="{{parsed.pais}}" selected>{{parsed.pais}}</option>{{/if}}{{/if}}
+					<option value="Perú">Perú</option>
+					<option value="Otros">Otros</option>
+				</select>
+			</div>
+			<input type="text" class="form-control-steps" id="otro_pais" name="otro_pais" placeholder="Otro país" {{#if pais_o}} value="{{parsed.pais}}"  {{else}}disabled{{/if}}>
+				
+			</div><!-- .form-update-accound__item -->
+
+			<div class="form-update-account__item">
+				<label class="form-steps__title">Banco</label>
+			<div class="form-control-steps__container mb-3">
+				<div class="form-control-steps__placeholder">
+					<i class="fa fa-music"></i>
+				</div>
+				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
+				<select name="banco_peru" id="banco_peru" class="form-control-steps" style="background-color: #11111108;" {{#if pais_o}} disabled{{/if}}>
+					{{#if pais_o}} {{else}}{{#if parsed}}<option value="{{parsed.banco}}" selected>{{parsed.banco}}</option>{{/if}}{{/if}}
+					<option value="Banco de Comercio" >Banco de Comercio</option>
+					<option value="Banco de Crédito del Perú">Banco de Crédito del Perú</option>
+					<option value="Banco Interamericano de Finanzas (BanBif)" >Banco Interamericano de Finanzas (BanBif)</option>
+					<option value="Banco Pichincha">Banco Pichincha</option>
+					<option value="BBVA" >BBVA</option>
+					<option value="Citibank Perú">Citibank Perú</option>
+					<option value="Interbank" >Interbank</option>
+					<option value="MiBanco">MiBanco</option>
+					<option value="Scotiabank Perú" >Scotiabank Perú</option>
+					<option value="Banco GNB Perú">Banco GNB Perú</option>
+					<option value="Banco Falabella" >Banco Falabella</option>
+					<option value="Banco Ripley">Banco Ripley</option>
+					<option value="Banco Santander Perú" >Banco Santander Perú</option>
+					<option value="Banco Azteca">Banco Azteca</option>
+					<option value="Bank of China" >Bank of China</option>
+					<option value="Cencosud Scotia">Cencosud Scotia</option>
+					<option value="ICBC PERU BANK" >ICBC PERU BANK</option>
+					<option value="Agrobanco">Agrobanco</option>
+					<option value="Banco de la Nación">Banco de la Nación</option>
+					<option value="COFIDE">COFIDE</option>
+					<option value="Fondo MiVivienda">Fondo MiVivienda</option>
+				</select>
+			</div>
+			<input type="text" class="form-control-steps" id="otro_pais_banco" name="otro_pais_banco" placeholder="Otro país" {{#if pais_o}} readonly = "true"{{else}}disabled{{/if}} value="WESTERM UNION">
+				
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item total-cols">
+				<label class="form-steps__title" for="user-name">Número de Cuenta</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-user"></i>
+					</div>
+					<input type="text" class="form-control-steps onlynum" id="cuenta" name="cuenta" placeholder="Número de Cuenta" {{#if parsed}} value="{{parsed.cuenta}}"{{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
 		</div>
+		<button type="submit" class="btn btn-primary btn-x-lg form-steps__btn" id="create-gate-btn">Guardar datos <i class="fa fa-check"></i></button>
+		</form>	
+		</div>{{/if}}
+
+		{{#if recargar_backcoin}}	<div class="col-12" style="margin-top: 1.5rem;">
+	<form action="/guardar_datos_pago_wallet" method="post" class="p-to-btn" autocomplete="off" id="form_datos_wallet" enctype='multipart/form-data'>
+		<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{user.id}}" hidden />
+		
+		<div class="form-update-account">
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Introduzca cantidad de backcoins</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fas fa-file-signature"></i>
+						</div>
+					<input type="hidden" class=""  id="back_re" name="product" value="Backcoin"  >
+					<input type="text" class="form-control-steps"  id="back_re" name="amount" placeholder="1$ = 1 Backcoin"  >
+				</div>
+			</div><!-- .form-update-accound__item -->	
+			<button type="submit" class="btn btn-primary btn-x-lg form-steps__btn" id="create-gate-btn" style="position: relative;height: 3rem; bottom: -1.5rem;"> Procesar <i class="fa fa-check"></i></button>		
+		</div>
+		
+		</form>	
+		</div>{{/if}}
+
+
 	</div>
 
 	<a href="/dashboard" class="before-page">

@@ -46,15 +46,19 @@ console.log(req_buscar);
 			//let cont= parsed_user.length
 			console.log(parsed_user);
 			let bondGate = false;
+			let backstore = false;
 			if (parsed.tipo_create == "bondgate") {
 				bondGate = true;
+			}
+			if (parsed.tipo_create == "backstore") {
+				backstore = true;
 			}
 
 			res.render('gate', {
 				pageName: parsed.titulo,
 				gate: parsed,
 				user: parsed_user,
-				bondGate,
+				bondGate,backstore,
 				layout: false
 			});			
 		})
@@ -184,9 +188,6 @@ exports.createGate = (req, res) => {
 		.catch(err => {
 return res.status(500).send("Error actualizando"+err);
 });
-//redirect('/dashboard');
-
-
 
 }
 exports.updateGate = (req, res) => {
@@ -213,10 +214,15 @@ res.redirect('/dashb/'+msg)
 }
 
 exports.getGates = async (req, res) => {
+	var photo = req.user.photo;
 	let parametro_buscar = req.params.gates;
 	let product = req.params.productUdpt;
 	var id_user = req.user.id;
 	let msg =false;
+	let notPhoto = true;
+
+	//console.log(req)
+
 	if (req.params.msg) {
 		msg =req.params.msg;
 	}
@@ -227,6 +233,9 @@ exports.getGates = async (req, res) => {
 	if (typeof parametro_buscar=== 'undefined') {
 		parametro_buscar="filegate";
 		
+	}
+	if (photo=="0") {
+	notPhoto = false;	
 	}
 	var total_gates="";
 	Gates.totalGates().then((res) =>{
@@ -244,8 +253,10 @@ exports.getGates = async (req, res) => {
 					product,
 					dashboardPage: true,
 					cont_gates:total_gates,
+					notPhoto,
 					msg
 				});
+				
 
 		})
 }
@@ -269,6 +280,7 @@ exports.deleteGate = async (req, res) => {
 exports.downloadGate = (req, res) => {
 	let archivo = req.params.id;
 	var parametro_buscar = req.params.id_gate;
+	var correo = req.params.correo;
 	//console.log(parametro_buscar)
 	var fileName = String(archivo); // The default name the browser will use
 	//var filePath =__dirname + '/../public/assets/uploads/'; // Or format the path using the `id` rest param
@@ -278,7 +290,12 @@ exports.downloadGate = (req, res) => {
     
 	//let absPath = path.join(__dirname, '/my_files/', filename);
 	console.log(filePath);
-
+	Gates
+    .guardarSuscripcionGate('suscripcion_gate',correo,parametro_buscar).then((resultado)=>{
+        if (resultado=="0") {
+            console.log("Email ya registrado en sistema");
+        }
+});
 	Gates
 	.obtenerGateforDown(parametro_buscar).then((resultado)=>{
 		let parsed = JSON.parse(resultado)[0];
