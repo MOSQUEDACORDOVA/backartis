@@ -201,7 +201,13 @@ exports.pagar = async (req, res, next) => {
         if (producto == 'Backcoin' || product == "backstore") {
           BD_conect.recargaBackcoin(userid,monto).then((res)=>{
             console.log(res);
+            //req.user.backcoins=res;
+            if (product == "backstore") {
+            
+            }else{
             req.user.backcoins=res;
+            console.log(req.user.backcoins);
+            }
          })
           BD_conect.guardarPago(userid,status,numero_referencia,monto,producto,'MercadoPago').then(()=>{
 
