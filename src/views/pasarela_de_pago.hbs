@@ -77,7 +77,7 @@ function backcoins_pay(id){
           
           
           <input type="radio" id="tarjeta" name="metodo_pago" value="PayPal" onclick="showPago('paypal','MP')">PayPal
-          {{#if Backcoin}}<input type="radio" id="backcoins_pay" name="metodo_pago" value="backcoins_pay" onclick="backcoins_pay('backcoins')">Backcoins{{else}}{{/if}}
+          {{#if Backcoin}}{{else}}{{#if backstore_sell}}{{else}}<input type="radio" id="backcoins_pay" name="metodo_pago" value="backcoins_pay" onclick="backcoins_pay('backcoins')">Backcoins{{/if}}{{/if}}
           </td>
 
 					
