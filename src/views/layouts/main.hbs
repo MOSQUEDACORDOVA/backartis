@@ -9,6 +9,7 @@
 						<h2 class="dashboard-header__logo-text">BackArtist</h2>
 					</a>
 				</div>
+				
 				<div class="col-4 d-flex align-items-center justify-content-center justify-content-md-end">
 					<a href="/dashboard" class="notifications" style="margin-right: 1rem;">
 						<i class="fa fa-house-user"></i>
@@ -21,13 +22,12 @@
 					</button>
 					<div id="header-toggle-elements">
 						<ul id="list-notifications" class="list-notifications">
-							{{!-- <li class="list-notifications__item text-center">No hay notificaciones</li> --}}
-							<li class="list-notifications__item">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</li>
-							<li class="list-notifications__item">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</li>
+							{{#if notificaciones}} {{#notificaciones parsed_lmit}}{{/notificaciones}} {{/if}}
+							
+							{{!-- <li class="list-notifications__item text-center">No hay notificaciones</li> 
+							
+							<li class="list-notifications__item">{{notificaciones_parsed.0.descripcion}}</li>
+							<li class="list-notifications__item">{{notificaciones_parsed.1.descripcion}}</li>--}}
 						</ul>
 						<ul class="list-account-options" id="list-account-options">
 							<li class="list-account-options__title">
@@ -58,33 +58,36 @@
 		<section>
 			<div class="text-center">
 				<a href="/update-profile" class="user-img__container">
-					<img src="{{#if user.photo}}/assets/uploads/{{user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Usuario {{user.name}} {{user.lastName}}" class="user-img">
+					<img src="{{#if notPhoto}}/assets/uploads/{{user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Usuario {{user.name}} {{user.lastName}}" class="user-img">
 					<div class="user-img__effect"></div>
 				</a>
 			</div>
 			<!-- Con Text Aling se alinean elementos inline e inline-block -->
 			{{#if admin_dash1}}
 			<div class="text-center user-statistics__container" style="max-height: 600px;">
-				<div class="card-box shadow box_admin">
+				<div class="card-box shadow box_admin" style="padding: 1rem;">
 						<nav class="card-box__nav" id="gates-navigation" >
 		<ul class="nav flex-column flex-md-row align-items-center justify-content-md-between">
 			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link active" href="/admin_dash"><label style="cursor: pointer;"><i class="fa fa-users "> </i>Usuarios</label></a>
+				<a class="nav-link active" href="/admin_dash"><label style="cursor: pointer;"><i class="fa fa-users "></i>Usuarios</label></a>
 			</li>
 			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link " href="/banner" ><label style="cursor: pointer;"><i class="fa fa-ad"></i>Banner</label></a> 
+				<a class="nav-link " href="/banner" ><label style="cursor: pointer;"><i class="fa fa-ad"></i>Logos</label></a> 
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/planes" ><label style="cursor: pointer;"><i class="fa fa-book"></i> Planes</label></a>
+				<a class="nav-link " href="/planes" ><label style="cursor: pointer;"><i class="fa fa-book"></i>Planes</label></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/aboutus" ><label style="cursor: pointer;"><i class="fa fa-address-card"></i> Nosotros</label></a>
+				<a class="nav-link " href="/aboutus" ><label style="cursor: pointer;"><i class="fa fa-address-card"></i>Nosotros</label></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/cupones" ><label style="cursor: pointer;"><i class="fa fa-align-center"></i> Cupones</label></a>
+				<a class="nav-link " href="/cupones" ><label style="cursor: pointer;"><i class="fa fa-align-center"></i>Cupones</label></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/ventas" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i> Ventas</label></a>
+				<a class="nav-link " href="/ventas" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Ventas</label></a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link " href="/notificaciones" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Notificaciones</label></a>
 			</li>
 		</ul>
 	</nav>
