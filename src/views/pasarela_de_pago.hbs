@@ -1,6 +1,107 @@
 {{#if backstore_sell}}{{> header }}{{/if}}
-<link rel="stylesheet" type="text/css" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"/>
+<!--<link rel="stylesheet" type="text/css" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"/>-->
+<style>
+  .card_container {
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    padding: 20px;
+    max-width: 760px;
+    width: 100%;
+    margin: 0 auto;
+}
+.card_field{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    height:40px;
+    background:white;
+    font-size:17px;
+    color:#3a3a3a;
+    font-family:helvetica, tahoma, calibri, sans-serif;
+}
+input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    height:40px;
+    background:white;
+    font-size:17px;
+    color:#3a3a3a;
+    font-family:helvetica, tahoma, calibri, sans-serif;
+}
+input[type=submit] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.message_container {
+    border-radius: 5px;
+    background:#FFFFFF;
+    font-size:13px;
+    font-family:monospace;
+    padding: 20px;
+}
+#loading {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: fixed;
+    display: block;
+    opacity: 0.7;
+    background-color: #fff;
+    z-index: 99;
+    text-align: center;
+}
+#loading-image {
+    position: absolute;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -100px 0 0 -150px;
+}
+.spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -50px; /* half width of the spinner gif */
+    margin-top: -50px; /* half height of the spinner gif */
+    text-align:center;
+    z-index:1234;
+    overflow: auto;
+    width: 100px; /* width of the spinner gif */
+    height: 102px; /* height of the spinner gif +2px to fix IE8 issue */
+}
 
+.btn_paypal:hover {
+    background-color: #4ec6f9;
+}
+.btn_paypal {
+    width:229px;
+    height:49px;
+    background:#009cde;
+    border:1px dotted black;
+    font-size:17px;
+    color:#fff;
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 auto;
+}
+</style>
 <script>
 function showPago(mostrar, ocultar){
 	if ($('#'+ocultar).is(':visible') ) {
@@ -129,7 +230,7 @@ function backcoins_pay(id){
        <label for="card-holder-name">Name on Card</label>
        <input type="text" id="card-holder-name" name="card-holder-name" autocomplete="off" placeholder="card holder name"/>
        
-  <button value="submit" id="submit" class="btn">Pagar</button>
+  <button value="submit" id="submit" class="btn_paypal">Pagar</button>
 </form>
 
 </div>

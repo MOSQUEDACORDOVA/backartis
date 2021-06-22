@@ -92,6 +92,15 @@ router.post('/save_edit_banner', authController.authenticatedUser, adminDash.sEd
 router.get('/borrar_banner/:id', authController.authenticatedUser, adminDash.deleteBanner);
 
 
+router.get('/notificaciones', authController.authenticatedUser, adminDash.notificacionesGet);
+router.get('/notificaciones/:msg', authController.authenticatedUser, adminDash.notificacionesGet);
+router.get('/notificaciones_create', authController.authenticatedUser, adminDash.addnotificaciones);
+router.post('/notificaciones_save', authController.authenticatedUser, adminDash.save_notificaciones);
+router.get('/edit_notificaciones/:id', authController.authenticatedUser, adminDash.editNotificaciones);
+router.post('/save_edit_notificaciones', authController.authenticatedUser, adminDash.save_notificaciones);
+router.get('/borrar_notificaciones/:id', authController.authenticatedUser, adminDash.deleteBanner);
+
+
 router.get('/ventas', authController.authenticatedUser, adminDash.getPagos);
 
 

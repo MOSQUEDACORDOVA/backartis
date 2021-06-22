@@ -1,0 +1,108 @@
+<script type="text/javascript">
+function valideKey(evt){
+    
+    // code is the decimal ASCII representation of the pressed key.
+    var code = (evt.which) ? evt.which : evt.keyCode;
+    
+    if(code==8) { // backspace.
+      return true;
+    } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else{ // other keys.
+      return false;
+    }
+}
+</script> 
+<div class="card-box shadow position-relative calculate-height">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-money-check" style="transform: translateX(.1em);"></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0">{{pageName}}</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<form action="/notificaciones_save" method="post" class="p-to-btn" autocomplete="off" id="form-create-plan" enctype='multipart/form-data'>
+	<input type="text" class="form-control-steps" id="id" name="id_user" placeholder="id"  value="{{userID}}" hidden />
+		<div class="form-update-account">
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Nombre</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fa fa-phone"></i>
+						</div>
+				
+					<input type="text" class="form-control-steps"  id="nombre" name="nombre" placeholder="Nombre para identificar la notificación" required {{#if parsed_notificacion}} value="{{parsed_notificacion.nombre}}" {{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item" style="grid-row-end: 1;">
+				<label class="form-steps__title" for="text">Estado</label>
+				<div class="form-control-steps__container mb-3">
+					<div class="form-control-steps__placeholder">
+						<i class="fas fa-project-diagram"></i>
+					</div>
+					<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
+					<select class="form-control-steps" id="estado" name="estado" required style="background-color: #11111108;">	
+						{{#if parsed_notificacion}}<option value="{{parsed_notificacion.estado}}" selected>{{parsed_notificacion.estado}}</option>{{/if}}
+						<option value="Activa">Activa</option>
+						<option value="Inactiva">Inactiva</option>						
+					</select>
+				</div>
+				
+			</div><!-- .form-update-accound__item -->
+			
+
+			<div class="form-update-account__item" style="grid-row-end: 1;">
+				<label class="form-steps__title" for="ws">Descripción</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fab fa-whatsapp"></i>
+					</div>
+					<textarea type="text" class="form-control-steps"  id="descripcion" name="descripcion" placeholder="Descripción" required >
+						{{#if parsed_notificacion}}{{parsed_notificacion.descripcion}}{{/if}}</textarea>
+				</div>
+			</div><!-- .form-update-accound__item -->
+
+		<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Fecha publicación</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fab fa-soundcloud"></i>
+					</div>
+					<input type="date" class="form-control-steps" id="fecha_publicacion" name="fecha_publicacion" placeholder="Fecha publicación" {{#if parsed_notificacion}} value="{{parsed_notificacion.fecha_publicacion}}" {{/if}} >
+				</div>
+				
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title">Destino</label>
+			<div class="form-control-steps__container mb-3">
+				<div class="form-control-steps__placeholder">
+					<i class="fa fa-music"></i>
+				</div>
+				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
+				<select name="destino" id="destino" class="form-control-steps" style="background-color: #11111108;" {{#if pais_o}} disabled{{/if}}>
+				{{#if parsed_notificacion}}<option value="{{parsed_notificacion.destino}}" selected>{{parsed_notificacion.destino}}</option>{{/if}}
+				<option value="Todos" >Todos</option>				
+				{{#each usuarios_parsed as |usuario i|}}					
+					<option value="{{usuario.userName}}" >{{usuario.name}} / {{usuario.userName}}</option>
+					{{/each}}
+				</select>
+			</div>
+			</div><!-- .form-update-accound__item -->
+			
+			
+			
+			
+		</div><!-- .form-update-account -->
+		<button type="submit" disabled class="btn btn-primary btn-x-lg form-steps__btn">Guardar <i class="fa fa-angle-right"></i></button>
+	</form>
+
+	<a href="/admin_dash" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

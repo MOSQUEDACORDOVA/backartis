@@ -639,3 +639,125 @@ exports.deleteBanner = async (req, res) => {
 		})
 	
 }
+
+// NOTIFICACIONES
+exports.notificacionesGet = (req, res) => {
+	//console.log(req.params.gates);
+	let msg =false;
+	if (req.params.msg) {
+		msg =req.params.msg;
+	}
+	
+	Modulo_BD
+		.obtenernotificaciones().then((resultado)=>{
+			let parsed = JSON.parse(resultado);
+			//let cont= parsed.length
+			Modulo_BD
+		.obtenernotificacionesbyLimit3().then((resultado2)=>{
+			let parsed_lmit = JSON.parse(resultado2);
+			//let cont= parsed.length
+			console.log(parsed_lmit);
+			
+		
+			console.log(parsed);
+				res.render("index_admin", {
+					//usuarios: parsed,
+					dashboardPage: true,
+					notificaciones_parsed: parsed,
+					parsed_lmit,
+					notificaciones: true,
+					admin_dash1: true,
+					msg,
+				});
+
+		})
+
+		})
+}
+
+exports.addnotificaciones = (req, res) => {
+	let userID = req.user.id;
+	Modulo_BD
+	.obtenerUsuarios().then((resultado)=>{
+		let parsed = JSON.parse(resultado);
+		let cont= parsed.length
+		//console.log(parsed);
+			res.render("notificaciones", {
+				pageName: "Crear Notificacion",
+				usuarios_parsed: parsed,
+				dashboardPage: true,
+				admin_dash1:true,userID
+			});
+
+	})
+}
+
+exports.save_notificaciones = async (req, res) => {
+	const {id_user,nombre,estado,descripcion,fecha_publicacion,destino} = req.body;	
+		var msg ="";
+		Modulo_BD.saveDatosNotificaciones(id_user,nombre,estado,descripcion,fecha_publicacion,destino).then((result) => {
+				console.log(result);
+				if (result==="0") {
+					msg ="El nombre de la notificacion existe y se actualizado con éxito";
+				}else{
+					msg ="Notificacion guardado con exito";	
+				}
+				res.redirect('/notificaciones/'+msg)
+		})
+			.catch(err => {
+	return res.status(500).send("Error actualizando"+err);
+});
+	
+}
+
+exports.editNotificaciones = (req, res) => {
+	let id_buscar = req.params.id;
+	let userID = req.user.id;
+
+	Modulo_BD
+		.obtenerNotificacionforedit(id_buscar).then((resultado)=>{
+			let parsed_notificacion = JSON.parse(resultado)[0];
+			let cont= parsed_notificacion.length
+		console.log(parsed_notificacion);
+
+	res.render('notificaciones', {
+		pageName: 'Editar Notificacion',
+		dashboardPage: true,
+		parsed_notificacion,
+		admin_dash1: true,userID
+
+		
+	});
+
+		})
+}
+
+exports.sEditedBanner = async (req, res) => {
+	const {id,link,	photo1,	nombre} = req.body;	
+
+		Modulo_BD.saveEditedBanner(id,link,	photo1,	nombre).then((result) => {
+				console.log(result);
+				
+		})
+			.catch(err => {
+	return res.status(500).send("Error actualizando"+err);
+});
+let msg ="Banner actualizado con exito";
+res.redirect('/banner/'+msg)	
+
+}
+exports.deleteBanner = async (req, res) => {
+	let parametro_buscar = req.params.id;
+
+	Modulo_BD
+		.deleteBanner(parametro_buscar).then((resultado)=>{
+			//let parsed = JSON.parse(resultado);
+			//let cont= parsed.length
+			console.log(resultado);
+			
+			let msg ="Banner eliminado con exito";
+			res.redirect('/banner/'+msg)	
+
+		})
+	
+}

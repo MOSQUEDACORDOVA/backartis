@@ -30,6 +30,7 @@
 	{{#if aboutUs}}<div><a class="" href="/aboutus_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
 	{{#if cupones}}<div><a class="" href="/cupones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Cupon</label></a></i></div>{{/if}}
 	{{#if banners}}<div><a class="" href="/banner_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Banner</label></a></i></div>{{/if}}
+	{{#if notificaciones}}<div><a class="" href="/notificaciones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Notificación</label></a></i></div>{{/if}}
 		
 		{{#each usuarios as |user i|}}	 <article class="gate-item">
 			<a href="#" class="gate-item__img">
@@ -233,7 +234,7 @@
 	<!-- .gate-item -->
 	{{/if}}
 		{{#if banners}}
-<table class="table table-bordered table-striped">
+	<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
                             <!--<th class="text-xs-center">
@@ -261,6 +262,49 @@
 						<i class="fa fa-trash-alt"></i>
 					</a>
 					<a href="/edit_banner/{{banner.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	</tbody> 
+ 			</table>
+	<!-- .gate-item -->
+	{{/if}}
+	{{#if notificaciones}}
+	<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Id
+								</th>
+								<th class="text-xs-center">
+									Nombre
+								</th>
+								<th class="text-xs-center">
+									Estado
+								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
+								
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each notificaciones_parsed as |notificaciones i|}}	 
+			<tr>
+				<td>{{notificaciones.id}}</td>
+				<td>{{notificaciones.nombre}}</td>
+				<td>{{notificaciones.estado}}</td>
+				<td><div class="gate-item__options">
+					<a href="/borrar_notificaciones/{{notificaciones.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/edit_notificaciones/{{notificaciones.id}}" class="gate-item__option">
 						<i class="fa fa-pen"></i>
 					</a>
 					

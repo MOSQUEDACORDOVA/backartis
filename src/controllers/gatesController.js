@@ -245,18 +245,29 @@ exports.getGates = async (req, res) => {
 	//console.log(req.params.gates);
 		Gates
 		.obtenerGates(parametro_buscar,id_user).then((resultado)=>{
+			Gates
+		.obtenernotificacionesbyLimit3().then((resultado2)=>{
+			let parsed_lmit = JSON.parse(resultado2);
+			//let cont= parsed.length
+			console.log(parsed_lmit);
+
+			
+
+		
 			let parsed = JSON.parse(resultado);
 			let cont= parsed.length
 			//console.log(cont);
 				res.render("dashboard", {
 					gates: parsed,
 					product,
+					parsed_lmit,
+					notificaciones: true,
 					dashboardPage: true,
 					cont_gates:total_gates,
 					notPhoto,
 					msg
 				});
-				
+			})	
 
 		})
 }

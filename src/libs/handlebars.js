@@ -96,5 +96,47 @@ module.exports = {
 		 }
 		 return out;
 		},
+
+		notificaciones: (arreglo, user) => {
+			//var aux = JSON.stringify(arreglo);
+			let cont =	arreglo.length;
+			 console.log(cont)
+			var out = "";
+			//Comprobamos que tenga formato correcto
+	
+ 			Hoy = new Date();//Fecha actual del sistema
+			var AnyoHoy = Hoy.getFullYear();
+			var MesHoy = Hoy.getMonth();
+			var DiaHoy = Hoy.getDate();
+			 for (let i = 0; i < cont; i++) {
+				var Fecha_aux = arreglo[i].fecha_publicacion.split("-");
+				var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+				//console.log(Fecha1)
+					
+					var AnyoFecha = Fecha1.getFullYear();
+					var MesFecha = Fecha1.getMonth();
+					var DiaFecha = Fecha1.getDate();
+
+				
+				 if (arreglo[i].estado == "Activa") {
+					
+					if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+						out +=		`<li class="list-notifications__item">${arreglo[i].descripcion}</li>`
+					 }
+				 }
+				}
+			/*	console.log(aux[i])
+			if (text == "soundcloud"){
+				 `<div class="soundc"><a class="div_share" id="div_share" ><i class="fab fa-${social}" style="padding-right: 16px;"></i>${text}</a>
+				<label class="label_url" hidden>${share_tw} ${aux[i]}</label> </div>`
+				}else{
+				out += `<a class="${class1} div_share" id="div_share" ><i class="fab fa-${social}" style="padding-right: 16px;"></i>${text}</a>
+				<label class="label_url" hidden>${share_tw} ${aux[i]}</label>`	
+				}
+					
+				 
+			 }*/
+			 return out;
+			},
 	
 }

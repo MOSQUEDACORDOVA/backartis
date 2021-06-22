@@ -10,6 +10,7 @@ const Pagos = require('../models/Pagos');
 const Banner = require('../models/Banner');
 const Suscripciones = require('../models/Suscripciones');
 const Backcoin = require('../models/Backcoin');
+const Notificaciones = require('../models/Notificaciones');
 
 module.exports = {
 	
@@ -1507,4 +1508,126 @@ consultarCuponMembership(consultar) {
 					})
 			},
 
+
+
+			//NOTIFICACIONES
+			obtenernotificaciones() {
+				return new Promise((resolve, reject) => {
+			
+				Notificaciones.findAll({
+					order: [
+					  // Will escape title and validate DESC against a list of valid direction parameters
+					  ['updatedAt', 'DESC']
+					]
+					})
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(JSON.stringify(users));
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+			});
+			},
+
+			obtenernotificacionesbyLimit3() {
+				return new Promise((resolve, reject) => {
+			
+				Notificaciones.findAll({
+					limit: 2,
+					order: [
+					  // Will escape title and validate DESC against a list of valid direction parameters
+					  ['updatedAt', 'DESC']
+					]
+					} )
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(JSON.stringify(users));
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+			});
+			},
+
+			saveDatosNotificaciones(id_usuario,nombre,estado,descripcion,fecha_publicacion,destino) {
+				return new Promise((resolve, reject) => {
+					Notificaciones.findOne({ 
+						where: {
+							nombre:nombre,
+						} }
+					)
+					.then(res => {
+						console.log(res);
+						if (!res) {
+							// Item not found, create a new one
+							Notificaciones.create({id_usuario: id_usuario,nombre: nombre,estado: estado,descripcion: descripcion,fecha_publicacion: fecha_publicacion,destino: destino})
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(respuesta);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				}else{		
+								Notificaciones.update({nombre: nombre,estado: estado,descripcion: descripcion,fecha_publicacion: fecha_publicacion,destino: destino}, {
+									where: {
+										id_usuario:id_usuario,
+										nombre: nombre,
+									}})
+								.then(resp => {
+									let res= JSON.stringify(resp)
+									resolve("0");
+								 // console.log(res);
+								})
+								.catch(err => {
+								  console.log(err)
+								})
+						}
+					})
+				
+			});
+			},
+
+
+			obtenerNotificacionforedit(id) {
+				return new Promise((resolve, reject) => {
+				
+				Notificaciones.findAll({ 
+					where: {
+						id: id,
+					} }
+				)
+				.then(res => {
+					let ress= JSON.stringify(res)
+					resolve(ress);
+				  console.log(id);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				});
+				},
+				saveEditedNotificaciones(id,link,	photo,	nombre) {
+				let now= new Date();
+				fecha=now.toString();
+				return new Promise((resolve, reject) => {
+				
+				Notificaciones.update({link:link,	photo:photo,	nombre:nombre }, {
+					where: {
+						id: id,
+					}})
+				.then(res => {
+					let reses= JSON.stringify(res)
+					resolve(reses);
+				  console.log(reses);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				});
+				},
 	}
