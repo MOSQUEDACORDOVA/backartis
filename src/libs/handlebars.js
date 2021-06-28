@@ -19,11 +19,12 @@ module.exports = {
 			return '(actual)';
 		}
 	},
-	showBtnMembership: (str1, str2, btnClass, url, monto) => {
+	showBtnMembership: (str1, str2, btnClass, url, monto, modo) => {
 		if(str1 !== str2) {
 			return `
 			<form action="${url}" method="post">
 			<input type="hidden"   name="amount" value="${monto}" id="monto_plan">
+			<input type="hidden"   name="modo" value="${modo}" id="modo_plan">
 			<input type="hidden"   name="product" value="${str2}" id="tipo_plan">
 			<input type="submit"   class="btn btn-block btn-${btnClass}" value="Obtener Plan">
 			</form>
@@ -100,7 +101,6 @@ module.exports = {
 		notificaciones: (arreglo, user) => {
 			//var aux = JSON.stringify(arreglo);
 			let cont =	arreglo.length;
-			 console.log(cont)
 			var out = "";
 			//Comprobamos que tenga formato correcto
 	
@@ -125,18 +125,33 @@ module.exports = {
 					 }
 				 }
 				}
-			/*	console.log(aux[i])
-			if (text == "soundcloud"){
-				 `<div class="soundc"><a class="div_share" id="div_share" ><i class="fab fa-${social}" style="padding-right: 16px;"></i>${text}</a>
-				<label class="label_url" hidden>${share_tw} ${aux[i]}</label> </div>`
-				}else{
-				out += `<a class="${class1} div_share" id="div_share" ><i class="fab fa-${social}" style="padding-right: 16px;"></i>${text}</a>
-				<label class="label_url" hidden>${share_tw} ${aux[i]}</label>`	
-				}
-					
-				 
-			 }*/
 			 return out;
 			},
+			formatoFecha: (fecha, user) => {
+				const f = new Date(fecha);
+				 console.log(fecha)
+				var Anyo = f.getFullYear();
+				var Mes = f.getMonth();
+				var Dia = f.getDate();
+					var fecha_ = Dia + "/" +Mes+ "/"+Anyo
+				 return fecha_;
+				},
+			estadoCupon: (fecha, cantidad) => {
+					const f = new Date(fecha);
+						Hoy = new Date();
+					var estado = "";
+					if (Hoy > f) {
+						estado = "Caducado"
+					}else if (cantidad == 0){
+						estado = "Agotado"
+					}else{
+						estado = "Activo"
+					}
+						
+
+					 return estado;
+			},
+
+		
 	
 }

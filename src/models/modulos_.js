@@ -11,6 +11,7 @@ const Banner = require('../models/Banner');
 const Suscripciones = require('../models/Suscripciones');
 const Backcoin = require('../models/Backcoin');
 const Notificaciones = require('../models/Notificaciones');
+const Used_cupons = require('./Used_cupons');
 
 module.exports = {
 	
@@ -92,6 +93,24 @@ module.exports = {
 		Gates.findAll({ 
 			where: {
 				tipo_create: parametro_buscar,
+				id_usuario: id_usuario
+			} }
+		)
+		.then(users => {
+			let gates= JSON.stringify(users)
+			resolve(gates);
+		  //console.log(JSON.stringify(users));
+		})
+		.catch(err => {
+		  console.log(err)
+		})
+	});
+    },
+	obtenerGatesbyUser(id_usuario) {
+		return new Promise((resolve, reject) => {
+
+		Gates.findAll({ 
+			where: {
 				id_usuario: id_usuario
 			} }
 		)
@@ -950,12 +969,12 @@ obtenerAboutforedit(id) {
 	})
 });
 },
-saveEditedAbout(id,telefono,ws,facebook,instagram,souncloud,mixcloud,youtube,correo,twitter,spotify,tiktok) {
+saveEditedAbout(id,telefono,ws,facebook,instagram,soundcloud,mixcloud,youtube,correo,twitter,spotify,tiktok) {
 	let now= new Date();
 	fecha=now.toString();
 	return new Promise((resolve, reject) => {
 
-	Sobre_nosotros.update({ telefono:telefono,ws:ws,facebook: facebook,instagram:instagram,souncloud: souncloud,mixcloud: mixcloud,youtube: youtube,correo: correo,twitter: twitter,spotify: spotify,tiktok: tiktok }, {
+	Sobre_nosotros.update({ telefono:telefono,ws:ws,facebook: facebook,instagram:instagram,soundcloud: soundcloud,mixcloud: mixcloud,youtube: youtube,correo: correo,twitter: twitter,spotify: spotify,tiktok: tiktok }, {
 		where: {
 			id: id,
 		}})
@@ -1002,21 +1021,20 @@ totalcupones() {
 	})
 });
 },
-guardarCupon(id_usuario,nombre_cupon,numero_cupon,valor,fecha_inicio,fecha_final,cantidad,tipo) {
+guardarCupon(id_usuario,nombre_cupon,valor,fecha_inicio,fecha_final,cantidad,tipo) {
 	let now= new Date();
 	fecha=now.toString();
 	return new Promise((resolve, reject) => {
 		Cupones.findOne({ 
 			where: {
 				nombre_cupon:nombre_cupon,
-				numero_cupon: numero_cupon
 			} }
 		)
 		.then(res => {
 			console.log(res);
 			if (!res) {
 				// Item not found, create a new one
-				Cupones.create({ id_usuario: id_usuario,nombre_cupon:nombre_cupon,numero_cupon: numero_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,tipo: tipo })
+				Cupones.create({ id_usuario: id_usuario,nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,tipo: tipo})
 	.then(res => {
 		let about= JSON.stringify(res)
 		resolve(about);
@@ -1050,19 +1068,21 @@ Cupones.findAll({
 })
 });
 },
-saveEditedCupon(id,	nombre_cupon,	numero_cupon,	valor,	fecha_inicio,	fecha_final,	cantidad,	tipo) {
+saveEditedCupon(id,nombre_cupon,valor,fecha_inicio,fecha_final,cantidad,tipo) {
 let now= new Date();
 fecha=now.toString();
+console.log(fecha_inicio);
+  console.log(fecha_final);
 return new Promise((resolve, reject) => {
 
-Cupones.update({ nombre_cupon:nombre_cupon,numero_cupon: numero_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,tipo: tipo}, {
+Cupones.update({ nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,tipo: tipo}, {
 	where: {
 		id: id,
 	}})
 .then(about => {
 	let aboutes= JSON.stringify(about)
 	resolve(aboutes);
-  console.log(aboutes);
+	
 })
 .catch(err => {
   console.log(err)
@@ -1091,7 +1111,6 @@ consultarCuponMembership(consultar) {
 		where: {
 			[Op.or]: [
 				{ nombre_cupon: consultar},
-				{ numero_cupon: consultar }
 			  ]
 			
 		} }
@@ -1125,6 +1144,38 @@ consultarCuponMembership(consultar) {
 		})
 		});
 		},
+		CuponUsado(id_usuario,nombre_cupon,valor,fecha_uso,usado_en,tipo) {
+			return new Promise((resolve, reject) => {
+			
+			Used_cupons.create({ id_usuario: id_usuario,nombre_cupon: nombre_cupon,valor: valor,fecha_uso: fecha_uso,usado_en: usado_en,tipo: tipo})
+			.then(about => {
+				let aboutes= JSON.stringify(about)
+				resolve(aboutes);
+			 // console.log(aboutes);
+			})
+			.catch(err => {
+			  console.log(err)
+			})
+			});
+			},
+			obtenerCuponesUsados(id_usuario) {
+				return new Promise((resolve, reject) => {
+				
+					Used_cupons.findAll({ 
+					where: {
+						id_usuario: id_usuario,
+					} }
+				)
+				.then(res => {
+					let ress= JSON.stringify(res)
+					resolve(ress);
+				  //console.log(id);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				});
+				},
 		guardarPago(id_usuario,status,numero_referencia,monto,tipo_compra, metodo) {
 			let now= new Date();
 			fecha=now.toString();
@@ -1192,19 +1243,17 @@ consultarCuponMembership(consultar) {
 			})
 			});
 			},
-		actualizarGateDownload(id,descarga) {
-			let now= new Date();
-			fecha=now.toString();
+		actualizarGateDownload(id,descarga, mails) {
+		
 			return new Promise((resolve, reject) => {
 		
-			Gates.update({ descargas:descarga }, {
+			Gates.update({ descargas:descarga, correos: mails }, {
 				where: {
 					id: id,
 				}})
 			.then(about => {
 				let aboutes= JSON.stringify(about)
 				resolve(aboutes);
-			  console.log(aboutes);
 			})
 			.catch(err => {
 			  console.log(err)
@@ -1340,7 +1389,7 @@ consultarCuponMembership(consultar) {
 				
 			});
 			},
-			guardarSuscripcionGate(tipo,correo,id_gate) {
+			guardarSuscripcionGate(tipo,correo,id_gate,id_usuario) {
 				let now= new Date();
 				fecha=now.toString();
 				return new Promise((resolve, reject) => {
@@ -1354,7 +1403,7 @@ consultarCuponMembership(consultar) {
 						console.log(res);
 						if (!res) {
 							// Item not found, create a new one
-							Suscripciones.create({ tipo:tipo,correo:correo, id_gate:id_gate })
+							Suscripciones.create({ tipo:tipo,correo:correo, id_gate:id_gate,id_usuario:id_usuario })
 				.then(res => {
 					let respuesta= JSON.stringify(res)
 					resolve(respuesta);
@@ -1370,6 +1419,24 @@ consultarCuponMembership(consultar) {
 				
 			});
 			},
+
+			obtenerSuscripbyUserG(id) {
+				return new Promise((resolve, reject) => {
+				
+					Suscripciones.findAll({ 
+					where: {
+						id_usuario: id,
+					} }
+				)
+				.then(res => {
+					let ress= JSON.stringify(res)
+					resolve(ress);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				});
+				},
 
 
 
@@ -1630,4 +1697,41 @@ consultarCuponMembership(consultar) {
 				})
 				});
 				},
+
+
+				guardarPlan_user(userid,producto,modo,metodo_pago) {
+					Fecha_inicial = new Date();//Fecha actual del sistema
+					Hoy = new Date();
+					var desde = Fecha_inicial.toISOString();
+					console.log(modo)
+					if (modo == "Anual") {
+						Hoy.setFullYear(Hoy.getFullYear()+1);
+						var Final = Hoy.toISOString()
+					}else if (modo == "Mensual"){
+						Hoy.setMonth(Hoy.getMonth()+1);
+						var Final = Hoy.toISOString()
+					}
+					return new Promise((resolve, reject) => {
+						Usuarios.findOne({ 
+							where: {
+								id:userid,
+							} }
+						)
+						.then(res => {							
+									Usuarios.update({modo: modo,metodo_pago: metodo_pago,desde: Fecha_inicial, hasta: Final}, {
+										where: {
+											id:userid,
+										}})
+									.then(resp => {
+										let res= JSON.stringify(resp)
+										resolve("0");
+									 // console.log(res);
+									})
+									.catch(err => {
+									  console.log(err)
+									})
+						})
+					
+				});
+				},		
 	}

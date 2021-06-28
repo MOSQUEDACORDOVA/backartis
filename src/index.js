@@ -28,6 +28,7 @@ require('./models/Cupones');
 require('./models/Pagos');
 require('./models/Banner');
 require('./models/Suscripciones');
+require('./models/Notificaciones');
 
 // Crear el servidor de express
 const app = express();

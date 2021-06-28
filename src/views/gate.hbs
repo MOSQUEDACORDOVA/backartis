@@ -454,7 +454,7 @@ function guardar_correo(correo, tipo){
   }else{
     var div_activo = document.getElementById('descargar_link');
   const item = document.createElement('a');
-  div_activo.setAttribute('href', "/downgate/{{gate.archivo}}/{{gate.id}}/"+correo);
+  div_activo.setAttribute('href', "/downgate/{{gate.archivo}}/{{gate.id}}/{{gate.id_usuario}}/"+correo);
   $('#nextBtn').click();
   }
 	
@@ -695,7 +695,7 @@ display: none;}
 <div style="display: grid;margin-bottom: 25px;grid-template-columns: 1fr;" >
   	<button class="btn btn-primary btn-block " id="descargar_show" onclick ="showRSS('descargar_link','regForm','descargar_show')">Descargar <i class="fa fa-angle-right"></i></button>
     {{#if backstore}}{{else}}
-					<a href="/downgate/{{gate.archivo}}/{{gate.id}}" class="btn btn-primary btn-block btn_disabled none" id="descargar_link" style="pointer-events: none;">Descargar <i class="fa fa-angle-right"></i></a>{{/if}}
+					<a href="/downgate/{{gate.archivo}}/{{gate.id}}/{{gate.id_usuario}}" class="btn btn-primary btn-block btn_disabled none" id="descargar_link" style="pointer-events: none;">Descargar <i class="fa fa-angle-right"></i></a>{{/if}}
 
 					<footer class="main-gate__footer">
 						<div class="row align-items-center">

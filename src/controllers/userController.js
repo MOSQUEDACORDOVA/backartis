@@ -101,7 +101,7 @@ exports.sendToken = async (req, res) => {
 
 	// Url de reset
 	const resetUrl = `http://${req.headers.host}/search-account/${usuario.token}`;
-
+	res.redirect('/search-account/'+usuario.token);
 	console.log(resetUrl);
 }
 

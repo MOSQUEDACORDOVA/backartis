@@ -1,5 +1,21 @@
 {{> header }}
 	<!-- Dashboard Header -->
+{{#if hay_not}}{{else}}
+	<style>
+		.notifications--resived::after {
+	content: '';
+	display: block;
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	background-color: #F20505;
+	border-radius: 50%;
+	top: 6px;
+	right: -6px;
+}
+	</style>{{/if}}
+
+
 	<header class="dashboard-header">
 		<div class="container-fluid">
 			<div class="row align-items-center">
@@ -14,14 +30,14 @@
 					<a href="/dashboard" class="notifications" style="margin-right: 1rem;">
 						<i class="fa fa-house-user"></i>
 					</a>
-					<a href="#" class="notifications notifications--resived" id="notifications">
+					<a href="#" class="notifications notifications--resived" id="notifications" {{#if hay_not}}style="pointer-events: none;"{{/if}}>
 						<i class="far fa-bell"></i>
 					</a>
 					<button class="account-options" id="account-options">
 						<i class="fa fa-ellipsis-v"></i>
 					</button>
-					<div id="header-toggle-elements">
-						<ul id="list-notifications" class="list-notifications">
+					<div id="header-toggle-elements" >
+						<ul id="list-notifications" class="list-notifications" >
 							{{#if notificaciones}} {{#notificaciones parsed_lmit}}{{/notificaciones}} {{/if}}
 							
 							{{!-- <li class="list-notifications__item text-center">No hay notificaciones</li> 
@@ -69,25 +85,25 @@
 						<nav class="card-box__nav" id="gates-navigation" >
 		<ul class="nav flex-column flex-md-row align-items-center justify-content-md-between">
 			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link active" href="/admin_dash"><label style="cursor: pointer;"><i class="fa fa-users "></i>Usuarios</label></a>
+				<a class="nav-link {{#if usuarios}} active{{/if}}" href="/admin_dash"><label style="cursor: pointer;"><i class="fa fa-users "></i>Usuarios</label></a>
 			</li>
 			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link " href="/banner" ><label style="cursor: pointer;"><i class="fa fa-ad"></i>Logos</label></a> 
+				<a class="nav-link {{#if banners}} active{{/if}}" href="/banner" ><label style="cursor: pointer;"><i class="fa fa-ad"></i>Logos</label></a> 
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/planes" ><label style="cursor: pointer;"><i class="fa fa-book"></i>Planes</label></a>
+				<a class="nav-link {{#if planes}} active{{/if}}" href="/planes" ><label style="cursor: pointer;"><i class="fa fa-book"></i>Planes</label></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/aboutus" ><label style="cursor: pointer;"><i class="fa fa-address-card"></i>Nosotros</label></a>
+				<a class="nav-link {{#if aboutUs_parsed}} active{{/if}}" href="/aboutus" ><label style="cursor: pointer;"><i class="fa fa-address-card"></i>Nosotros</label></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/cupones" ><label style="cursor: pointer;"><i class="fa fa-align-center"></i>Cupones</label></a>
+				<a class="nav-link {{#if cupones}} active{{/if}}" href="/cupones" ><label style="cursor: pointer;"><i class="fa fa-align-center"></i>Cupones</label></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/ventas" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Ventas</label></a>
+				<a class="nav-link {{#if ventas}} active{{/if}}" href="/ventas" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Ventas</label></a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link " href="/notificaciones" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Notificaciones</label></a>
+				<a class="nav-link {{#if notificaciones}} active{{/if}}" href="/notificaciones" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Notificaciones</label></a>
 			</li>
 		</ul>
 	</nav>
@@ -98,18 +114,18 @@
 				<div class="card-box shadow">
 					<div class="user-statistics">
 						<p class="user-statistics__title"><i class="fa fa-download"></i>Gates</p>
-						<p class="user-statistics__number">{{cont_gates}}</p>
+						<p class="user-statistics__number">{{total_gates}}</p>
 						<p class="user-statistics__desc"></p>
 					</div><!-- .user-statistics -->
 					
 					<div class="user-statistics">
-						<p class="user-statistics__title"><i class="fa fa-eye"></i>Fans</p>
-						<p class="user-statistics__number">19.459</p>
+						<p class="user-statistics__title"><i class="fa fa-eye"></i>Descargas</p>
+						<p class="user-statistics__number">{{total_descargas}}</p>
 						<p class="user-statistics__desc"></p>
 					</div><!-- .user-statistics -->
 					<div class="user-statistics">
 						<p class="user-statistics__title"><i class="fa fa-user-plus"></i>Añadidos</p>
-						<p class="user-statistics__number">2.847</p>
+						<p class="user-statistics__number">{{total_sus}}</p>
 						<p class="user-statistics__desc"></p>
 					</div><!-- .user-statistics -->
 					{{/if}}

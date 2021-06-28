@@ -262,17 +262,6 @@ input:focus {
 	position: relative;
 }
 
-.notifications--resived::after {
-	content: '';
-	display: block;
-	position: absolute;
-	width: 12px;
-	height: 12px;
-	background-color: #F20505;
-	border-radius: 50%;
-	top: 6px;
-	right: -6px;
-}
 
 /* List notification */
 .list-notifications {

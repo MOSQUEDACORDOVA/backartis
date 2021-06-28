@@ -2,21 +2,15 @@ const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 const bcrypt = require('bcrypt-nodejs');
 
-const Cupones = db.define('cupones', {
+const Used_cupons = db.define('used_cupons', {
 	id: {
 		type: DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	
 	id_usuario: {
 		type: DataTypes.INTEGER,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El id_usuario es obligatorio'
-			}
-		}
+		allowNull: true,
 	},
 	nombre_cupon: {
 		type: DataTypes.TEXT,
@@ -27,23 +21,17 @@ const Cupones = db.define('cupones', {
 			}
 		}
 	},
-
 	valor: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
 	},
-	fecha_inicio: {
-		type: DataTypes.TEXT,
+	
+	fecha_uso: {
+		type: DataTypes.DATE,
 		allowNull: true,
-		defaultValue: ""
 	},
-	fecha_final: {
-		type: DataTypes.TEXT,
-		allowNull: true,
-		defaultValue: ""
-	},
-	cantidad: {
+	usado_en: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
@@ -53,11 +41,10 @@ const Cupones = db.define('cupones', {
 		allowNull: true,
 		defaultValue: ""
 	},
-	
-	
-	
 });
 
-// Métodos personalizados
-module.exports = Cupones;
+
+
+
+module.exports = Used_cupons;
 

@@ -62,17 +62,31 @@ exports.changeMembership = (req, res) => {
 			//const element = array[index];
 			
 		}
+		Modulo_BD.obtenerGatesbyUser(user.id).then((respuesta) =>{
+			let parsed_g = JSON.parse(respuesta);
+			total_gates= parsed_g.length
+			console.log(total_gates);	
+			let total_descargas = 0
+			for (let i = 0; i < total_gates; i++) {
+				total_descargas += parseInt(parsed_g[i].descargas) 
+				//console.log(plan_basico_Mensual)
+				//const element = array[index];
+				
+			}
+
+			Modulo_BD.obtenerSuscripbyUserG(user.id).then((data) =>{
+				let parsed_s = JSON.parse(data);
+				total_sus= parsed_s.length
 		res.render('membership', {
 			pageName: 'Membresía',
 			dashboardPage: true,
-			plan_basico_Mensual,
-				plan_VIP_Anual,
-				plan_Gold_Anual,
-				plan_VIP_Mensual,
-				plan_Gold_mensual,
-			user,msg
+			plan_basico_Mensual,plan_VIP_Anual,	plan_Gold_Anual,plan_VIP_Mensual,plan_Gold_mensual,
+			total_descargas,
+			total_gates,
+			user,msg,total_sus
 		})
-
+	})
+		})
 	})
 	
 }
@@ -93,9 +107,11 @@ exports.changeMembershipCupon = (req, res) => {
 			
 		
 		//Comprobamos que tenga formato correcto
+
 		var Fecha_aux = parsed.fecha_final.split("-");
-		var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
-		//console.log(Fecha1)
+		//var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+		var Fecha1 = new Date(parsed.fecha_final);
+		console.log(Fecha1)
 		Hoy = new Date();//Fecha actual del sistema
 		var AnyoFecha = Fecha1.getFullYear();
 		var MesFecha = Fecha1.getMonth();
@@ -104,20 +120,38 @@ exports.changeMembershipCupon = (req, res) => {
 		var AnyoHoy = Hoy.getFullYear();
 		var MesHoy = Hoy.getMonth();
 		var DiaHoy = Hoy.getDate();
+		var horaHoy = Hoy.getHours();
+		var minutosHoy = Hoy.getMinutes();
+			console.log(horaHoy)
 
+		console.log(minutosHoy)
+
+		var horafinal = Fecha1.getHours();
+		var minutosfinal = Fecha1.getMinutes();
+		console.log(horafinal)
+
+		console.log(minutosfinal)
 		if (parsed.cantidad == 0) {
 			let msg = "Cupon agotado"
 			res.redirect('/membership/'+msg)	
 			
 		}else {
-			if (AnyoFecha >= AnyoHoy && MesFecha >= MesHoy && DiaFecha >= DiaHoy){
+			if (AnyoFecha >= AnyoHoy && MesFecha >= MesHoy && DiaFecha >= DiaHoy &&  horaHoy<=horafinal  &&  minutosHoy<=minutosfinal ){
 							 console.log("Has introducido la fecha de Hoy");
 							 var cantidad_act = parsed.cantidad - 1;
 							 var id_cupon = parsed.id;
+							 var valor = parsed.valor;
+							 var nombre_cupon = parsed.nombre_cupon;
+							 var tipo = parsed.tipo;
+							 var fecha_uso = Hoy.toISOString()
 							 Modulo_BD
 							 .UpdateUsedCupon(id_cupon,cantidad_act).then((resultado)=>{
 								 let parsed = JSON.parse(resultado)[0];
-								 console.log(parsed);
+								
+								 Modulo_BD.CuponUsado(user.id,nombre_cupon,valor,fecha_uso,'Membresia',tipo).then((resultadoaqui) => {
+									 console.log(resultadoaqui); 
+								 })
+
 					 
 							 })
 							 Modulo_BD
@@ -164,6 +198,8 @@ exports.changeMembershipCupon = (req, res) => {
 								 var monto_mensual_gold = plan_Gold_mensual[0].costo-descuento_mensual_gold
 								 console.log(monto_mensual_gold);
 							 }
+
+
 							 res.render('membership_cupon', {
 								 pageName: 'Membresía',
 								 dashboardPage: true,
@@ -175,11 +211,13 @@ exports.changeMembershipCupon = (req, res) => {
 									 monto_anual_vip,monto_mensual_vip,monto_anual_gold,monto_mensual_gold,
 								 user
 							 })
+
+
 					 
 						 })
 						}
 						else{
-							let msg = "Cupon fuera de fecha"
+							let msg = "Cupon fuera de fecha u hora"
 								res.redirect('/membership/'+msg)
 						}	
 		}
@@ -213,11 +251,12 @@ exports.fansPage = (req, res) => {
 
 exports.mixcloud = (req, res) => {
 	const user = res.locals.user;
-	const SOUNDCLOUD_URL = 'https://soundcloud.com/djtowa/sessions-10-towa-studio92-junio-2021'
+	const SOUNDCLOUD_URL = 'https://soundcloud.com/sandro-nicho-543892063/dj-dani-dj-hardrrix-rompe-jaula'
 	//const CLIENT_ID = 'asdhkalshdkhsf'
 	scdl.getInfo(SOUNDCLOUD_URL).then(stream => {
 		var titulo = stream.title
 		//stream.pipe(fs.createWriteStream('audio.mp3'))
+		console.log(stream)
 	scdl.download(SOUNDCLOUD_URL).then(stream2 => {
 		//console.log(req.headers)
 		//stream.download()
@@ -231,7 +270,7 @@ exports.mixcloud = (req, res) => {
 	
 				// percentage downloaded is as follows
 			var percent = (len / 1000) * 100;
-				console.log(percent)
+				//console.log(percent)
 				});
 		stream2.pipe(file);
 		file.on("finish", function() {

@@ -14,6 +14,7 @@ exports.dashboard = (req, res) => {
 })
 	Modulo_BD
 		.obtenerUsuarios().then((resultado)=>{
+			
 			let parsed = JSON.parse(resultado);
 			let cont= parsed.length
 			//console.log(parsed);
@@ -28,6 +29,35 @@ exports.dashboard = (req, res) => {
 
 		})
 }
+
+exports.verCupones = (req, res) => {
+	let userID = req.params.id;
+	let username = req.params.username
+	//console.log(req.params.gates);
+	let msg =false;
+	if (req.params.msg) {
+		msg =req.params.msg;
+	}
+	console.log(username)
+
+	Modulo_BD
+		.obtenerCuponesUsados(userID).then((resultado)=>{
+			
+			let parsed = JSON.parse(resultado);
+			console.log(parsed);
+				res.render("index_admin", {
+					cupones_usados: parsed,
+					dashboardPage: true,
+					usuarios: true,
+					admin_dash1: true,
+					username,
+					msg
+				});
+
+		})
+}
+
+
 exports.updateProfile = (req, res) => {
 	let id_buscar = req.params.id;
 //	var id_user = req.user.id;
@@ -341,10 +371,10 @@ exports.editabout = (req, res) => {
 		})
 }
 
-exports.savePlanEdited = async (req, res) => {
-	const {id,telefono,ws,facebook,instagram,souncloud,mixcloud,youtube,correo,twitter,spotify,tiktok} = req.body;	
+exports.saveaboutEdited = async (req, res) => {
+	const {id,telefono,ws,facebook,instagram,soundcloud,mixcloud,youtube,correo,twitter,spotify,tiktok} = req.body;	
 
-		Modulo_BD.saveEditedAbout(id,telefono,ws,facebook,instagram,souncloud,mixcloud,youtube,correo,twitter,spotify,tiktok).then((result) => {
+		Modulo_BD.saveEditedAbout(id,telefono,ws,facebook,instagram,soundcloud,mixcloud,youtube,correo,twitter,spotify,tiktok).then((result) => {
 				console.log(result);
 				
 		})
@@ -424,16 +454,16 @@ exports.addCupon = (req, res) => {
 }
 
 exports.save_cupon = async (req, res) => {
-	const {id,nombre_cupon,n_cupon,valor_cupon,	cantidad,tipo_cupon,	fecha_inicio,fecha_final} = req.body;	
+	const {id,nombre_cupon,valor_cupon,	cantidad,tipo_cupon,fecha_inicio,fecha_final} = req.body;	
 		var msg ="";
-		Modulo_BD.guardarCupon(id,nombre_cupon,n_cupon,valor_cupon,fecha_inicio,fecha_final,cantidad,tipo_cupon).then((result) => {
+		Modulo_BD.guardarCupon(id,nombre_cupon,valor_cupon,fecha_inicio,fecha_final,cantidad,tipo_cupon).then((result) => {
 				console.log(result);
 				if (result==="0") {
 					msg ="Ya existe el cupón, porfavor verifique";
 				}else{
 					msg ="Cupón guardado con exito";	
 				}
-				res.redirect('/aboutus/'+msg)
+				res.redirect('/cupones/'+msg)
 		})
 			.catch(err => {
 	return res.status(500).send("Error actualizando"+err);
@@ -464,9 +494,9 @@ exports.editCupon = (req, res) => {
 }
 
 exports.saveCuponEdited = async (req, res) => {
-	const {id,nombre_cupon,n_cupon,valor_cupon,	cantidad,tipo_cupon,	fecha_inicio,fecha_final} = req.body;	
+	const {id,nombre_cupon,valor_cupon,	cantidad,tipo_cupon,	fecha_inicio,fecha_final} = req.body;	
 
-		Modulo_BD.saveEditedCupon(id,nombre_cupon,n_cupon,valor_cupon,fecha_inicio,fecha_final,cantidad,tipo_cupon).then((result) => {
+		Modulo_BD.saveEditedCupon(id,nombre_cupon,valor_cupon,fecha_inicio,fecha_final,cantidad,tipo_cupon).then((result) => {
 				console.log(result);
 				
 		})

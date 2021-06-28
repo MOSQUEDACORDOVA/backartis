@@ -69,13 +69,31 @@ console.log(req_buscar);
 
 exports.formCreateFileGate = (req, res) => {
 	const user = res.locals.user;
+
 	
-	res.render('create-gate', {
+	Gates.totalGates().then((respuesta) =>{
+		let parsed = JSON.parse(respuesta);
+		let array = []
+		for (let i = 0; i < parsed.length; i++) {
+			const enlace_perzonalizado = parsed[i].enlace_perzonalizado;
+			array.push(enlace_perzonalizado)
+			//console.log(parsed)
+			
+		}
+res.render('create-gate', {
 		pageName: 'Crear File Gate',
 		dashboardPage: true,
 		fileGate: true,
+		array,
 		user
 	});
+
+})
+
+
+
+
+	
 }
 
 
@@ -238,35 +256,81 @@ exports.getGates = async (req, res) => {
 	notPhoto = false;	
 	}
 	var total_gates="";
-	Gates.totalGates().then((res) =>{
-			let parsed = JSON.parse(res);
-			total_gates= parsed.length
-	})
+	
 	//console.log(req.params.gates);
 		Gates
 		.obtenerGates(parametro_buscar,id_user).then((resultado)=>{
-			Gates
-		.obtenernotificacionesbyLimit3().then((resultado2)=>{
-			let parsed_lmit = JSON.parse(resultado2);
-			//let cont= parsed.length
-			console.log(parsed_lmit);
-
 			
-
-		
 			let parsed = JSON.parse(resultado);
 			let cont= parsed.length
-			//console.log(cont);
+		Gates.obtenernotificacionesbyLimit3().then((resultado2)=>{
+			let parsed_lmit = JSON.parse(resultado2);
+			let cont= parsed_lmit.length
+			
+			Hoy = new Date();//Fecha actual del sistema
+			var AnyoHoy = Hoy.getFullYear();
+			var MesHoy = Hoy.getMonth();
+			var DiaHoy = Hoy.getDate();
+			var hay_not = false
+			for (let i = 0; i < cont; i++) {
+				var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
+				var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+				console.log(Fecha1)
+					
+					var AnyoFecha = Fecha1.getFullYear();
+					var MesFecha = Fecha1.getMonth();
+					var DiaFecha = Fecha1.getDate();
+
+				
+				 if (parsed_lmit[i].estado == "Activa") {
+					
+					if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+						break;
+					 }else{
+						 console.log("hay fecha")
+						 hay_not = true
+						 
+					 }
+				 }else{
+					 console.log("hay activo")
+					 hay_not = true
+					 break;
+					 
+				 }
+				}
+			
+		Gates.obtenerGatesbyUser(id_user).then((respuesta) =>{
+			let parsed_g = JSON.parse(respuesta);
+			total_gates= parsed_g.length
+			//console.log(total_gates);
+			let total_descargas = 0
+		for (let i = 0; i < total_gates; i++) {
+				total_descargas += parseInt(parsed_g[i].descargas) 
+				//console.log(plan_basico_Mensual)
+				//const element = array[index];
+				
+			}
+			Gates.obtenerSuscripbyUserG(id_user).then((data) =>{
+				let parsed_s = JSON.parse(data);
+				total_sus= parsed_s.length
+			//console.log(parsed_s);
+			
+			
 				res.render("dashboard", {
 					gates: parsed,
 					product,
 					parsed_lmit,
 					notificaciones: true,
 					dashboardPage: true,
-					cont_gates:total_gates,
-					notPhoto,
+					total_gates,
+					notPhoto,total_descargas,
+					notificaciones_parsed: parsed,
+					total_sus,parsed_s,
+					hay_not,
 					msg
 				});
+				})
+			})
 			})	
 
 		})
@@ -292,6 +356,7 @@ exports.downloadGate = (req, res) => {
 	let archivo = req.params.id;
 	var parametro_buscar = req.params.id_gate;
 	var correo = req.params.correo;
+	var id_usuario = req.params.id_usuario;
 	//console.log(parametro_buscar)
 	var fileName = String(archivo); // The default name the browser will use
 	//var filePath =__dirname + '/../public/assets/uploads/'; // Or format the path using the `id` rest param
@@ -302,7 +367,7 @@ exports.downloadGate = (req, res) => {
 	//let absPath = path.join(__dirname, '/my_files/', filename);
 	console.log(filePath);
 	Gates
-    .guardarSuscripcionGate('suscripcion_gate',correo,parametro_buscar).then((resultado)=>{
+    .guardarSuscripcionGate('suscripcion_gate',correo,parametro_buscar,id_usuario).then((resultado)=>{
         if (resultado=="0") {
             console.log("Email ya registrado en sistema");
         }
@@ -312,11 +377,13 @@ exports.downloadGate = (req, res) => {
 		let parsed = JSON.parse(resultado)[0];
 		let cont= parsed.length;
 		let down = parsed.descargas;
+		let mails = parsed.correos;
 
 		let cont_down = parseInt(down) + 1;
-		console.log(cont_down);
+		let cont_mails = parseInt(mails) + 1;
+		console.log(cont_mails);
 		Gates
-		.actualizarGateDownload(parametro_buscar,cont_down ).then((resultado)=>{
+		.actualizarGateDownload(parametro_buscar,cont_down,cont_mails).then((resultado)=>{
 			
 			res.download(filePath, (err) => {
 				if (err) {

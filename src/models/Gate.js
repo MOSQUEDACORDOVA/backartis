@@ -256,6 +256,11 @@ const Gates = db.define('gates', {
 		allowNull: true,
 		defaultValue: 0
 	},
+	correos: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: 0
+	},
 	
 	
 });

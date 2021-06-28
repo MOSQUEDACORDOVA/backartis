@@ -75,11 +75,11 @@ router.get('/editar_plan/:id', authController.authenticatedUser, adminDash.editP
 router.post('/guardar_edit_plan', authController.authenticatedUser, adminDash.savePlanEdited);
 
 router.get('/aboutus', authController.authenticatedUser, adminDash.aboutUs);
-router.get('/aboutus/:msg', authController.authenticatedUser, adminDash.planes);
+router.get('/aboutus/:msg', authController.authenticatedUser, adminDash.aboutUs);
 router.get('/aboutus_create', authController.authenticatedUser, adminDash.addAboutUs);
 router.post('/save_aboutus', authController.authenticatedUser, adminDash.save_aboutus);
 router.get('/edit_aboutus/:id', authController.authenticatedUser, adminDash.editabout);
-router.post('/save_edit_aboutus', authController.authenticatedUser, adminDash.savePlanEdited);
+router.post('/save_edit_aboutus', authController.authenticatedUser, adminDash.saveaboutEdited);
 router.get('/borrar_about/:id', authController.authenticatedUser, adminDash.deleteAbout);
 
 
@@ -112,6 +112,7 @@ router.post('/save_cupon', authController.authenticatedUser, adminDash.save_cupo
 router.get('/borrar_cupon/:id', authController.authenticatedUser, adminDash.deleteCupon);
 router.post('/save_cupon_edited', authController.authenticatedUser, adminDash.saveCuponEdited);
 router.get('/edit_cupon/:id', authController.authenticatedUser, adminDash.editCupon);
+router.get('/cupones_usados/:id/:username', authController.authenticatedUser, adminDash.verCupones);
 
 
 
@@ -138,6 +139,7 @@ router.post('/my-api/execute-payment/', authController.authenticatedUser, paypal
 
 router.post('/recargar_mi_saldo', authController.authenticatedUser, mercadopago.pasarela);
 router.post('/create-order/:token/:product/:amount',  paypal.crearOrden);
+router.post('/handle-approve/:id/:token/:product/:amount/:id_user/:modo',  paypal.aprobarOrden);
 router.post('/handle-approve/:id/:token/:product/:amount/:id_user',  paypal.aprobarOrden);
 
 
@@ -156,7 +158,7 @@ router.get('/create-bond-gate', authController.authenticatedUser, gatesControlle
 router.get('/backstore', authController.authenticatedUser, gatesController.formBackstore);
 router.post('/create-gate', authController.authenticatedUser, gatesController.createGate);
 
-router.get('/downgate/:id/:id_gate/:correo',  gatesController.downloadGate);
+router.get('/downgate/:id/:id_gate/:id_usuario/:correo',  gatesController.downloadGate);
 
 router.get('/gate/:id', gatesController.viewGate);
 router.get('/track/:enlace', gatesController.viewGatePersonalizado);
@@ -168,7 +170,7 @@ router.get('/wallet/:msg', authController.authenticatedUser, walletController.wa
 router.get('/datos_wallet', authController.authenticatedUser, walletController.datos_pagos);
 router.post('/guardar_datos_pago_wallet', authController.authenticatedUser, walletController.saveDatos);
 router.get('/recargar_backcoin', authController.authenticatedUser, walletController.recargar_backcoin);
-router.get('/pagar_backcoins/:id/:product/:amount', authController.authenticatedUser, walletController.descontar_backcoin);
+router.get('/pagar_backcoins/:id/:product/:amount/:modo', authController.authenticatedUser, walletController.descontar_backcoin);
 // Fans
 router.get('/fans', authController.authenticatedUser, dashboardController.fansPage);
 

@@ -40,6 +40,7 @@
 
 		const monto_plan = document.getElementById('monto_plan');
 		const tipo_plan = document.getElementById('tipo_plan');
+		const modo_plan = document.getElementById('modo_plan');
 
 		selectPlan.addEventListener('click', changePlan);
 
@@ -57,9 +58,11 @@
 						goldPress.textContent = goldanualCost.innerHTML;
 							if (tipo_plan.value === 'Gold') {
 								monto_plan.value= goldanualCost.innerHTML;
+								modo_plan.value= "Anual";
 							}
 							if (tipo_plan.value === 'VIP') {
 								monto_plan.value= vipanualCost.innerHTML;
+								modo_plan.value= "Anual";
 							}
 
 						if(document.body.classList.contains('dashboard-body')) {
@@ -74,9 +77,11 @@
 						goldPress.textContent = goldmensualCost.innerHTML;
 						if (tipo_plan.value === 'Gold') {
 							monto_plan.value= goldmensualCost.innerHTML
+							modo_plan.value= "Mensual";
 						}
 						if (tipo_plan.value === 'VIP') {
 							monto_plan.value= vipmensualCost.innerHTML
+							modo_plan.value= "Mensual";
 						}
 						if(document.body.classList.contains('dashboard-body')) {
 							goldTime.innerHTML = '/ Mes';
@@ -1544,21 +1549,9 @@ class validateInput {
     });
 	
 })();
-// Boton Compartir
+// Vista previa diseño Gate
 (() => {
-	//jQuery(".twitter-follow-button").click(function() {
-	//	console.log("hola")
 	
-	//				Swal.fire('Gracias por compartir')
-				
-	//			  setTimeout(function(){
-	//				let link = document.getElementById('descargar_link')
-	//			link.style.pointerEvents = null;
-					//link.style.color = 'blue';
-	//			}, 2000);
-
-
-//	});
 	
 })();
 // Boton Copiar Portapapeles
@@ -1648,4 +1641,104 @@ function fixStepIndicator(n) {
 }
 	
 })();
-// Validaciones de banner
+
+
+(() => {
+	document.getElementById("music-title").addEventListener('change', () => {
+		document.getElementById("color_title").innerHTML = document.getElementById("music-title").value
+		});
+	
+		document.getElementById("music-desc").addEventListener('change', () => {
+		document.getElementById("color_descrip").innerHTML = document.getElementById("music-desc").value
+		});
+	
+		document.getElementById("artist-name").addEventListener('change', () => {
+		document.getElementById("gate-name-dj").innerHTML = document.getElementById("artist-name").value
+		});
+		var checkboxYT = document.querySelector("input[name=suscribir_youtube]");
+		var like_facebook = document.querySelector("input[name=like_facebook]");
+		var seguir_twitter = document.querySelector("input[name=seguir_twitter]");
+		var seguir_soundcloud = document.querySelector("input[name=seguir_soundcloud]");
+		var seguir_instagram = document.querySelector("input[name=seguir_instagram]");
+		var seguir_spotify = document.querySelector("input[name=seguir_spotify]");
+		var seguir_deezer = document.querySelector("input[name=seguir_deezer]");
+		var seguir_tiktok = document.querySelector("input[name=seguir_tiktok]");
+		var seguir_mixcloud = document.querySelector("input[name=seguir_mixcloud]");
+	
+		
+		checkboxYT.addEventListener('change', () => {
+				if ($('#youtube-square').is(':visible') ) {
+	$('#youtube-square').hide();
+	}else{
+	$('#youtube-square').show();
+	}
+		});
+	
+		like_facebook.addEventListener('change', () => {
+				if ($('#facebook-square').is(':visible') ) {
+	$('#facebook-square').hide();
+	}else{
+	$('#facebook-square').show();
+	}
+		});
+		seguir_twitter.addEventListener('change', () => {
+				if ($('#twitter-square').is(':visible') ) {
+	$('#twitter-square').hide();
+	}else{
+	$('#twitter-square').show();
+	}
+		});
+		seguir_soundcloud.addEventListener('change', () => {
+				if ($('#soundcloud-square').is(':visible') ) {
+	$('#soundcloud-square').hide();
+	}else{
+	$('#soundcloud-square').show();
+	}
+		});
+		seguir_instagram.addEventListener('change', () => {
+				if ($('#instagram-square').is(':visible') ) {
+	$('#instagram-square').hide();
+	}else{
+	$('#instagram-square').show();
+	}
+		});
+		seguir_spotify.addEventListener('change', () => {
+				if ($('#spotify-square').is(':visible') ) {
+	$('#spotify-square').hide();
+	}else{
+	$('#spotify-square').show();
+	}
+		});
+		seguir_deezer.addEventListener('change', () => {
+				if ($('#deezer-square').is(':visible') ) {
+	$('#deezer-square').hide();
+	}else{
+	$('#deezer-square').show();
+	}
+		});
+		seguir_tiktok.addEventListener('change', () => {
+				if ($('#tiktok-square').is(':visible') ) {
+	$('#tiktok-square').hide();
+	}else{
+	$('#tiktok-square').show();
+	}
+		});
+	seguir_mixcloud.addEventListener('change', () => {
+				if ($('#mixcloud-square').is(':visible') ) {
+	$('#mixcloud-square').hide();
+	}else{
+	$('#mixcloud-square').show();
+	}
+		});
+	
+})();
+
+
+
+
+
+
+
+
+// Vista previa diseño Gate
+

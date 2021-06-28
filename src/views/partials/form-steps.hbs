@@ -1,4 +1,5 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script>
 	function copyToClipboard(elemento) {
 		var $temp = $("<input>")
@@ -22,7 +23,29 @@
 	}
 	 
 </script>
+<script>
+	$( document ).ready(function() {
 
+		var texto = document.getElementById('chek_gate-link').value,
+    textoseparado = texto.split(",");
+	var gate_link = document.querySelector("input[name=gate_link]");
+
+		
+		gate_link.addEventListener('change', () => {
+			
+			console.log(gate_link.value)
+			let pos = textoseparado.indexOf(gate_link.value) // (pos) es la posición para abreviar
+			if (pos >= 1){
+				Swal.fire("El nombre del link ya se encuentra registrado, elija otro por favor")
+				gate_link.value = "";
+			}else{
+				console.log("Todo Fino")
+			}
+
+
+		});
+}); 
+</script>
 <nav class="steps-nav">
 	<!-- Step Nav Items -->
 	{{#if backstore}}{{/if}}{{#if bondGate}}{{/if}}{{#if fileGate}}
@@ -211,7 +234,13 @@
 	</section>
 	<!-- End Section Step -->
 
+	
 	<!-- Section Step -->
+	{{#if backstore}}{{else}}
+	{{> section-steps }}
+	{{/if}}
+	<!-- End Section Step -->
+<!-- Section Step -->
 	<section class="section-step" data-step-desc="Diseño">
 		<div class="row">
 			<div class="col-md-7">
@@ -259,11 +288,13 @@
 								<img src="https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg" alt="DJ Homero">
 							</div>
 							<div class="main-gate__user-body text-white">
-								<h2 class="main-gate__name">Nombre DJ</h2>
+								<h2 class="main-gate__name" id ="gate-name-dj">Nombre DJ</h2>
 								<p class="main-gate__user-name">@nombreDJ</p>
 							</div>
 						</div>
-						
+						<scrip>
+
+						</scrip>
 						<p class="main-gate__title" id="color_title">Título de la pista <label class="input-color-label" for="input-color_titulo" >
   <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label>				 </p>
 								
@@ -276,32 +307,35 @@
 								<div class="col-12">
 									<nav class="social-nav text-center">
 										<a href="" class="social-nav__link">
-											<i class="fab fa-facebook-square"></i>
+											<i class="fab fa-facebook-square" style="display: none;" id="facebook-square"></i>
+										</a>
+										<a href="" class="social-nav__link" >
+											<i class="fab fa-twitter-square" style="display: none;" id="twitter-square"></i>
 										</a>
 										<a href="" class="social-nav__link">
-											<i class="fab fa-twitter-square"></i>
+											<i class="fab fa-youtube-square" style="display: none;" id="youtube-square"></i>
+										</a>
+										<a href="" class="social-nav__link" >
+											<i class="fab fa-soundcloud" style="display: none;" id="soundcloud-square"></i>
 										</a>
 										<a href="" class="social-nav__link">
-											<i class="fab fa-youtube-square"></i>
+											<i class="fab fa-instagram-square" style="display: none;" id="instagram-square"></i>
 										</a>
 										<a href="" class="social-nav__link">
-											<i class="fab fa-soundcloud"></i>
+											<i class="fab fa-spotify" style="display: none;" id="spotify-square"></i>
 										</a>
 										<a href="" class="social-nav__link">
-											<i class="fab fa-instagram-square"></i>
+											<i class="fab fa-deezer" style="display: none;" id="deezer-square"></i>
 										</a>
 										<a href="" class="social-nav__link">
-											<i class="fab fa-spotify"></i>
+											<i class="fab fa-tiktok" style="display: none;" id="tiktok-square"></i>
 										</a>
 										<a href="" class="social-nav__link">
-											<i class="fab fa-deezer"></i>
-										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-tiktok"></i>
+											<i class="fab fa-mixcloud" style="display: none;" id="mixcloud-square"></i>
 										</a>
 									</nav>
 								</div>
-								<div class="col-12 my-1">
+							<!--	<div class="col-12 my-1">
 									<ul class="nav site-footer__nav justify-content-center">
 										<li class="nav-item">
 											<a class="nav-link" href="#">Enlace</a>
@@ -316,7 +350,7 @@
 											<a class="nav-link" href="#">Enlace</a>
 										</li>
 									</ul>
-								</div>
+								</div>-->
 							</div>
 						</footer>
 					</div>
@@ -324,13 +358,13 @@
 			</div><!-- .col-md-6 -->
 			<div class="col-md-5">
 				<div class="form-row mb-4">
-					<div class="col-7">
+					<!--<div class="col-7">
 						<div class="label" style="margin-bottom: calc(1em + 25px);">Tema:</div>
 						<div class="select-plan select-plan--theme" id="select-plan" style="transform: translateY(-50%);">
 							<span id="opt-1" class="select-plan__option" data-plan="claro">Claro</span>
 							<span id="opt-2" class="select-plan__option active" data-plan="obscuro">Obscuro</span>
 						</div>
-					</div><!-- .col-7 -->
+					</div> .col-7 -->
 					<div class="col-5">
 						<label class="label" for="color">Color:</label>
 						<div class="input-color-wrapper">
@@ -364,13 +398,6 @@
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn" disabled>Siguiente <i class="fa fa-angle-right"></i></button>
 	</section>
 	<!-- End Section Step -->
-
-	<!-- Section Step -->
-	{{#if backstore}}{{else}}
-	{{> section-steps }}
-	{{/if}}
-	<!-- End Section Step -->
-
 	<!-- Section Step -->
 	<section class="section-step" data-step-desc="Privacidad">
 		<p class="form-steps__title form-steps__title--label text-left">Selecciona la privacidad de este título</p>
@@ -403,6 +430,8 @@
 				<i class="fa fa-link"></i>
 			</div>
 			<input type="text" class="form-control-steps" id="gate-link" name="gate_link" placeholder="Enlace" required value="mitrack123">
+			<input type="hidden" class="form-control-steps" id="chek_gate-link" name="gate_link2" placeholder="Enlace" required value="{{array}}">
+
 		</div>
 		<div id="gate-link-output" class="mt-3 text-muted text-center">
 			https://backartis.herokuapp.com/track/<span>mitrack123</span>

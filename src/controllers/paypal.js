@@ -183,6 +183,7 @@ exports.aprobarOrden = async (req, res, next) => {
   var token = req.params.token
   var amount = req.params.amount
   var product = req.params.product
+  var modo = req.params.modo
   console.log(token)
   request.post('https://api-m.sandbox.paypal.com/v2/checkout/orders/' + OrderID + '/capture', {
       headers: {
@@ -235,8 +236,12 @@ exports.aprobarOrden = async (req, res, next) => {
         //res.render('complete_pay', {product, dashboardPage:true});
        BD_conect.guardarPago(userId,status,numero_referencia,amount,product, 'Paypal').then(()=>{
           //req.user.membership=producto;     
-          
-          res.render('complete_pay', {product, dashboardPage:true});
+          console.log(modo)
+          BD_conect.guardarPlan_user(userId,product,modo,'Paypal').then((respg)=> {
+            console.log(respg)
+          res.render('complete_pay', {errores,product,dashboardPage:true});
+
+          })
 
       })
       })

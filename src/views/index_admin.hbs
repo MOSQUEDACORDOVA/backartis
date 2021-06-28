@@ -1,10 +1,11 @@
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 	{{#if msg}}
 	<!-- Sweet Alert -->
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<!--jQuery -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	
 <script>
 	$( document ).ready(function() {
     if ( $("#msgs").length ) {
@@ -12,12 +13,59 @@
 	 console.log("mensaje");
 	 Swal.fire(mensaje)
 	}
+
 });
 
 	 
 </script>
 <label id="msgs"></label>
 {{/if}}
+<style>
+	.texto-gris{
+    color: #CCC;
+	margin-left: 10px;
+}
+.contenedor_usuarios {
+ 
+    width:120%;
+}
+/* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
+/* Ponemos un color de fondo y redondeamos las esquinas del track */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+</style>
+<script>
+	$( document ).ready(function() {
+   jQuery("#buscador").keyup(function(){
+	console.log("hola mundo")
+    if( jQuery(this).val() != ""){
+        jQuery("#tabla_ tbody>tr").hide();
+        jQuery("#tabla_ td:contiene-palabra('" + jQuery(this).val() + "')").parent("tr").show();
+    }
+    else{
+        jQuery("#tabla_ tbody>tr").show();
+    }
+});
+ 
+jQuery.extend(jQuery.expr[":"], 
+{
+    "contiene-palabra": function(elem, i, match, array) {
+        return (elem.textContent || elem.innerText || jQuery(elem).text() || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+    }
+});
+
+});
+
+</script>
 <div class="card-box data-user text-center text-lg-left d-lg-inline-block">
 	<h2 class="data-user__name">{{user.name}} {{user.lastName}}</h2>
 	<p class="data-user__user-name">{{user.tipo}}</p>
@@ -31,20 +79,106 @@
 	{{#if cupones}}<div><a class="" href="/cupones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Cupon</label></a></i></div>{{/if}}
 	{{#if banners}}<div><a class="" href="/banner_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Banner</label></a></i></div>{{/if}}
 	{{#if notificaciones}}<div><a class="" href="/notificaciones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Notificación</label></a></i></div>{{/if}}
-		
-		{{#each usuarios as |user i|}}	 <article class="gate-item">
-			<a href="#" class="gate-item__img">
-				<img src="/assets/uploads/{{user.photo}}" alt="Gate 1">
-			</a>
-			<div class="gate-item__body">
- 			<h3 class="gate-item__author">{{user.name}} {{user.lastName}}</h3>
-			
-				<h3 class="gate-item__title">{{user.tipo}}</h3>
+<div>
+<label for="buscador">Buscar:</label><input type="text" class="texto-gris" id="buscador" />	
 
-				<form action="/dashboard/id_delete.prueba"  method="POST">
+</div>	
+	
+{{#if usuarios}}
+<div class="contenedor_usuarios">
+{{#if cupones_usados}}
+<div>
+<label for="buscador">Nombre de Usuario: {{username}}</label>	
 
-				</form>
-				<div class="gate-item__options">
+</div>
+<table class="table table-bordered table-striped" id="tabla_">
+						<thead>
+							<tr>
+								<th class="text-xs-center">
+									Cupon
+								</th>
+								<th class="text-xs-center">
+									Tipo de cupon
+								</th> 
+								<th class="text-xs-center">
+									Valor del cupon
+								</th> 
+								<th class="text-xs-center">
+									Fecha de Uso
+								</th> 
+								<th class="text-xs-center">
+									Usado en
+								</th> 
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each cupones_usados as |cupon i|}}	 
+			<tr>
+				<td>{{cupon.nombre_cupon}}</td>
+				<td>{{cupon.tipo}}</td>
+				<td>{{cupon.valor}}</td>
+				<td>{{cupon.fecha_uso}}</td>
+				<td>{{cupon.usado_en}}</td>
+				
+				
+				</tr>		
+	{{/each}}
+	</tbody> 
+ 			</table>
+
+
+{{else}}
+<table class="table table-bordered table-striped" id="tabla_">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Nombre y Apellido
+								</th>
+								<th class="text-xs-center">
+									Usuario
+								</th>
+								<th class="text-xs-center">
+									Correo
+								</th> 
+								<th class="text-xs-center">
+									Fecha de registro
+								</th> 
+								<th class="text-xs-center">
+									Tipo de Plan
+								</th> 
+								<th class="text-xs-center">
+									Modalidad
+								</th> 
+								<th class="text-xs-center">
+									Inicio de Plan
+								</th> 
+								<th class="text-xs-center">
+									Fin de Plan
+								</th> 
+								<th class="text-xs-center">
+									Cupones usados
+								</th> 
+								<th class="text-xs-center">
+									Opciones
+								</th> 
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each usuarios as |user i|}}	 
+			<tr>
+				<td>{{user.name}} {{user.lastName}}</td>
+				<td>{{user.userName}}</td>
+				<td>{{user.email}}</td>
+				<td>{{#formatoFecha user.createdAt}}{{/formatoFecha}}</td>
+				<td>{{user.membership}}</td>
+				<td>{{user.modo}}</td>
+				<td>{{user.desde}}</td>
+				<td>{{user.hasta}}</td>
+				<td><a href="/cupones_usados/{{user.id}}/{{user.userName}}" class="gate-item__option">Ver
+						<i class="fa fa-eyes"></i>
+					</a></td>
+				<td><div class="gate-item__options">
 					<a href="/borrar_user/{{user.id}}" class="gate-item__option">
 						<i class="fa fa-trash-alt"></i>
 					</a>
@@ -52,13 +186,19 @@
 						<i class="fa fa-pen"></i>
 					</a>
 					
-				</div>
-			</div>
-		</article>
-	{{/each}}<!-- .gate-item -->
+				</div></td>
+				</tr>		
+	{{/each}}
+	</tbody> 
+ 			</table>
+			 {{/if}}
+			 </div>
+	<!-- .gate-item -->
+	{{/if}}
+
 	
 	{{#if planes}}
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped" id="tabla_">
 						<thead>
 							<tr>
                             <!--<th class="text-xs-center">
@@ -99,7 +239,7 @@
 	<!-- .gate-item -->
 	{{/if}}
 	{{#if aboutUs_parsed}}
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped" id="tabla_">
 						<thead>
 							<tr>
                             <!--<th class="text-xs-center">
@@ -145,17 +285,20 @@
 	{{/if}}
 
 	{{#if cupones}}
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped" id="tabla_">
 						<thead>
 							<tr>
                             <!--<th class="text-xs-center">
 									Id
 								</th>-->
 								<th class="text-xs-center">
-									Nº Cupon
+									Tipo Cupon
 								</th>
 								<th class="text-xs-center">
-									Cupon
+									Valor
+								</th> 
+								<th class="text-xs-center">
+									Nombre Cupon
 								</th>
 								<th class="text-xs-center">
 									Fecha creacion
@@ -164,7 +307,10 @@
 									Fecha final
 								</th> 
 								<th class="text-xs-center">
-									Valor
+									Cantidad Actual
+								</th>								
+								<th class="text-xs-center">
+									Estado
 								</th> 
 								<th class="text-xs-center">
 									Opciones
@@ -173,11 +319,13 @@
 						</thead><tbody ></tbody>
 	{{#each cuponoes_parsed as |cupon i|}}	 
 			<tr>
-				<td>{{cupon.numero_cupon}}</td>
+				<td>{{cupon.tipo}}</td>
+				<td>{{cupon.valor}}</td>
 				<td>{{cupon.nombre_cupon}}</td>
 				<td>{{cupon.fecha_inicio}}</td>
 				<td>{{cupon.fecha_final}}</td>
-				<td>{{cupon.valor}}</td>
+				<td>{{cupon.cantidad}}</td>				
+				<td>{{#estadoCupon cupon.fecha_final cupon.cantidad}}{{/estadoCupon}}</td>
 				<td><div class="gate-item__options">
 					<a href="/borrar_cupon/{{cupon.id}}" class="gate-item__option">
 						<i class="fa fa-trash-alt"></i>
@@ -195,7 +343,7 @@
 	{{/if}}
 
 	{{#if ventas}}
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped" id="tabla_">
 						<thead>
 							<tr>
                             <!--<th class="text-xs-center">
@@ -234,7 +382,7 @@
 	<!-- .gate-item -->
 	{{/if}}
 		{{#if banners}}
-	<table class="table table-bordered table-striped">
+	<table class="table table-bordered table-striped" id="tabla_">
 						<thead>
 							<tr>
                             <!--<th class="text-xs-center">
@@ -273,7 +421,7 @@
 	<!-- .gate-item -->
 	{{/if}}
 	{{#if notificaciones}}
-	<table class="table table-bordered table-striped">
+	<table class="table table-bordered table-striped" id="tabla_">
 						<thead>
 							<tr>
                             <!--<th class="text-xs-center">

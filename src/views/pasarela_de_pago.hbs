@@ -125,7 +125,7 @@ function backcoins_pay(id){
   confirmButtonText: 'Pagar'
 }).then((result) => {
   if (result.isConfirmed) {
-	  window.location.href = '/pagar_backcoins/'+'{{userId}}'+ '/{{product}}'+ '/{{amount}}';
+	  window.location.href = '/pagar_backcoins/'+'{{userId}}'+ '/{{product}}'+ '/{{amount}}'+ '/{{modo}}';
   }
 });
 }
@@ -296,7 +296,7 @@ function backcoins_pay(id){
         hostedFields.submit().then(payload => {
 			console.log("hola2")
       const $cargando = document.getElementById("cargando");
-          return fetch('/handle-approve/' + payload.orderId + '/{{access_token}}'+ '/{{product}}'+ '/{{amount}}'+ '/{{userId}}', {
+          return fetch('/handle-approve/' + payload.orderId + '/{{access_token}}'+ '/{{product}}'+ '/{{amount}}'+ '/{{userId}}' {{#if modo}}+ '/{{modo}}'{{/if}}, {
             method: 'POST'
            }).then(response => {
             if (!response.ok) {
@@ -332,7 +332,7 @@ Swal.fire({
   /* Read more about handling dismissals below */
   if (result.dismiss === Swal.DismissReason.timer) {
     console.log('I was closed by the timer')
-   {{#if backstore_sell}}window.location.href = '/downgate/{{archivo}}/{{id_gate}}/{{correo}}';{{else}}window.location.href = '/dashboard';{{/if}}
+   {{#if backstore_sell}}window.location.href = '/downgate/{{archivo}}/{{id_gate}}/{{userId}}/{{correo}}';{{else}}window.location.href = '/dashboard';{{/if}}
   }
 })
  

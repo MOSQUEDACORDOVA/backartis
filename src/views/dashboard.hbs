@@ -16,7 +16,6 @@
 	 console.log("mensaje");
 	 Swal.fire(mensaje)
 	}
-
 	
 }); 
 </script>
@@ -98,7 +97,7 @@ $("#loading").show();
 		</ul>
 	</nav>
 	<div class="grid-gates">
-{{#each gates as |item i|}}		<article class="gate-item">
+{{#each gates as |item i| }}		<article class="gate-item">
 			<a href="/track/{{item.enlace_perzonalizado}}" class="gate-item__img" target="_blank">
 				<img src="/assets/uploads/{{item.imagen}}" alt="Gate 1">
 			</a>
@@ -109,7 +108,7 @@ $("#loading").show();
 				<div class="gate-item__statistics">
 					<p><i class="fa fa-eye"></i></p>
 					<p><i class="fa fa-download"></i>{{item.descargas}}</p>
-					<p><i class="fa fa-envelope"></i></p>
+					<p><i class="fa fa-envelope"></i>{{item.correos}}</p>
 				</div>
 				<form action="/dashboard/id_delete.prueba"  method="POST">
 
@@ -124,9 +123,7 @@ $("#loading").show();
 					<a href="/mix" class="gate-item__option" onclick="pruebaclick()">
 						<i class="fab fa-soundcloud"></i>
 					</a>
-					<a href="#" class="gate-item__option">
-						<i class="fa fa-share-alt"></i>
-					</a>
+					
 				</div>
 			</div>
 		</article>

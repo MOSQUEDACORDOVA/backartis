@@ -16,13 +16,30 @@ exports.walletDashboard = (req, res) => {
 	if (req.params.msg) {
 		msg =req.params.msg;
 	}
+	BD_module.obtenerGatesbyUser(user.id).then((respuesta) =>{
+		let parsed_g = JSON.parse(respuesta);
+		total_gates= parsed_g.length
+		console.log(total_gates);	
+		let total_descargas = 0
+		for (let i = 0; i < total_gates; i++) {
+			total_descargas += parseInt(parsed_g[i].descargas) 
+			//console.log(plan_basico_Mensual)
+			//const element = array[index];
+			
+		}
+		BD_module.obtenerSuscripbyUserG(user.id).then((data) =>{
+			let parsed_s = JSON.parse(data);
+			total_sus= parsed_s.length
+
 	res.render('wallet', {
 		pageName: 'Billetera',
 		dashboardPage: true,
 		movimientos: true,
-		msg,
+		msg,total_gates,total_descargas,total_sus,
 		user
 	})
+})
+})
 }
 exports.datos_pagos = (req, res) => {
 	const user = res.locals.user;
@@ -36,12 +53,28 @@ exports.datos_pagos = (req, res) => {
 		//console.log(parsed);
 
 		if (typeof parsed=== 'undefined') {
+			BD_module.obtenerGatesbyUser(user.id).then((respuesta) =>{
+				let parsed_g = JSON.parse(respuesta);
+				total_gates= parsed_g.length
+				let total_descargas = 0
+			for (let i = 0; i < total_gates; i++) {
+				total_descargas += parseInt(parsed_g[i].descargas) 
+				//console.log(plan_basico_Mensual)
+				//const element = array[index];
+				
+			}
+			BD_module.obtenerSuscripbyUserG(user.id).then((data) =>{
+				let parsed_s = JSON.parse(data);
+				total_sus= parsed_s.length
 			res.render('wallet', {
 				pageName: 'Billetera',
 				dashboardPage: true,
 				datos_pagos: true,
-				user
+				total_gates,total_descargas,
+				user,total_sus
 			})
+		})
+		})
 		}else{	
 
 		if (parsed.pais === 'Perú') {
@@ -49,12 +82,28 @@ exports.datos_pagos = (req, res) => {
 		}else{
 			pais_o = true;
 		}
+		BD_module.obtenerGatesbyUser(user.id).then((respuesta) =>{
+			let parsed_g = JSON.parse(respuesta);
+			total_gates= parsed_g.length
+			let total_descargas = 0
+			for (let i = 0; i < total_gates; i++) {
+				total_descargas += parseInt(parsed_g[i].descargas) 
+				//console.log(plan_basico_Mensual)
+				//const element = array[index];
+				
+			}
+
+			BD_module.obtenerSuscripbyUserG(user.id).then((data) =>{
+				let parsed_s = JSON.parse(data);
+				total_sus= parsed_s.length
 		res.render('wallet', {
 			pageName: 'Billetera',
 			dashboardPage: true,
 			datos_pagos: true,
-			parsed,pais_o,user
+			parsed,pais_o,user,total_gates,total_descargas,total_sus
 		})
+	})
+	})
 }
 });
 }
@@ -101,14 +150,30 @@ exports.recargar_backcoin = (req, res) => {
 
 	if(user.basic) {
 		return res.redirect('/dashboard');
-	}	  
+	}	 
+	
+	BD_module.obtenerGatesbyUser(user.id).then((respuesta) =>{
+		let parsed_g = JSON.parse(respuesta);
+		total_gates= parsed_g.length
+		let total_descargas = 0
+			for (let i = 0; i < total_gates; i++) {
+				total_descargas += parseInt(parsed_g[i].descargas) 
+				//console.log(plan_basico_Mensual)
+				//const element = array[index];
+				
+			}
+
+			BD_module.obtenerSuscripbyUserG(user.id).then((data) =>{
+				let parsed_s = JSON.parse(data);
+				total_sus= parsed_s.length
 	  res.render('wallet', {
 		pageName: 'Billetera',
 		dashboardPage: true,
-		recargar_backcoin: true,
-		
-		user
-	});	
+		recargar_backcoin: true,total_gates,total_descargas,	
+		user,total_sus
+	})
+})
+});	
 	
 }
 
@@ -117,6 +182,7 @@ exports.descontar_backcoin = (req, res) => {
 	var user_id =  req.params.id
 	var producto =  req.params.product
 	var monto =  req.params.amount
+	var modo =  req.params.modo
 	if(user.basic) {
 		return res.redirect('/dashboard');
 	}
@@ -137,8 +203,13 @@ exports.descontar_backcoin = (req, res) => {
 					req.user.membership=producto;
 					let numero_referencia = monto + 1;
 					BD_module.guardarPago(user_id,'Pagado',numero_referencia,monto,producto,'Backcoins').then(()=>{
-
-						let msg ="Membresia actualizada con exito";
+						
+						BD_module.guardarPlan_user(user_id,producto,modo,'Backcoins').then((respg)=> {
+							console.log(respg)
+						 // res.render('complete_pay', {product,dashboardPage:true});
+				
+						  })
+				
 						//return console.log(msg)
 						//return res.redirect('/dashboard');
 					 // 

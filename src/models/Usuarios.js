@@ -83,7 +83,25 @@ const Usuarios = db.define('usuarios', {
 	},
 	expiration: {
 		type: DataTypes.DATE
-	}
+	},
+	modo: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},
+	desde: {
+		type: DataTypes.DATE,
+		allowNull: true,
+	},
+	hasta: {
+		type: DataTypes.DATE,
+		allowNull: true,
+		defaultValue: ""
+	},
+	metodo_pago: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
 }, {
 	hooks: {
 		beforeCreate(usuario) {

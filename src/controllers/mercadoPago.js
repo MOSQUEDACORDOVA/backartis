@@ -13,6 +13,7 @@ exports.pasarela = async (req, res, next) => {
   var product = false
   var backstore_sell = false
   var correo = false
+  var modo=""
 if (req.params.archivo) {
   archivo = req.params.archivo
   id_gate = req.params.id_gate
@@ -21,12 +22,15 @@ if (req.params.archivo) {
   correo = req.params.correo
   var userId =  req.params.user_id
   backstore_sell = true
-  console.log(product)
+  modo = false
+  console.log(modo)
 
 }else{
   //const {amount, product } = req.body;
   amount = req.body.amount
   product = req.body.product
+  modo = req.body.modo
+  console.log(modo)
   var userId = res.locals.user.id;
 
 }
@@ -66,7 +70,7 @@ let preference = {
      "pending": "localhost:3000/visa/respuesta/pending"
   //auto_return: "approved",
   },
-  external_reference: userId+"/"+product+"/"+amount,
+  external_reference: userId+"/"+product+"/"+amount+"/"+modo,
   // ...
   
 };
@@ -135,7 +139,8 @@ request.post(PAYPAL_API + '/v1/oauth2/token',
         CLIENT_ID,
         global,
       amount, 
-      product, 
+      product,       
+      modo,
       archivo,
       id_gate,  
       Backcoin,
@@ -144,7 +149,20 @@ request.post(PAYPAL_API + '/v1/oauth2/token',
         //user
       });
     }else{
-
+      BD_conect.obtenerGatesbyUser(userId).then((respuesta) =>{
+        let parsed_g = JSON.parse(respuesta);
+        total_gates= parsed_g.length
+        console.log(total_gates);	
+        let total_descargas = 0
+        for (let i = 0; i < total_gates; i++) {
+          total_descargas += parseInt(parsed_g[i].descargas) 
+          //console.log(plan_basico_Mensual)
+          //const element = array[index];
+          
+        }
+        BD_conect.obtenerSuscripbyUserG(userId).then((data) =>{
+          let parsed_s = JSON.parse(data);
+          total_sus= parsed_s.length
       res.render('pasarela_de_pago', {
 		pageName: 'Pasarela',
 	  dashboardPage: true,
@@ -154,13 +172,17 @@ request.post(PAYPAL_API + '/v1/oauth2/token',
 		CLIENT_ID,
     global,
   amount, 
-  product, 
+  product,  
+  modo, 
   archivo,
   id_gate,  
-  Backcoin,
-  backstore_sell,userId
+  Backcoin,total_descargas,total_gates,
+  backstore_sell,userId, total_sus
 		//user
-	});
+	})
+})
+      })
+  ;
     }
 	  
 
@@ -190,6 +212,7 @@ exports.pagar = async (req, res, next) => {
       let userid = aux[0];
       let producto = aux[1];
       let monto = aux[2];
+      let modo = aux[3];
       let status = req.query.status
       console.log(req.query);
       let product = false;
@@ -220,8 +243,14 @@ exports.pagar = async (req, res, next) => {
             req.user.membership=producto;
             BD_conect.guardarPago(userid,status,numero_referencia,monto,producto,'MercadoPago').then(()=>{
              
-              
+              BD_conect.guardarPlan_user(userid,producto,modo,'MercadoPago').then((respg)=> {
+                console.log(respg)
               res.render('complete_pay', {errores,product,dashboardPage:true});
+
+              })
+              
+
+
            })
       //      res.render('complete_pay', {errores,product,dashboardPage:true});
          })

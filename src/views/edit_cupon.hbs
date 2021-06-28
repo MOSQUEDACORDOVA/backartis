@@ -42,17 +42,7 @@ function valideKey(evt){
 			</div><!-- .form-update-accound__item -->
 			
 			
-
-			<div class="form-update-account__item" style="grid-row-end: 1;">
-				<label class="form-steps__title" for="ws">Nº de cupon</label>
-				<div class="form-control-steps__container">
-					<div class="form-control-steps__placeholder">
-						<i class="fas fa-sort-numeric-up-alt"></i>
-					</div>
-					<input type="text" class="form-control-steps"  id="n_cupon" name="n_cupon" placeholder="Número de cupón" value="{{parsed_cupon.numero_cupon}}" required >
-				</div>
-			</div><!-- .form-update-accound__item -->
-		<div class="form-update-account__item">
+		<div class="form-update-account__item" style="grid-row-end: 1;">
 				<label class="form-steps__title" for="text">Valor del cupón</label>
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">
@@ -93,7 +83,7 @@ function valideKey(evt){
 					<div class="form-control-steps__placeholder">
 						<i class="fas fa-calendar-alt"></i>
 					</div>
-					<input type="date" class="form-control-steps" id="fecha_inicio" name="fecha_inicio" placeholder="Inicio de validez del cupon" value="{{parsed_cupon.fecha_inicio}}" autocomplete="off" >
+					<input type="datetime-local" class="form-control-steps" id="fecha_inicio" name="fecha_inicio" placeholder="Inicio de validez del cupon" value="{{parsed_cupon.fecha_inicio}}" autocomplete="off" >
 				</div>
 			</div><!-- .form-update-accound__item -->
 			<div class="form-update-account__item">
@@ -102,7 +92,7 @@ function valideKey(evt){
 					<div class="form-control-steps__placeholder">
 						<i class="fas fa-calendar-alt"></i>
 					</div>
-					<input type="date" class="form-control-steps" id="fecha_final" name="fecha_final" placeholder="Fecha finalización" value="{{parsed_cupon.fecha_final}}" autocomplete="off" >
+					<input type="datetime-local" class="form-control-steps" id="fecha_final" name="fecha_final" placeholder="Fecha finalización" value="{{parsed_cupon.fecha_final}}" autocomplete="off" >
 				</div>
 			</div><!-- .form-update-accound__item -->
 			
