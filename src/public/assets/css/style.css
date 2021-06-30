@@ -1757,7 +1757,7 @@ a.card-box:hover {
 
 @media screen and (min-width: 992px) {
 	.grid-gates {
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr;
 	}
 }
 
@@ -1838,6 +1838,10 @@ a.card-box:hover {
 	border-radius: 20px;
 	overflow: hidden;
 	display: block;
+}
+.gate-item__img img{
+	height: 100px;
+	width: 100px;
 }
 
 /* Widget Box */
@@ -2779,4 +2783,18 @@ select.form-control-steps {
 .add-other__btn i,
 .remove-other__btn i {
 	pointer-events: none;
+}
+
+/*-- Rodolfo --*/
+#paypal .card_field, #paypal #card-holder-name{
+	border: 1px solid hsl(45, 70%, 45%) !important;
+	border-radius: 20px;
+	height: 50px !important;
+	padding: 19px;
+}
+#paypal .btn_paypal{
+	margin-top: 1rem;
+	background-color: hsl(45, 70%, 45%);
+	border-radius: 25px;
+	border-color: hsl(45, 70%, 45%);
 }

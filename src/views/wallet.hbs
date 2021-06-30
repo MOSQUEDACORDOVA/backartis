@@ -205,7 +205,7 @@ $( ".onlynum" ).keypress(function(evt) {
 				<label class="form-steps__title" for="text">Correo</label>
 				<div class="form-control-steps__container mb-3">
 						<div class="form-control-steps__placeholder">
-					<i class="fas fa-file-signature"></i>
+							<i class="far fa-envelope"></i>
 						</div>
 				
 					<input type="mail" class="form-control-steps"  id="correo" name="correo" placeholder="Correo electrónico" required {{#if parsed}}value="{{parsed.correo}}"{{/if}}>
@@ -215,7 +215,7 @@ $( ".onlynum" ).keypress(function(evt) {
 				<label class="form-steps__title">Selecciona el país</label>
 			<div class="form-control-steps__container mb-3">
 				<div class="form-control-steps__placeholder">
-					<i class="fa fa-music"></i>
+					<i class="fas fa-search-location"></i>
 				</div>
 				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 				<select name="pais" id="pais" class="form-control-steps" style="background-color: #11111108;" >
@@ -232,7 +232,7 @@ $( ".onlynum" ).keypress(function(evt) {
 				<label class="form-steps__title">Banco</label>
 			<div class="form-control-steps__container mb-3">
 				<div class="form-control-steps__placeholder">
-					<i class="fa fa-music"></i>
+					<i class="fas fa-university"></i>
 				</div>
 				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 				<select name="banco_peru" id="banco_peru" class="form-control-steps" style="background-color: #11111108;" {{#if pais_o}} disabled{{/if}}>
@@ -267,7 +267,7 @@ $( ".onlynum" ).keypress(function(evt) {
 				<label class="form-steps__title" for="user-name">Número de Cuenta</label>
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">
-						<i class="fa fa-user"></i>
+						<i class="fas fa-university"></i>
 					</div>
 					<input type="text" class="form-control-steps onlynum" id="cuenta" name="cuenta" placeholder="Número de Cuenta" {{#if parsed}} value="{{parsed.cuenta}}"{{/if}}>
 				</div>
