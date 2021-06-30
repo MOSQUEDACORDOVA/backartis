@@ -41,7 +41,13 @@ exports.showLandingPage = (req, res) => {
 				//const element = array[index];
 				
 			}
-			console.log(parsedBanner)
+			Modulo_BD
+		.totalaboutUs().then((data)=>{
+			let parsed_about = JSON.parse(data)[0];
+		//	console.log(parsed_about)
+
+
+			//console.log(parsedBanner)
 			res.render('home', {
 				pageName: 'Inicio',
 				landingPage: true,
@@ -52,8 +58,11 @@ exports.showLandingPage = (req, res) => {
 				plan_Gold_mensual,
 				msg,
 				parsedBanner,
+				parsed_about,
 				layout: false
 			});
+
+		})
 
 		})
 	})

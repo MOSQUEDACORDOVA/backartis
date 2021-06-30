@@ -66,7 +66,7 @@ const Usuarios = db.define('usuarios', {
 	tipo: {
 		type: DataTypes.STRING(90),
 		allowNull: false,
-		defaultValue: 'Basic'
+		defaultValue: 'Normal'
 	},
 	membership: {
 		type: DataTypes.STRING(60),

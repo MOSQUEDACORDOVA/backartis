@@ -35,30 +35,24 @@ if (req.params.archivo) {
 
 }
 
-  
+BD_conect
+		.obtenerTipo_cambio().then((resultado)=>{
+			let parsed_tipo_cambio = JSON.parse(resultado)[0];
+
+  let monto_soles = parseFloat(amount) * parseFloat(parsed_tipo_cambio.tipo_cambio)
+  console.log(monto_soles)
 // Agrega credenciales
 mercadopago.configure({
   access_token: 'TEST-7704156678097466-010904-a33b280de26eb4d1e747cf84848e3706-696588363'
 });
 console.log(parseFloat(amount))
 // Crea un objeto de preferencia
-var payer = {
-  name: "Charles",
-  surname: "Luevano",
-  email: "charles@hotmail.com",
-  date_created: "2015-06-02T12:58:41.425-04:00",
- 
-  identification: {
-    type: "DNI",
-    number: "12345678"
-  },
-}
 let preference = {
   items: [
     {
       id: userId,
       title: product,
-      unit_price: parseFloat(amount),
+      unit_price: parseFloat(monto_soles),
       quantity: 1,
       //currency_id: 'USD',
     }
@@ -74,6 +68,7 @@ let preference = {
   // ...
   
 };
+
 
 
 mercadopago.preferences.create(preference)
@@ -202,6 +197,7 @@ var global = response.body.id;
 }).catch(function(error){
   console.log(error);
 });
+})
 }
 
 exports.pagar = async (req, res, next) => {

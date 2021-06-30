@@ -86,13 +86,13 @@ $("#loading").show();
 	<nav class="card-box__nav" id="gates-navigation">
 		<ul class="nav flex-column flex-md-row align-items-center justify-content-md-between">
 			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link active" href="/dashboard/filegate"><label style="cursor: pointer;"><i class="fa fa-download "> </i>File Gate</label></a>
+				<a class="nav-link {{#if fileGateget}} active{{/if}}" href="/dashboard/filegate"><label style="cursor: pointer;"><i class="fa fa-download "> </i>File Gate</label></a>
 			</li>
 			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link {{#if user.basic}}sb-disabled{{/if}}" href="/dashboard/bondgate" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}><label style="cursor: pointer;"><i class="fa fa-link"></i>Bond Gate</label></a> 
+				<a class="nav-link {{#if user.basic}}sb-disabled{{/if}} {{#if bondGateget}} active{{/if}}" href="/dashboard/bondgate" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}><label style="cursor: pointer;"><i class="fa fa-link"></i>Bond Gate</label></a> 
 			</li>
 			<li class="nav-item">
-				<a class="nav-link {{#if user.gold}}{{else}}sb-disabled{{/if}}" href="/dashboard/backstore" {{#if user.gold}}{{else}}data-swal-title="Solo disponible para usuarios Gold"{{/if}}><label style="cursor: pointer;"><i class="fa fa-cart-arrow-down"></i> BackStore</label></a>
+				<a class="nav-link {{#if user.gold}}{{else}}sb-disabled{{/if}} {{#if backstoreget}} active{{/if}}" href="/dashboard/backstore" {{#if user.gold}}{{else}}data-swal-title="Solo disponible para usuarios Gold"{{/if}}><label style="cursor: pointer;"><i class="fa fa-cart-arrow-down"></i> BackStore</label></a>
 			</li>
 		</ul>
 	</nav>

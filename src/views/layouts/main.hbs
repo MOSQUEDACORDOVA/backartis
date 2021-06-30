@@ -38,7 +38,7 @@
 					</button>
 					<div id="header-toggle-elements" >
 						<ul id="list-notifications" class="list-notifications" >
-							{{#if notificaciones}} {{#notificaciones parsed_lmit}}{{/notificaciones}} {{/if}}
+							{{#if parsed_lmit}} {{#notificaciones parsed_lmit}}{{/notificaciones}} {{/if}}
 							
 							{{!-- <li class="list-notifications__item text-center">No hay notificaciones</li> 
 							
@@ -105,12 +105,15 @@
 			<li class="nav-item">
 				<a class="nav-link {{#if notificaciones}} active{{/if}}" href="/notificaciones" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Notificaciones</label></a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link {{#if tipo_cambio}} active{{/if}}" href="/tipo_cambio" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Tipo Cambio</label></a>
+			</li>
 		</ul>
 	</nav>
 				</div>
 			</div>
 			{{else}}
-			<div class="text-center user-statistics__container" style="min-height: 450px;">
+			<div class="text-center user-statistics__container" style="max-height: 450px;">
 				<div class="card-box shadow">
 					<div class="user-statistics">
 						<p class="user-statistics__title"><i class="fa fa-download"></i>Gates</p>

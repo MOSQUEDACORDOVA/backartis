@@ -18,11 +18,74 @@ exports.dashboard = (req, res) => {
 exports.shareMusic = (req, res) => {
 	const user = res.locals.user;
 
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+	notPhoto = false;	
+	}
+	Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2)=>{
+		let parsed_lmit = JSON.parse(resultado2);
+		let cont= parsed_lmit.length
+		
+		Hoy = new Date();//Fecha actual del sistema
+		var AnyoHoy = Hoy.getFullYear();
+		var MesHoy = Hoy.getMonth();
+		var DiaHoy = Hoy.getDate();
+		var hay_not = false
+		for (let i = 0; i < cont; i++) {
+			var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
+			var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+			console.log(Fecha1)
+				
+				var AnyoFecha = Fecha1.getFullYear();
+				var MesFecha = Fecha1.getMonth();
+				var DiaFecha = Fecha1.getDate();
+
+			
+			 if (parsed_lmit[i].estado == "Activa") {
+				
+				if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+					break;
+				 }else{
+					 console.log("hay fecha")
+					 hay_not = true
+					 
+				 }
+			 }else{
+				 console.log("hay activo")
+				 hay_not = true
+				 break;
+				 
+			 }
+			}
+		
+	Modulo_BD.obtenerGatesbyUser(user.id).then((respuesta) =>{
+		let parsed_g = JSON.parse(respuesta);
+		total_gates= parsed_g.length
+		//console.log(total_gates);
+		let total_descargas = 0
+	for (let i = 0; i < total_gates; i++) {
+			total_descargas += parseInt(parsed_g[i].descargas) 
+			//console.log(plan_basico_Mensual)
+			//const element = array[index];
+			
+		}
+		Modulo_BD.obtenerSuscripbyUserG(user.id).then((data) =>{
+			let parsed_s = JSON.parse(data);
+			total_sus= parsed_s.length
+
 	res.render('share-music', {
 		pageName: 'Compartir mi Música',
-		dashboardPage: true,
+		dashboardPage: true,notPhoto,
+		parsed_lmit,
+		hay_not,
+		total_gates,
+		total_descargas,total_sus,
 		user
 	})
+})
+	})
+})
 }
 
 exports.changeMembership = (req, res) => {
@@ -30,6 +93,11 @@ exports.changeMembership = (req, res) => {
 	let msg =false;
 	if (req.params.msg) {
 		msg =req.params.msg;
+	}
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+	notPhoto = false;	
 	}
 	Modulo_BD
 	.totalPlanes().then((resultado)=>{
@@ -73,7 +141,41 @@ exports.changeMembership = (req, res) => {
 				//const element = array[index];
 				
 			}
-
+			Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2)=>{
+				let parsed_lmit = JSON.parse(resultado2);
+				let cont= parsed_lmit.length
+				
+				Hoy = new Date();//Fecha actual del sistema
+				var AnyoHoy = Hoy.getFullYear();
+				var MesHoy = Hoy.getMonth();
+				var DiaHoy = Hoy.getDate();
+				var hay_not = false
+				for (let i = 0; i < cont; i++) {
+					var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
+					var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+					console.log(Fecha1)
+						
+						var AnyoFecha = Fecha1.getFullYear();
+						var MesFecha = Fecha1.getMonth();
+						var DiaFecha = Fecha1.getDate();
+		
+					
+					 if (parsed_lmit[i].estado == "Activa") {
+						
+						if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+							break;
+						 }else{
+							 console.log("hay fecha")
+							 hay_not = true
+							 
+						 }
+					 }else{
+						 console.log("hay activo")
+						 hay_not = true
+						 break;
+						 
+					 }
+					}
 			Modulo_BD.obtenerSuscripbyUserG(user.id).then((data) =>{
 				let parsed_s = JSON.parse(data);
 				total_sus= parsed_s.length
@@ -82,13 +184,12 @@ exports.changeMembership = (req, res) => {
 			dashboardPage: true,
 			plan_basico_Mensual,plan_VIP_Anual,	plan_Gold_Anual,plan_VIP_Mensual,plan_Gold_mensual,
 			total_descargas,
-			total_gates,
-			user,msg,total_sus
+			total_gates,notPhoto,parsed_lmit,hay_not,user,msg,total_sus
 		})
 	})
 		})
 	})
-	
+	})
 }
 
 exports.changeMembershipCupon = (req, res) => {
@@ -198,7 +299,9 @@ exports.changeMembershipCupon = (req, res) => {
 								 var monto_mensual_gold = plan_Gold_mensual[0].costo-descuento_mensual_gold
 								 console.log(monto_mensual_gold);
 							 }
-
+							 Gates.obtenerSuscripbyUserG(user.id).then((data) =>{
+								let parsed_s = JSON.parse(data);
+								total_sus= parsed_s.length
 
 							 res.render('membership_cupon', {
 								 pageName: 'Membresía',
@@ -208,10 +311,10 @@ exports.changeMembershipCupon = (req, res) => {
 									 plan_Gold_Anual,
 									 plan_VIP_Mensual,
 									 plan_Gold_mensual,
-									 monto_anual_vip,monto_mensual_vip,monto_anual_gold,monto_mensual_gold,
+									 monto_anual_vip,monto_mensual_vip,monto_anual_gold,monto_mensual_gold,total_sus,
 								 user
 							 })
-
+ })
 
 					 
 						 })

@@ -84,7 +84,6 @@ exports.formSearchAccount = (req, res) => {
 exports.sendToken = async (req, res) => {
 	// verificar si el usuario existe
 	const {email} = req.body;
-
 	const usuario = await Usuarios.findOne({where: {email}});
 
 	if(!usuario) {
@@ -101,7 +100,9 @@ exports.sendToken = async (req, res) => {
 
 	// Url de reset
 	const resetUrl = `http://${req.headers.host}/search-account/${usuario.token}`;
-	res.redirect('/search-account/'+usuario.token);
+
+
+	res.redirect('/sendMail/'+usuario.token + '/'+ email);
 	console.log(resetUrl);
 }
 

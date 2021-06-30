@@ -2,6 +2,11 @@ const Modulo_BD = require('../models/modulos_');
 
 exports.dashboard = (req, res) => {
 	//console.log(req.params.gates);
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let msg =false;
 	if (req.params.msg) {
 		msg =req.params.msg;
@@ -23,7 +28,7 @@ exports.dashboard = (req, res) => {
 					dashboardPage: true,
 					cont_user:cont,
 					cont_gates:total_gates,
-					admin_dash1,
+					admin_dash1,notPhoto,
 					msg
 				});
 
@@ -33,6 +38,11 @@ exports.dashboard = (req, res) => {
 exports.verCupones = (req, res) => {
 	let userID = req.params.id;
 	let username = req.params.username
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	//console.log(req.params.gates);
 	let msg =false;
 	if (req.params.msg) {
@@ -50,7 +60,7 @@ exports.verCupones = (req, res) => {
 					dashboardPage: true,
 					usuarios: true,
 					admin_dash1: true,
-					username,
+					username,notPhoto,
 					msg
 				});
 
@@ -155,6 +165,11 @@ exports.deleteUser = async (req, res) => {
 // PLANES
 exports.planes = (req, res) => {
 	//console.log(req.params.gates);
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let msg =false;
 	if (req.params.msg) {
 		msg =req.params.msg;
@@ -178,7 +193,7 @@ exports.planes = (req, res) => {
 					planes_parsed: parsed,
 					planes,
 					cont_gates:total_gates,
-					admin_dash1,
+					admin_dash1,notPhoto,
 					msg,
 				});
 
@@ -186,7 +201,11 @@ exports.planes = (req, res) => {
 }
 
 exports.addplanes = (req, res) => {
-	
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let userID = req.user.id;
 	console.log(userID);
 	//Modulo_BD
@@ -197,7 +216,7 @@ exports.addplanes = (req, res) => {
 				res.render("crear_planes", {
 					pageName: "Crear Plan",
 					dashboardPage: true,
-					userID,
+					userID,notPhoto,
 				});
 
 		//})
@@ -244,6 +263,11 @@ exports.deletePlan = async (req, res) => {
 exports.editPlan = (req, res) => {
 	let id_buscar = req.params.id;
 //	var id_user = req.user.id;
+var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 let admin_dash1= true;
 
 	Modulo_BD
@@ -255,7 +279,7 @@ let admin_dash1= true;
 	res.render('edit_plan', {
 		pageName: 'Editar Plan',
 		dashboardPage: true,
-		parsed_plan,
+		parsed_plan,notPhoto,
 		admin_dash1
 		
 	});
@@ -283,6 +307,11 @@ res.redirect('/admin_dash/'+msg)
 //ABOUT US
 exports.aboutUs = (req, res) => {
 	//console.log(req.params.gates);
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let msg =false;
 	if (req.params.msg) {
 		msg =req.params.msg;
@@ -304,7 +333,7 @@ exports.aboutUs = (req, res) => {
 					dashboardPage: true,
 					cont_user:cont,
 					aboutUs_parsed: parsed,
-					aboutUs,
+					aboutUs,notPhoto,
 					cont_gates:total_gates,
 					admin_dash1,
 					msg,
@@ -314,7 +343,11 @@ exports.aboutUs = (req, res) => {
 }
 
 exports.addAboutUs = (req, res) => {
-	
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let userID = req.user.id;
 	//console.log(userID);
 	//Modulo_BD
@@ -325,7 +358,7 @@ exports.addAboutUs = (req, res) => {
 				res.render("create_about", {
 					pageName: "Crear Sobre Nosotros",
 					dashboardPage: true,
-					userID,
+					userID,notPhoto
 				});
 
 		//})
@@ -353,6 +386,11 @@ exports.editabout = (req, res) => {
 	let id_buscar = req.params.id;
 //	var id_user = req.user.id;
 	let admin_dash1= true;
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 
 	Modulo_BD
 		.obtenerAboutforedit(id_buscar).then((resultado)=>{
@@ -363,7 +401,7 @@ exports.editabout = (req, res) => {
 	res.render('edit_about', {
 		pageName: 'Editar Plan',
 		dashboardPage: true,
-		parsed_about,
+		parsed_about,notPhoto,
 		admin_dash1
 		
 	});
@@ -405,6 +443,11 @@ exports.deleteAbout = async (req, res) => {
 // CUPONES
 exports.getCupones = (req, res) => {
 	//console.log(req.params.gates);
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let msg =false;
 	if (req.params.msg) {
 		msg =req.params.msg;
@@ -426,7 +469,7 @@ exports.getCupones = (req, res) => {
 					dashboardPage: true,
 					cont_user:cont,
 					cuponoes_parsed: parsed,
-					cupones,
+					cupones,notPhoto,
 					cont_gates:total_gates,
 					admin_dash1,
 					msg,
@@ -436,7 +479,11 @@ exports.getCupones = (req, res) => {
 }
 
 exports.addCupon = (req, res) => {
-	
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let userID = req.user.id;
 	//console.log(userID);
 	//Modulo_BD
@@ -447,7 +494,7 @@ exports.addCupon = (req, res) => {
 				res.render("create_cupon", {
 					pageName: "Crear Cupón",
 					dashboardPage: true,
-					userID,
+					userID,notPhoto
 				});
 
 		//})
@@ -475,7 +522,11 @@ exports.editCupon = (req, res) => {
 	let id_buscar = req.params.id;
 //	var id_user = req.user.id;
 	let admin_dash1= true;
-
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	Modulo_BD
 		.obtenerCuponforedit(id_buscar).then((resultado)=>{
 			let parsed_cupon = JSON.parse(resultado)[0];
@@ -486,7 +537,7 @@ exports.editCupon = (req, res) => {
 		pageName: 'Editar Cupón',
 		dashboardPage: true,
 		parsed_cupon,
-		admin_dash1
+		admin_dash1,notPhoto
 		
 	});
 
@@ -531,6 +582,11 @@ exports.getPagos = (req, res) => {
 	if (req.params.msg) {
 		msg =req.params.msg;
 	}
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	var total_gates="";
 	let admin_dash1= true;
 	Modulo_BD.totalGates().then((res) =>{
@@ -552,7 +608,7 @@ exports.getPagos = (req, res) => {
 					dashboardPage: true,
 					cont_user:cont,
 					ventas_parsed: parsed,
-					ventas,
+					ventas,notPhoto,
 					cont_gates:total_gates,
 					admin_dash1,
 					msg,
@@ -569,7 +625,11 @@ exports.bannersGet = (req, res) => {
 	if (req.params.msg) {
 		msg =req.params.msg;
 	}
-	
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let admin_dash1= true;
 	Modulo_BD
 		.obtenerBanners().then((resultado)=>{
@@ -582,7 +642,7 @@ exports.bannersGet = (req, res) => {
 					dashboardPage: true,
 					cont_user:cont,
 					banners_parsed: parsed,
-					banners,
+					banners,notPhoto,
 					admin_dash1,
 					msg,
 				});
@@ -591,12 +651,16 @@ exports.bannersGet = (req, res) => {
 }
 
 exports.addBanner = (req, res) => {
-	
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	let userID = req.user.id;
 				res.render("create_banner", {
 					pageName: "Crear Banner",
 					dashboardPage: true,
-					userID,
+					userID,notPhoto
 				});
 }
 
@@ -622,7 +686,11 @@ exports.editBanner = (req, res) => {
 	let id_buscar = req.params.id;
 //	var id_user = req.user.id;
 	let admin_dash1= true;
-
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	Modulo_BD
 		.obtenerBannerforedit(id_buscar).then((resultado)=>{
 			let parsed_banner = JSON.parse(resultado)[0];
@@ -632,7 +700,7 @@ exports.editBanner = (req, res) => {
 	res.render('edit_banner', {
 		pageName: 'Editar Banner',
 		dashboardPage: true,
-		parsed_banner,
+		parsed_banner,notPhoto,
 		admin_dash1
 		
 	});
@@ -677,7 +745,11 @@ exports.notificacionesGet = (req, res) => {
 	if (req.params.msg) {
 		msg =req.params.msg;
 	}
-	
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	Modulo_BD
 		.obtenernotificaciones().then((resultado)=>{
 			let parsed = JSON.parse(resultado);
@@ -697,7 +769,7 @@ exports.notificacionesGet = (req, res) => {
 					parsed_lmit,
 					notificaciones: true,
 					admin_dash1: true,
-					msg,
+					msg,notPhoto
 				});
 
 		})
@@ -707,6 +779,11 @@ exports.notificacionesGet = (req, res) => {
 
 exports.addnotificaciones = (req, res) => {
 	let userID = req.user.id;
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	Modulo_BD
 	.obtenerUsuarios().then((resultado)=>{
 		let parsed = JSON.parse(resultado);
@@ -715,7 +792,7 @@ exports.addnotificaciones = (req, res) => {
 			res.render("notificaciones", {
 				pageName: "Crear Notificacion",
 				usuarios_parsed: parsed,
-				dashboardPage: true,
+				dashboardPage: true,notPhoto,
 				admin_dash1:true,userID
 			});
 
@@ -743,7 +820,11 @@ exports.save_notificaciones = async (req, res) => {
 exports.editNotificaciones = (req, res) => {
 	let id_buscar = req.params.id;
 	let userID = req.user.id;
-
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
 	Modulo_BD
 		.obtenerNotificacionforedit(id_buscar).then((resultado)=>{
 			let parsed_notificacion = JSON.parse(resultado)[0];
@@ -753,7 +834,7 @@ exports.editNotificaciones = (req, res) => {
 	res.render('notificaciones', {
 		pageName: 'Editar Notificacion',
 		dashboardPage: true,
-		parsed_notificacion,
+		parsed_notificacion,notPhoto,
 		admin_dash1: true,userID
 
 		
@@ -762,31 +843,139 @@ exports.editNotificaciones = (req, res) => {
 		})
 }
 
-exports.sEditedBanner = async (req, res) => {
-	const {id,link,	photo1,	nombre} = req.body;	
-
-		Modulo_BD.saveEditedBanner(id,link,	photo1,	nombre).then((result) => {
-				console.log(result);
-				
-		})
-			.catch(err => {
-	return res.status(500).send("Error actualizando"+err);
-});
-let msg ="Banner actualizado con exito";
-res.redirect('/banner/'+msg)	
-
-}
-exports.deleteBanner = async (req, res) => {
+exports.deletenotificaciones = async (req, res) => {
 	let parametro_buscar = req.params.id;
 
 	Modulo_BD
-		.deleteBanner(parametro_buscar).then((resultado)=>{
+		.deleteNotificaciones(parametro_buscar).then((resultado)=>{
 			//let parsed = JSON.parse(resultado);
 			//let cont= parsed.length
 			console.log(resultado);
 			
-			let msg ="Banner eliminado con exito";
-			res.redirect('/banner/'+msg)	
+			let msg ="Notificacion eliminada con exito";
+			res.redirect('/notificaciones/'+msg)	
+
+		})
+	
+}
+
+
+//TIPO DE CAMBIO
+exports.tipo_cambio = (req, res) => {
+	//console.log(req.params.gates);
+	let msg =false;
+	if (req.params.msg) {
+		msg =req.params.msg;
+	}
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
+	Modulo_BD
+		.obtenerTipo_cambio().then((resultado)=>{
+			let parsed_tipo_cambio = JSON.parse(resultado);
+			//let cont= parsed.length
+			Modulo_BD
+		.obtenernotificacionesbyLimit3().then((resultado2)=>{
+			let parsed_lmit = JSON.parse(resultado2);
+			//let cont= parsed.length
+			console.log(parsed_lmit);
+			
+				res.render("index_admin", {
+					//usuarios: parsed,
+					dashboardPage: true,
+					parsed_tipo_cambio,
+					parsed_lmit,
+					tipo_cambio: true,
+					admin_dash1: true,
+					msg,notPhoto
+				});
+
+		})
+
+		})
+}
+
+exports.tipo_cambio_add = (req, res) => {
+	let userID = req.user.id;
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
+	
+		//console.log(parsed);
+			res.render("tipo_cambio", {
+				pageName: "Crear Tipo de Cambio",
+				dashboardPage: true,
+				notPhoto,
+				admin_dash1:true,
+				userID
+			});
+}
+
+exports.tipo_cambio_save = async (req, res) => {
+	const {id_user,tipo_cambio} = req.body;
+	var id_tipo = req.body.id_tipo
+	console.log(id_tipo)
+	if (typeof id_tipo === 'undefined') {
+		id_tipo = 1
+		}
+		console.log(id_tipo)
+		var msg ="";
+		Modulo_BD.saveTipoCambio(id_user,tipo_cambio,id_tipo).then((result) => {
+				console.log(result);
+				if (result==="0") {
+					msg ="Se actualizó con exito el tipo de cambio";
+				}else{
+					msg ="Tipo de Cambio guardado con exito";	
+				}
+				res.redirect('/tipo_cambio/'+msg)
+		})
+			.catch(err => {
+	return res.status(500).send("Error actualizando"+err);
+});
+	
+}
+
+exports.tipo_cambio_edit = (req, res) => {
+	let id_buscar = req.params.id;
+	let userID = req.user.id;
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
+	Modulo_BD
+		.obtenerTipoCambioById(id_buscar).then((resultado)=>{
+			let parsed_Tipo_cambio = JSON.parse(resultado)[0];
+			let cont= parsed_Tipo_cambio.length
+		console.log(parsed_Tipo_cambio);
+
+	res.render('tipo_cambio', {
+		pageName: 'Editar Tipo de Cambio',
+		dashboardPage: true,
+		parsed_Tipo_cambio,notPhoto,
+		admin_dash1: true,userID
+
+		
+	});
+
+		})
+}
+
+exports.tipo_cambio_delete = async (req, res) => {
+	let parametro_buscar = req.params.id;
+
+	Modulo_BD
+		.deleteTipo_cambio(parametro_buscar).then((resultado)=>{
+			//let parsed = JSON.parse(resultado);
+			//let cont= parsed.length
+			console.log(resultado);
+			
+			let msg ="Tipo de cambio eliminado con éxito";
+			res.redirect('/tipo_cambio/'+msg)	
 
 		})
 	

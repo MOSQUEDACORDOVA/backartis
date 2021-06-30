@@ -23,30 +23,34 @@
 				</div>
 				<div class="col-12 col-xl-4 d-flex justify-content-center justify-content-xl-end">
 					<nav class="social-nav">
-						<a href="" class="social-nav__link">
-							<i class="fab fa-facebook-square"></i>
-						</a>
-						<a href="" class="social-nav__link">
-							<i class="fab fa-twitter-square"></i>
-						</a>
-						<a href="" class="social-nav__link">
-							<i class="fab fa-youtube-square"></i>
-						</a>
-						<a href="" class="social-nav__link">
-							<i class="fab fa-soundcloud"></i>
-						</a>
-						<a href="" class="social-nav__link">
-							<i class="fab fa-instagram-square"></i>
-						</a>
-						<a href="" class="social-nav__link">
-							<i class="fab fa-spotify"></i>
-						</a>
-						<a href="" class="social-nav__link">
-							<i class="fab fa-deezer"></i>
-						</a>
-						<a href="" class="social-nav__link">
-							<i class="fab fa-tiktok"></i>
-						</a>
+							{{#if parsed_about.facebook}}
+									<a href="{{parsed_about.facebook}}" class="social-nav__link">
+										<i class="fab fa-facebook-square"></i>
+									</a>
+									{{/if}}
+									{{#if parsed_about.twitter}}
+									<a href="{{parsed_about.twitter}}" class="social-nav__link">
+										<i class="fab fa-twitter-square"></i>
+									</a>
+									{{/if}}
+									{{#if parsed_about.youtube}}<a href="{{parsed_about.youtube}}" class="social-nav__link">
+										<i class="fab fa-youtube-square"></i>
+									</a>{{/if}}
+									{{#if parsed_about.soundcloud}}<a href="{{parsed_about.soundcloud}}" class="social-nav__link">
+										<i class="fab fa-soundcloud"></i>
+									</a>{{/if}}
+									{{#if parsed_about.instagram}}<a href="{{parsed_about.instagram}}" class="social-nav__link">
+										<i class="fab fa-instagram-square"></i>
+									</a>{{/if}}
+									{{#if parsed_about.spotify}}<a href="{{parsed_about.spotify}}" class="social-nav__link">
+										<i class="fab fa-spotify"></i>
+									</a>{{/if}}
+									{{#if parsed_about.mixcloud}}<a href="{{parsed_about.mixcloud}}" class="social-nav__link">
+										<i class="fab fa-mixcloud"></i>
+									</a>{{/if}}
+									{{#if parsed_about.tiktok}}<a href="{{parsed_about.tiktok}}" class="social-nav__link">
+										<i class="fab fa-tiktok"></i>
+									</a>{{/if}}
 					</nav>
 				</div>
 			</div>
@@ -65,5 +69,7 @@
 	<script src="/assets/js/bootstrap.js"></script>
 	<!-- Script -->
 	<script src="/assets/js/script.js"></script>
+	<script src="/assets/js/jquery.jPaginate.js"></script>
+	
 </body>
 </html>

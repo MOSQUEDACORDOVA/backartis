@@ -1,4 +1,5 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
 	{{#if msg}}
 	<!-- Sweet Alert -->
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -13,6 +14,8 @@
 	 console.log("mensaje");
 	 Swal.fire(mensaje)
 	}
+
+	$()
 
 });
 
@@ -42,8 +45,14 @@
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
 }
+table>thead>tr{font-weight: bolder;}
+.linea-oculta{display: none;}
 </style>
+
 <script>
+	var resultados_por_pagina = 10;
+var pagina_actual = 1;
+var pagina_ultima = 0;
 	$( document ).ready(function() {
    jQuery("#buscador").keyup(function(){
 	console.log("hola mundo")
@@ -62,9 +71,40 @@ jQuery.extend(jQuery.expr[":"],
         return (elem.textContent || elem.innerText || jQuery(elem).text() || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
     }
 });
-
+//contar todos los registros que tenemos
+	var total_registros = $("#tabla_>tbody>tr").length;
+	//saber cuantas paginas vamos a mostrar
+	pagina_ultima = Math.round(total_registros / resultados_por_pagina);
+	//cargar la primera pagina
+	cargarPagina(pagina_actual);
+	//eventos para los botones
+	$("#cargar_primera_pagina").click(function(){
+		cargarPagina(1);
+	});
+	$("#cargar_anterior_pagina").click(function(){
+		cargarPagina(pagina_actual - 1);
+	});
+	$("#cargar_siguiente_pagina").click(function(){
+		cargarPagina(pagina_actual + 1);
+	});
+	$("#cargar_ultima_pagina").click(function(){
+		cargarPagina(pagina_ultima);
+	});
 });
-
+var cargarPagina = function(intPaginaP){
+	//evaluar si la pagina a cargar es mayor que el numero de paginas o es menor que 1
+	if(intPaginaP < 1){intPaginaP = 1;}
+	if(intPaginaP > pagina_ultima){intPaginaP = pagina_ultima;}
+	//ocultar todas las lineas
+	$("#tabla_>tbody>tr").addClass("linea-oculta");
+	var primer_registro = (intPaginaP - 1) * resultados_por_pagina;
+	for (var i = primer_registro; i < (primer_registro + resultados_por_pagina); i++){
+		$("#tabla_>tbody>tr").eq(i).removeClass("linea-oculta");
+	}
+	//indicar en qué pagina estamos
+	pagina_actual = intPaginaP;
+	$("#indicador_paginas").html("Página: " + pagina_actual + " / " + pagina_ultima);
+}
 </script>
 <div class="card-box data-user text-center text-lg-left d-lg-inline-block">
 	<h2 class="data-user__name">{{user.name}} {{user.lastName}}</h2>
@@ -79,6 +119,7 @@ jQuery.extend(jQuery.expr[":"],
 	{{#if cupones}}<div><a class="" href="/cupones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Cupon</label></a></i></div>{{/if}}
 	{{#if banners}}<div><a class="" href="/banner_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Banner</label></a></i></div>{{/if}}
 	{{#if notificaciones}}<div><a class="" href="/notificaciones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Notificación</label></a></i></div>{{/if}}
+	{{#if tipo_cambio}}<div><a class="" href="/tipo_cambio_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Tipo de Cambio</label></a></i></div>{{/if}}
 <div>
 <label for="buscador">Buscar:</label><input type="text" class="texto-gris" id="buscador" />	
 
@@ -123,6 +164,13 @@ jQuery.extend(jQuery.expr[":"],
 				</tr>		
 	{{/each}}
 	</tbody> 
+	<tfoot>
+	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
+	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td id="indicador_paginas"></td>
+	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
+	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+</tfoot>
  			</table>
 
 
@@ -190,6 +238,13 @@ jQuery.extend(jQuery.expr[":"],
 				</tr>		
 	{{/each}}
 	</tbody> 
+	<tfoot>
+	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
+	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td id="indicador_paginas"></td>
+	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
+	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+</tfoot>
  			</table>
 			 {{/if}}
 			 </div>
@@ -338,12 +393,20 @@ jQuery.extend(jQuery.expr[":"],
 				</tr>		
 	{{/each}}
 	</tbody> 
+	<tfoot>
+	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
+	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td id="indicador_paginas"></td>
+	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
+	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+</tfoot>
  			</table>
 	<!-- .gate-item -->
 	{{/if}}
 
 	{{#if ventas}}
-<table class="table table-bordered table-striped" id="tabla_">
+	
+<table class="table table-bordered table-striped" id="tabla_" >
 						<thead>
 							<tr>
                             <!--<th class="text-xs-center">
@@ -366,9 +429,10 @@ jQuery.extend(jQuery.expr[":"],
 								</th> 
 								
 							</tr>
-						</thead><tbody ></tbody>
+						</thead><tbody></tbody>
+						<tbody id="paginationdemo">
 	{{#each ventas_parsed as |venta i|}}	 
-			<tr>
+			<tr  class="pagination__item">
 				<td>{{venta.tipo_compra}}</td>
 				<td>{{venta.createdAt}}</td>
 				<td>{{venta.numero_referencia}}</td>
@@ -378,7 +442,16 @@ jQuery.extend(jQuery.expr[":"],
 				</tr>		
 	{{/each}}
 	</tbody> 
+	
+<tfoot>
+	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
+	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td id="indicador_paginas"></td>
+	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
+	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+</tfoot>
  			</table>
+			 
 	<!-- .gate-item -->
 	{{/if}}
 		{{#if banners}}
@@ -417,6 +490,7 @@ jQuery.extend(jQuery.expr[":"],
 				</tr>		
 	{{/each}}
 	</tbody> 
+	
  			</table>
 	<!-- .gate-item -->
 	{{/if}}
@@ -444,7 +518,7 @@ jQuery.extend(jQuery.expr[":"],
 							</tr>
 						</thead><tbody ></tbody>
 	{{#each notificaciones_parsed as |notificaciones i|}}	 
-			<tr>
+			<tr class="pagedemo ">
 				<td>{{notificaciones.id}}</td>
 				<td>{{notificaciones.nombre}}</td>
 				<td>{{notificaciones.estado}}</td>
@@ -459,8 +533,52 @@ jQuery.extend(jQuery.expr[":"],
 				</div></td>
 				</tr>		
 	{{/each}}
+	
 	</tbody> 
  			</table>
+			
+	<!-- .gate-item -->
+	{{/if}}
+
+	{{#if tipo_cambio}}
+	<table class="table table-bordered table-striped" id="tabla_">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Id
+								</th>
+								<th class="text-xs-center">
+									Tipo de Cambio Actual
+								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
+								
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each parsed_tipo_cambio as |tipo_c i|}}	 
+			<tr class="pagedemo ">
+				<td>{{tipo_c.id}}</td>
+				<td>{{tipo_c.tipo_cambio}}</td>
+				<td><div class="gate-item__options">
+					<a href="/borrar_tipo_cambio/{{tipo_c.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/edit_tipo_cambio/{{tipo_c.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	
+	</tbody> 
+ 			</table>
+			
 	<!-- .gate-item -->
 	{{/if}}
 	</div><!-- .grid-gates -->

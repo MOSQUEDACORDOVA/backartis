@@ -69,8 +69,61 @@ console.log(req_buscar);
 
 exports.formCreateFileGate = (req, res) => {
 	const user = res.locals.user;
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+	notPhoto = false;	
+	}
+	Gates.obtenernotificacionesbyLimit3().then((resultado2)=>{
+		let parsed_lmit = JSON.parse(resultado2);
+		let cont= parsed_lmit.length
+		
+		Hoy = new Date();//Fecha actual del sistema
+		var AnyoHoy = Hoy.getFullYear();
+		var MesHoy = Hoy.getMonth();
+		var DiaHoy = Hoy.getDate();
+		var hay_not = false
+		for (let i = 0; i < cont; i++) {
+			var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
+			var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+			console.log(Fecha1)
+				
+				var AnyoFecha = Fecha1.getFullYear();
+				var MesFecha = Fecha1.getMonth();
+				var DiaFecha = Fecha1.getDate();
 
-	
+			
+			 if (parsed_lmit[i].estado == "Activa") {
+				
+				if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+					break;
+				 }else{
+					 console.log("hay fecha")
+					 hay_not = true
+					 
+				 }
+			 }else{
+				 console.log("hay activo")
+				 hay_not = true
+				 break;
+				 
+			 }
+			}
+		
+	Gates.obtenerGatesbyUser(user.id).then((respuesta) =>{
+		let parsed_g = JSON.parse(respuesta);
+		total_gates= parsed_g.length
+		//console.log(total_gates);
+		let total_descargas = 0
+	for (let i = 0; i < total_gates; i++) {
+			total_descargas += parseInt(parsed_g[i].descargas) 
+			//console.log(plan_basico_Mensual)
+			//const element = array[index];
+			
+		}
+		Gates.obtenerSuscripbyUserG(user.id).then((data) =>{
+			let parsed_s = JSON.parse(data);
+			total_sus= parsed_s.length
 	Gates.totalGates().then((respuesta) =>{
 		let parsed = JSON.parse(respuesta);
 		let array = []
@@ -84,15 +137,17 @@ res.render('create-gate', {
 		pageName: 'Crear File Gate',
 		dashboardPage: true,
 		fileGate: true,
-		array,
+		array,hay_not,
+		total_gates,
+		total_descargas,
+		total_sus,		
+		parsed_lmit,notPhoto,
 		user
 	});
-
-})
-
-
-
-
+				})
+			})
+		})
+	})
 	
 }
 
@@ -139,13 +194,80 @@ exports.formCreateBondGate = (req, res) => {
 	if(user.basic) {
 		return res.redirect('/dashboard');
 	}
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+	notPhoto = false;	
+	}
+	Gates.obtenernotificacionesbyLimit3().then((resultado2)=>{
+		let parsed_lmit = JSON.parse(resultado2);
+		let cont= parsed_lmit.length
+		
+		Hoy = new Date();//Fecha actual del sistema
+		var AnyoHoy = Hoy.getFullYear();
+		var MesHoy = Hoy.getMonth();
+		var DiaHoy = Hoy.getDate();
+		var hay_not = false
+		for (let i = 0; i < cont; i++) {
+			var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
+			var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+			console.log(Fecha1)
+				
+				var AnyoFecha = Fecha1.getFullYear();
+				var MesFecha = Fecha1.getMonth();
+				var DiaFecha = Fecha1.getDate();
 
+			
+			 if (parsed_lmit[i].estado == "Activa") {
+				
+				if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+					break;
+				 }else{
+					 console.log("hay fecha")
+					 hay_not = true
+					 
+				 }
+			 }else{
+				 console.log("hay activo")
+				 hay_not = true
+				 break;
+				 
+			 }
+			}
+		
+	Gates.obtenerGatesbyUser(user.id).then((respuesta) =>{
+		let parsed_g = JSON.parse(respuesta);
+		total_gates= parsed_g.length
+		//console.log(total_gates);
+		let total_descargas = 0
+	for (let i = 0; i < total_gates; i++) {
+			total_descargas += parseInt(parsed_g[i].descargas) 
+			//console.log(plan_basico_Mensual)
+			//const element = array[index];
+			
+		}
+		Gates.obtenerSuscripbyUserG(user.id).then((data) =>{
+			let parsed_s = JSON.parse(data);
+			total_sus= parsed_s.length
+	Gates.totalGates().then((respuesta) =>{
+		let parsed = JSON.parse(respuesta);
+		let array = []
+		for (let i = 0; i < parsed.length; i++) {
+			const enlace_perzonalizado = parsed[i].enlace_perzonalizado;
+			array.push(enlace_perzonalizado)
+			//console.log(parsed)
+			
+		}
 	res.render('create-gate', {
 		pageName: 'Crear Bond Gate',
 		dashboardPage: true,
 		bondGate: true,
-		user
+		notPhoto,parsed_lmit,hay_not,total_gates,total_descargas,total_sus,user
 	});
+});
+});
+});
+});
 }
 
 exports.formBackstore = (req, res) => {
@@ -154,13 +276,80 @@ exports.formBackstore = (req, res) => {
 	if(!user.gold) {
 		return res.redirect('dashboard');
 	}
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+	notPhoto = false;	
+	}
+	Gates.obtenernotificacionesbyLimit3().then((resultado2)=>{
+		let parsed_lmit = JSON.parse(resultado2);
+		let cont= parsed_lmit.length
+		
+		Hoy = new Date();//Fecha actual del sistema
+		var AnyoHoy = Hoy.getFullYear();
+		var MesHoy = Hoy.getMonth();
+		var DiaHoy = Hoy.getDate();
+		var hay_not = false
+		for (let i = 0; i < cont; i++) {
+			var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
+			var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+			console.log(Fecha1)
+				
+				var AnyoFecha = Fecha1.getFullYear();
+				var MesFecha = Fecha1.getMonth();
+				var DiaFecha = Fecha1.getDate();
 
+			
+			 if (parsed_lmit[i].estado == "Activa") {
+				
+				if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+					break;
+				 }else{
+					 console.log("hay fecha")
+					 hay_not = true
+					 
+				 }
+			 }else{
+				 console.log("hay activo")
+				 hay_not = true
+				 break;
+				 
+			 }
+			}
+		
+	Gates.obtenerGatesbyUser(user.id).then((respuesta) =>{
+		let parsed_g = JSON.parse(respuesta);
+		total_gates= parsed_g.length
+		//console.log(total_gates);
+		let total_descargas = 0
+	for (let i = 0; i < total_gates; i++) {
+			total_descargas += parseInt(parsed_g[i].descargas) 
+			//console.log(plan_basico_Mensual)
+			//const element = array[index];
+			
+		}
+		Gates.obtenerSuscripbyUserG(user.id).then((data) =>{
+			let parsed_s = JSON.parse(data);
+			total_sus= parsed_s.length
+	Gates.totalGates().then((respuesta) =>{
+		let parsed = JSON.parse(respuesta);
+		let array = []
+		for (let i = 0; i < parsed.length; i++) {
+			const enlace_perzonalizado = parsed[i].enlace_perzonalizado;
+			array.push(enlace_perzonalizado)
+			//console.log(parsed)
+			
+		}
 	res.render('create-gate', {
 		pageName: 'BackStore',
 		dashboardPage: true,
 		backstore: true,
-		user
+		notPhoto,parsed_lmit,hay_not,total_gates,total_descargas,total_sus,user
 	});
+});
+});
+});
+});
 }
 
 exports.createGate = (req, res) => {
@@ -238,7 +427,9 @@ exports.getGates = async (req, res) => {
 	var id_user = req.user.id;
 	let msg =false;
 	let notPhoto = true;
-
+	let fileGateget = true;
+	let bondGateget = false;
+	let backstoreget = false
 	//console.log(req)
 
 	if (req.params.msg) {
@@ -252,9 +443,20 @@ exports.getGates = async (req, res) => {
 		parametro_buscar="filegate";
 		
 	}
+
+		if (parametro_buscar=== 'bondgate') {
+			 fileGateget = false;
+			 bondGateget = true;
+		}
+		if (parametro_buscar=== 'backstore') {
+			 fileGateget = false;
+			 backstoreget = true;
+		}
+	
 	if (photo=="0") {
 	notPhoto = false;	
 	}
+
 	var total_gates="";
 	
 	//console.log(req.params.gates);
@@ -326,7 +528,7 @@ exports.getGates = async (req, res) => {
 					notPhoto,total_descargas,
 					notificaciones_parsed: parsed,
 					total_sus,parsed_s,
-					hay_not,
+					hay_not,fileGateget,bondGateget,backstoreget,
 					msg
 				});
 				})

@@ -217,7 +217,7 @@
 				<div class="container">
 				<div class="grid-artist">
 					{{#each parsedBanner as |banner i|}}
-						<img src="/assets/uploads/{{banner.photo}}" alt="Logo de {{banner.nombre}}">
+					<a href="{{banner.link}}"  target="_blank">	<img src="/assets/uploads/{{banner.photo}}" alt="Logo de {{banner.nombre}}"></a>
 						{{/each}}
 					</div>
 				</div>

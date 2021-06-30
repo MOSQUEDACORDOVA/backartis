@@ -25,6 +25,9 @@ const paypal = require('../controllers/paypal');
 
 // Landing Page
 router.get('/', landingController.showLandingPage);
+// Landing Page
+
+
 //router.get('//:msg', landingController.showLandingPage);
 
 // Iniciar sesión
@@ -41,6 +44,7 @@ router.post('/register', userController.createUser);
 
 //email route
 router.post('/subscribe', EmailCtrl.sendEmail);
+router.get('/sendMail/:token/:mail', EmailCtrl.sendEmailResetPass);
 // Buscar cuenrta
 router.get('/search-account', userController.formSearchAccount);
 router.post('/search-account', userController.sendToken);
@@ -98,7 +102,16 @@ router.get('/notificaciones_create', authController.authenticatedUser, adminDash
 router.post('/notificaciones_save', authController.authenticatedUser, adminDash.save_notificaciones);
 router.get('/edit_notificaciones/:id', authController.authenticatedUser, adminDash.editNotificaciones);
 router.post('/save_edit_notificaciones', authController.authenticatedUser, adminDash.save_notificaciones);
-router.get('/borrar_notificaciones/:id', authController.authenticatedUser, adminDash.deleteBanner);
+router.get('/borrar_notificaciones/:id', authController.authenticatedUser, adminDash.deletenotificaciones);
+
+
+router.get('/tipo_cambio', authController.authenticatedUser, adminDash.tipo_cambio);
+router.get('/tipo_cambio/:msg', authController.authenticatedUser, adminDash.tipo_cambio);
+router.get('/tipo_cambio_create', authController.authenticatedUser, adminDash.tipo_cambio_add);
+router.post('/tipo_cambio_save', authController.authenticatedUser, adminDash.tipo_cambio_save);
+router.get('/edit_tipo_cambio/:id', authController.authenticatedUser, adminDash.tipo_cambio_edit);
+router.post('/save_edit_tipo_cambio', authController.authenticatedUser, adminDash.tipo_cambio_save);
+router.get('/borrar_tipo_cambio/:id', authController.authenticatedUser, adminDash.tipo_cambio_delete);
 
 
 router.get('/ventas', authController.authenticatedUser, adminDash.getPagos);

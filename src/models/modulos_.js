@@ -12,6 +12,7 @@ const Suscripciones = require('../models/Suscripciones');
 const Backcoin = require('../models/Backcoin');
 const Notificaciones = require('../models/Notificaciones');
 const Used_cupons = require('./Used_cupons');
+const Tipo_cambio = require('./Tipo_cambio');
 
 module.exports = {
 	
@@ -1223,6 +1224,26 @@ consultarCuponMembership(consultar) {
 			})
 		});
 		},
+		totalPagosbyId(id_user) {
+			return new Promise((resolve, reject) => {
+		
+			Pagos.findAll({ 
+				where: {
+					id_usuario: id_user,
+				},order: [
+					// Will escape title and validate DESC against a list of valid direction parameters
+					['updatedAt', 'DESC']
+				  ] })
+			.then(res => {
+				let respuesta= JSON.stringify(res)
+				resolve(respuesta);
+			  //console.log(JSON.stringify(users));
+			})
+			.catch(err => {
+			  console.log(err)
+			})
+		});
+		},
 
 
 		obtenerGateforDown(id) {
@@ -1698,6 +1719,21 @@ consultarCuponMembership(consultar) {
 				});
 				},
 
+				deleteNotificaciones(parametro_buscar) {
+					return new Promise((resolve, reject) => {
+			
+			
+						Notificaciones.destroy({
+							where: {
+								id:parametro_buscar
+							}
+						}).then(() => {
+							//let gates= JSON.stringify(users)
+							resolve("respuesta exitosa");
+						  //console.log(JSON.stringify(users));
+						})
+				});
+				},
 
 				guardarPlan_user(userid,producto,modo,metodo_pago) {
 					Fecha_inicial = new Date();//Fecha actual del sistema
@@ -1733,5 +1769,101 @@ consultarCuponMembership(consultar) {
 						})
 					
 				});
-				},		
+				},
+				
+				// TIPO DE CAMBIO
+
+				obtenerTipo_cambio() {
+					return new Promise((resolve, reject) => {
+				
+					Tipo_cambio.findAll({
+						order: [
+						  // Will escape title and validate DESC against a list of valid direction parameters
+						  ['updatedAt', 'DESC']
+						]
+						})
+					.then(res => {
+						let respuesta= JSON.stringify(res)
+						resolve(respuesta);
+					  //console.log(JSON.stringify(users));
+					})
+					.catch(err => {
+					  console.log(err)
+					})
+				});
+				},
+
+				saveTipoCambio(id_user,tipo_cambio,id_tipo) {
+					return new Promise((resolve, reject) => {
+						Tipo_cambio.findOne({ 
+							where: {
+								id:id_tipo,
+							} }
+						)
+						.then(res => {
+							console.log(res);
+							if (!res) {
+								// Item not found, create a new one
+								Tipo_cambio.create({id_usuario: id_user,tipo_cambio: tipo_cambio})
+					.then(res => {
+						let respuesta= JSON.stringify(res)
+						resolve(respuesta);
+					  //console.log(respuesta);
+					})
+					.catch(err => {
+					  console.log(err)
+					})
+					}else{		
+									Tipo_cambio.update({id_usuario:id_user,tipo_cambio: tipo_cambio}, {
+										where: {
+											id:id_tipo,
+										}})
+									.then(resp => {
+										let res= JSON.stringify(resp)
+										resolve("0");
+									 // console.log(res);
+									})
+									.catch(err => {
+									  console.log(err)
+									})
+							}
+						})
+					
+				});
+				},
+
+				obtenerTipoCambioById(id) {
+					return new Promise((resolve, reject) => {
+					
+					Tipo_cambio.findAll({ 
+						where: {
+							id: id,
+						} }
+					)
+					.then(res => {
+						let ress= JSON.stringify(res)
+						resolve(ress);
+					  console.log(id);
+					})
+					.catch(err => {
+					  console.log(err)
+					})
+					});
+					},
+
+					deleteTipo_cambio(parametro_buscar) {
+						return new Promise((resolve, reject) => {
+				
+				
+							Tipo_cambio.destroy({
+								where: {
+									id:parametro_buscar
+								}
+							}).then(() => {
+								//let gates= JSON.stringify(users)
+								resolve("respuesta exitosa");
+							  //console.log(JSON.stringify(users));
+							})
+					});
+					},
 	}

@@ -81,7 +81,67 @@ $( ".onlynum" ).keypress(function(evt) {
 </script>
 <label id="msgs"></label>
 {{/if}}
-
+<style>
+	table>thead>tr{font-weight: bolder;}
+.linea-oculta{display: none;}
+</style>
+<script>
+var resultados_por_pagina = 6;
+var pagina_actual = 1;
+var pagina_ultima = 0;
+	$( document ).ready(function() {
+   jQuery("#buscador").keyup(function(){
+	console.log("hola mundo")
+    if( jQuery(this).val() != ""){
+        jQuery("#tabla_ tbody>tr").hide();
+        jQuery("#tabla_ td:contiene-palabra('" + jQuery(this).val() + "')").parent("tr").show();
+    }
+    else{
+        jQuery("#tabla_ tbody>tr").show();
+    }
+});
+ 
+jQuery.extend(jQuery.expr[":"], 
+{
+    "contiene-palabra": function(elem, i, match, array) {
+        return (elem.textContent || elem.innerText || jQuery(elem).text() || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+    }
+});
+//contar todos los registros que tenemos
+	var total_registros = $("#tabla_>tbody>tr").length;
+	//saber cuantas paginas vamos a mostrar
+	pagina_ultima = Math.round(total_registros / resultados_por_pagina);
+	//cargar la primera pagina
+	cargarPagina(pagina_actual);
+	//eventos para los botones
+	$("#cargar_primera_pagina").click(function(){
+		cargarPagina(1);
+	});
+	$("#cargar_anterior_pagina").click(function(){
+		cargarPagina(pagina_actual - 1);
+	});
+	$("#cargar_siguiente_pagina").click(function(){
+		cargarPagina(pagina_actual + 1);
+	});
+	$("#cargar_ultima_pagina").click(function(){
+		cargarPagina(pagina_ultima);
+	});
+});
+var cargarPagina = function(intPaginaP){
+	//evaluar si la pagina a cargar es mayor que el numero de paginas o es menor que 1
+	if(intPaginaP < 1){intPaginaP = 1;}
+	if(intPaginaP > pagina_ultima){intPaginaP = pagina_ultima;}
+	//ocultar todas las lineas
+	$("#tabla_>tbody>tr").addClass("linea-oculta");
+	var primer_registro = (intPaginaP - 1) * resultados_por_pagina;
+	for (var i = primer_registro; i < (primer_registro + resultados_por_pagina); i++){
+		$("#tabla_>tbody>tr").eq(i).removeClass("linea-oculta");
+	}
+	//indicar en qué pagina estamos
+	pagina_actual = intPaginaP;
+	$("#indicador_paginas").html("Página: " + pagina_actual + " / " + pagina_ultima);
+}
+</script>
 <h1 class="dashboard-title">Mi billetera</h1>
 <div class="card-box card-box--share-music shadow card-box--bg-celeste position-relative">
 	<div class="row">
@@ -111,54 +171,36 @@ $( ".onlynum" ).keypress(function(evt) {
 		</div>
 
 		{{#if movimientos}}<div class="col-12" style="margin-top: 1.5rem;">
-			<table class="table table-striped table-hover">
+			<table class="table table-striped table-hover" id="tabla_">
 				<p class="text-center font-weight-bold h3" style="margin-bottom: 1.5rem;">Últimos movimientos</p>
 				<thead class="thead-dark">
 					<tr>
 						<th>Fecha</th>
-						<th>Tipo</th>
-						<th>Id</th>
+						<th>Tipo (Producto)</th>
+						<th>Metodo de Pago</th>
 						<th>Monto</th>
 						<th>Comprobante</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>18/07/2003</td>
-						<td>Algún tipo</td>
-						<td>1</td>
-						<td>100</td>
-						<td>Algún comprobante</td>
-					</tr>
-					<tr>
-						<td>18/07/2003</td>
-						<td>Algún tipo</td>
-						<td>1</td>
-						<td>100</td>
-						<td>Algún comprobante</td>
-					</tr>
-					<tr>
-						<td>18/07/2003</td>
-						<td>Algún tipo</td>
-						<td>1</td>
-						<td>100</td>
-						<td>Algún comprobante</td>
-					</tr>
-					<tr>
-						<td>18/07/2003</td>
-						<td>Algún tipo</td>
-						<td>1</td>
-						<td>100</td>
-						<td>Algún comprobante</td>
-					</tr>
-					<tr>
-						<td>18/07/2003</td>
-						<td>Algún tipo</td>
-						<td>1</td>
-						<td>100</td>
-						<td>Algún comprobante</td>
-					</tr>
+					{{#each parsed_ventas as |venta i|}}	 
+			<tr  class="pagination__item">
+				<td>{{venta.createdAt}}</td>
+				<td>{{venta.tipo_compra}}</td>
+				<td>{{venta.metodo_pago}}</td>
+				<td>$ {{venta.monto}}</td>
+				<td>{{venta.numero_referencia}}</td>
+				</tr>		
+	{{/each}}
+					
 				</tbody>
+				<tfoot>
+	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
+	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td id="indicador_paginas"></td>
+	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
+	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+</tfoot>
 			</table>
 		</div>{{/if}}
 		{{#if datos_pagos}}	<div class="col-12" style="margin-top: 1.5rem;">
@@ -205,7 +247,7 @@ $( ".onlynum" ).keypress(function(evt) {
 				<label class="form-steps__title" for="text">Correo</label>
 				<div class="form-control-steps__container mb-3">
 						<div class="form-control-steps__placeholder">
-							<i class="far fa-envelope"></i>
+					<i class="fas fa-envelope"></i>
 						</div>
 				
 					<input type="mail" class="form-control-steps"  id="correo" name="correo" placeholder="Correo electrónico" required {{#if parsed}}value="{{parsed.correo}}"{{/if}}>
@@ -215,7 +257,7 @@ $( ".onlynum" ).keypress(function(evt) {
 				<label class="form-steps__title">Selecciona el país</label>
 			<div class="form-control-steps__container mb-3">
 				<div class="form-control-steps__placeholder">
-					<i class="fas fa-search-location"></i>
+					<i class="fa fa-search-location"></i>
 				</div>
 				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 				<select name="pais" id="pais" class="form-control-steps" style="background-color: #11111108;" >
@@ -232,7 +274,7 @@ $( ".onlynum" ).keypress(function(evt) {
 				<label class="form-steps__title">Banco</label>
 			<div class="form-control-steps__container mb-3">
 				<div class="form-control-steps__placeholder">
-					<i class="fas fa-university"></i>
+					<i class="fa fa-university"></i>
 				</div>
 				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 				<select name="banco_peru" id="banco_peru" class="form-control-steps" style="background-color: #11111108;" {{#if pais_o}} disabled{{/if}}>
@@ -267,7 +309,7 @@ $( ".onlynum" ).keypress(function(evt) {
 				<label class="form-steps__title" for="user-name">Número de Cuenta</label>
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">
-						<i class="fas fa-university"></i>
+						<i class="fa fa-university"></i>
 					</div>
 					<input type="text" class="form-control-steps onlynum" id="cuenta" name="cuenta" placeholder="Número de Cuenta" {{#if parsed}} value="{{parsed.cuenta}}"{{/if}}>
 				</div>

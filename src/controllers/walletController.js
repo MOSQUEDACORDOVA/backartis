@@ -7,7 +7,11 @@ var PAYPAL_API = 'https://api-m.sandbox.paypal.com';
 
 exports.walletDashboard = (req, res) => {
 	const user = res.locals.user;
-
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+	notPhoto = false;	
+	}
 	if(user.basic) {
 		return res.redirect('/dashboard');
 	}
@@ -16,6 +20,41 @@ exports.walletDashboard = (req, res) => {
 	if (req.params.msg) {
 		msg =req.params.msg;
 	}
+	BD_module.obtenernotificacionesbyLimit3().then((resultado2)=>{
+		let parsed_lmit = JSON.parse(resultado2);
+		let cont= parsed_lmit.length
+		
+		Hoy = new Date();//Fecha actual del sistema
+		var AnyoHoy = Hoy.getFullYear();
+		var MesHoy = Hoy.getMonth();
+		var DiaHoy = Hoy.getDate();
+		var hay_not = false
+		for (let i = 0; i < cont; i++) {
+			var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
+			var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
+			console.log(Fecha1)
+				
+				var AnyoFecha = Fecha1.getFullYear();
+				var MesFecha = Fecha1.getMonth();
+				var DiaFecha = Fecha1.getDate();
+
+			
+			 if (parsed_lmit[i].estado == "Activa") {
+				
+				if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy){
+					break;
+				 }else{
+					 console.log("hay fecha")
+					 hay_not = true
+					 
+				 }
+			 }else{
+				 console.log("hay activo")
+				 hay_not = true
+				 break;
+				 
+			 }
+			}
 	BD_module.obtenerGatesbyUser(user.id).then((respuesta) =>{
 		let parsed_g = JSON.parse(respuesta);
 		total_gates= parsed_g.length
@@ -31,13 +70,21 @@ exports.walletDashboard = (req, res) => {
 			let parsed_s = JSON.parse(data);
 			total_sus= parsed_s.length
 
+			BD_module
+			.totalPagosbyId(user.id).then((resultado)=>{
+				let parsed_ventas = JSON.parse(resultado);
+				console.log(parsed_ventas)
+				let cont= parsed_ventas.length
+				let ventas = true;
 	res.render('wallet', {
 		pageName: 'Billetera',
 		dashboardPage: true,
 		movimientos: true,
-		msg,total_gates,total_descargas,total_sus,
+		msg,total_gates,total_descargas,total_sus,notPhoto,parsed_ventas,parsed_lmit,hay_not,
 		user
 	})
+})
+})
 })
 })
 }

@@ -604,8 +604,6 @@ display: none;}
     <a href="/backstore_sell/{{gate.archivo}}/{{gate.id}}/{{gate.id_usuario}}/{{gate.music_price}}/backstore" class="btn btn-primary btn-block btn_disabled" id="backstore_link">Ir a la Pasarela <i class="fa fa-angle-right"></i></a>
 
 </div>
-
-
 {{else}}
 <!-- One "tab" for each step in the form: -->
 {{#if gate.like_facebook}}
@@ -675,7 +673,7 @@ display: none;}
 </div>
 
 <!-- Circles which indicates the steps of the form: -->
-<div style="text-align:center;margin-top:40px;" hidden>
+<div style="text-align:center;margin-top:40px;">
   <span class="step"></span>
   {{#if gate.like_facebook}}<span class="step"></span>{{/if}}
   {{#if gate.compartir_facebook}}<span class="step"></span>{{/if}}
