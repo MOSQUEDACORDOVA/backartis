@@ -134,7 +134,7 @@
 
 		});
 
-$('#url-demo').on('change',function() {
+$('#url-demo').on('keyup',function() {
 const btna = document.getElementById('btn_url');
 console.log("hola")
 let link         = document.getElementById('url-demo').value,
@@ -142,8 +142,10 @@ let link         = document.getElementById('url-demo').value,
 	console.log(link_.length)
 	if(link_[0] == "https:" && link_[2] == "soundcloud.com" && link_.length > 4){
 		console.log("correcto")
+		btna.removeAttribute('disabled');
 	}else if(link_[0] == "https:" && link_[2] == "soundcloud.es" && link_.length > 4){
 		console.log("correcto1")
+		btna.removeAttribute('disabled');
 	}else{
 		console.log("malo")
 		btna.setAttribute('disabled', true);
