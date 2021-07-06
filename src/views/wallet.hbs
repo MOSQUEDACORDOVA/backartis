@@ -84,6 +84,12 @@ $( ".onlynum" ).keypress(function(evt) {
 <style>
 	table>thead>tr{font-weight: bolder;}
 .linea-oculta{display: none;}
+.ingreso{
+	color: green;
+}
+.egreso{
+	color:red;
+}
 </style>
 <script>
 var resultados_por_pagina = 6;
@@ -184,7 +190,7 @@ var cargarPagina = function(intPaginaP){
 				</thead>
 				<tbody>
 					{{#each parsed_ventas as |venta i|}}	 
-			<tr  class="pagination__item">
+			<tr  class="pagination__item {{#ColorPay venta.metodo_pago venta.tipo_compra}}{{/ColorPay}}">
 				<td>{{venta.createdAt}}</td>
 				<td>{{venta.tipo_compra}}</td>
 				<td>{{venta.metodo_pago}}</td>

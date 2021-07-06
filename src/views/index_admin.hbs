@@ -47,6 +47,16 @@
 }
 table>thead>tr{font-weight: bolder;}
 .linea-oculta{display: none;}
+
+.Activo{
+	color: green;
+}
+.Caducado{
+	color: orange;
+}
+.Agotado{
+	color: red;
+}
 </style>
 
 <script>
@@ -120,6 +130,7 @@ var cargarPagina = function(intPaginaP){
 	{{#if banners}}<div><a class="" href="/banner_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Banner</label></a></i></div>{{/if}}
 	{{#if notificaciones}}<div><a class="" href="/notificaciones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Notificación</label></a></i></div>{{/if}}
 	{{#if tipo_cambio}}<div><a class="" href="/tipo_cambio_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Tipo de Cambio</label></a></i></div>{{/if}}
+	{{#if terminos_ayuda}}<div><a class="" href="/terminos_ayuda_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
 <div>
 <label for="buscador">Buscar:</label><input type="text" class="texto-gris" id="buscador" />	
 
@@ -157,7 +168,7 @@ var cargarPagina = function(intPaginaP){
 				<td>{{cupon.nombre_cupon}}</td>
 				<td>{{cupon.tipo}}</td>
 				<td>{{cupon.valor}}</td>
-				<td>{{cupon.fecha_uso}}</td>
+				<td>{{#formatoFecha2 cupon.fecha_uso}}{{/formatoFecha2}}</td>
 				<td>{{cupon.usado_en}}</td>
 				
 				
@@ -194,6 +205,9 @@ var cargarPagina = function(intPaginaP){
 									Fecha de registro
 								</th> 
 								<th class="text-xs-center">
+									Tipo de usuario
+								</th> 
+								<th class="text-xs-center">
 									Tipo de Plan
 								</th> 
 								<th class="text-xs-center">
@@ -218,11 +232,12 @@ var cargarPagina = function(intPaginaP){
 				<td>{{user.name}} {{user.lastName}}</td>
 				<td>{{user.userName}}</td>
 				<td>{{user.email}}</td>
-				<td>{{#formatoFecha user.createdAt}}{{/formatoFecha}}</td>
+				<td>{{#formatoFecha2 user.createdAt}}{{/formatoFecha2}}</td>
+				<td>{{user.tipo}}</td>
 				<td>{{user.membership}}</td>
 				<td>{{user.modo}}</td>
-				<td>{{user.desde}}</td>
-				<td>{{user.hasta}}</td>
+				<td>{{#formatoFecha2 user.desde}}{{/formatoFecha2}}</td>
+				<td>{{#formatoFecha2 user.hasta}}{{/formatoFecha2}}</td>
 				<td><a href="/cupones_usados/{{user.id}}/{{user.userName}}" class="gate-item__option">Ver
 						<i class="fa fa-eyes"></i>
 					</a></td>
@@ -377,10 +392,10 @@ var cargarPagina = function(intPaginaP){
 				<td>{{cupon.tipo}}</td>
 				<td>{{cupon.valor}}</td>
 				<td>{{cupon.nombre_cupon}}</td>
-				<td>{{cupon.fecha_inicio}}</td>
-				<td>{{cupon.fecha_final}}</td>
+				<td>{{#formatoFecha2 cupon.fecha_inicio}}{{/formatoFecha2}}</td>
+				<td>{{#formatoFecha2 cupon.fecha_final}}{{/formatoFecha2}}</td>
 				<td>{{cupon.cantidad}}</td>				
-				<td>{{#estadoCupon cupon.fecha_final cupon.cantidad}}{{/estadoCupon}}</td>
+				<td class="{{#estadoCupon cupon.fecha_final cupon.cantidad}}{{/estadoCupon}}">{{#estadoCupon cupon.fecha_final cupon.cantidad}}{{/estadoCupon}}</td>
 				<td><div class="gate-item__options">
 					<a href="/borrar_cupon/{{cupon.id}}" class="gate-item__option">
 						<i class="fa fa-trash-alt"></i>
@@ -434,7 +449,7 @@ var cargarPagina = function(intPaginaP){
 	{{#each ventas_parsed as |venta i|}}	 
 			<tr  class="pagination__item">
 				<td>{{venta.tipo_compra}}</td>
-				<td>{{venta.createdAt}}</td>
+				<td>{{#formatoFecha2 venta.createdAt}}{{/formatoFecha2}}</td>
 				<td>{{venta.numero_referencia}}</td>
 				<td>{{venta.metodo_pago}}</td>
 				<td>{{venta.monto}}</td>
@@ -569,6 +584,47 @@ var cargarPagina = function(intPaginaP){
 						<i class="fa fa-trash-alt"></i>
 					</a>
 					<a href="/edit_tipo_cambio/{{tipo_c.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	
+	</tbody> 
+ 			</table>
+			
+	<!-- .gate-item -->
+	{{/if}}
+	{{#if terminos_ayuda}}
+	<table class="table table-bordered table-striped" id="tabla_">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Id
+								</th>
+								<th class="text-xs-center">
+									Tipo
+								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
+								
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each parsed_ayuda as |ayuda i|}}	 
+			<tr class="pagedemo ">
+				<td>{{ayuda.id}}</td>
+				<td>{{ayuda.tipo}}</td>
+				<td><div class="gate-item__options">
+					<a href="/borrar_ayuda/{{ayuda.id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/edit_ayuda/{{ayuda.id}}" class="gate-item__option">
 						<i class="fa fa-pen"></i>
 					</a>
 					
