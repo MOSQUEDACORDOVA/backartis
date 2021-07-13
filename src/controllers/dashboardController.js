@@ -223,23 +223,22 @@ exports.changeMembershipCupon = (req, res) => {
 		var DiaHoy = Hoy.getDate();
 		var horaHoy = Hoy.getHours();
 		var minutosHoy = Hoy.getMinutes();
-			console.log(horaHoy)
-
+		console.log(horaHoy)
 		console.log(minutosHoy)
 
 		var horafinal = Fecha1.getHours();
 		var minutosfinal = Fecha1.getMinutes();
+		console.log("/////")
 		console.log(horafinal)
-
 		console.log(minutosfinal)
-		if (parsed.cantidad == 0) {
+		if (parsed.cantidad_actual == 0) {
 			let msg = "Cupon agotado"
 			res.redirect('/membership/'+msg)	
 			
 		}else {
-			if (AnyoFecha >= AnyoHoy && MesFecha >= MesHoy && DiaFecha >= DiaHoy &&  horaHoy<=horafinal  &&  minutosHoy<=minutosfinal ){
+			if (AnyoFecha >= AnyoHoy && MesFecha >= MesHoy && DiaFecha >= DiaHoy &&  horafinal >= horaHoy ){
 							 console.log("Has introducido la fecha de Hoy");
-							 var cantidad_act = parsed.cantidad - 1;
+							 var cantidad_act = parsed.cantidad_actual - 1;
 							 var id_cupon = parsed.id;
 							 var valor = parsed.valor;
 							 var nombre_cupon = parsed.nombre_cupon;
@@ -299,7 +298,7 @@ exports.changeMembershipCupon = (req, res) => {
 								 var monto_mensual_gold = plan_Gold_mensual[0].costo-descuento_mensual_gold
 								 console.log(monto_mensual_gold);
 							 }
-							 Gates.obtenerSuscripbyUserG(user.id).then((data) =>{
+							 Modulo_BD.obtenerSuscripbyUserG(user.id).then((data) =>{
 								let parsed_s = JSON.parse(data);
 								total_sus= parsed_s.length
 

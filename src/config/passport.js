@@ -13,9 +13,10 @@ passport.use(
 	new LocalStrategy(
 		{
 			usernameField: 'email',
-			passwordField: 'password'
+			passwordField: 'password',
+			passReqToCallback : true
 		},
-		async (email, password, done) => {
+		async (req,email, password, done) => {
 			try {
 				const usuario = await Usuarios.findOne({
 					where: {email}
@@ -25,7 +26,6 @@ passport.use(
 						message: 'Contraseña incorrecta'
 					});
 				}
-
 				return done(null, usuario);
 			}catch(err) {
 				return done(null, false, {

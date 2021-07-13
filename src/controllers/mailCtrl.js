@@ -155,6 +155,7 @@ exports.sendEmailFans = function(req, res){
     console.log(correo)
     console.log(promocionar_musica)
     const resetUrl = `http://${req.headers.host}/track/${promocionar_musica}`;
+    
 // Definimos el transporter
   var transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -183,6 +184,47 @@ transporter.sendMail(mailOptions, function(error, info){
         console.log("Email sent fine");
         let msg="Se envio con exito la musica seleccionada a los correos indicados";
         res.redirect('/fans/'+msg)	 
+     
+        
+      //  res.status(200).jsonp(req.body);
+    }
+});
+};
+
+exports.sendEmail_borra_cuenta = function(req, res){
+	const correo = req.user.email
+    const id_user = req.user.id
+    const resetUrl = `http://${req.headers.host}/borrar_user/${id_user}/ext`;
+
+
+// Definimos el transporter
+  var transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true, 
+        auth: {
+            user: 'josearzolay287@gmail.com',
+            pass: 'geekjjaa2012'
+        }
+    });
+// Definimos el email
+var mailOptions = {
+    from: 'Remitente',
+    to: correo,
+    subject: 'Borrar Cuenta',
+    text:'Nos informaste que deseas borrar tu cuenta con nosotros, para confirmar haz click al siguiente enlace; recuerda que perderas TODA la informacion ' +  resetUrl
+};
+// Enviamos el email
+transporter.sendMail(mailOptions, function(error, info){
+    if (error){
+        console.log(error);
+		let msg="Error al enviar Mensaje";
+		res.redirect('/dashb/'+msg)
+       // res.send(500, err.message);
+    } else {
+        console.log("Email sent fine");
+        let msg="Se envio un correo con el enlace para confirmar la eliminacion de tu cuenta";
+        res.redirect('/dashb/'+msg)	 
      
         
       //  res.status(200).jsonp(req.body);

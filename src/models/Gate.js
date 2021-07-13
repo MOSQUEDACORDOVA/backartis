@@ -38,11 +38,7 @@ const Gates = db.define('gates', {
 	genero: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		validate: {
-			notEmpty: {
-				msg: 'El genero es obligatorio'
-			}
-		}
+		
 	},
 	archivo: {
 		type: DataTypes.TEXT,

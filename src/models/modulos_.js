@@ -2,6 +2,7 @@ const { Op } = require('sequelize');
 const db = require('../config/db');
 const bcrypt = require('bcrypt-nodejs');
 const Gates = require('../models/Gate');
+const Gate_SoundC = require('../models/Gate_SoundC');
 const Usuarios = require('../models/Usuarios');
 const Planes = require('../models/Planes');
 const Sobre_nosotros = require('../models/Sobre_nosotros');
@@ -495,8 +496,6 @@ id_usuario=arreglo.id_user;
 fecha=now;
 tema="Oscuro";
 
-
-
 return new Promise((resolve, reject) => {
 
 	Gates.findOne({ 
@@ -512,7 +511,7 @@ return new Promise((resolve, reject) => {
 					.then(gate => {
 						let gatees= JSON.stringify(gate)
 						resolve(gatees);
-					  //console.log(gatees);
+					 // console.log(gatees);
 					})
 					.catch(err => {
 					  console.log(err)
@@ -1036,7 +1035,7 @@ guardarCupon(id_usuario,nombre_cupon,valor,fecha_inicio,fecha_final,cantidad,tip
 			console.log(res);
 			if (!res) {
 				// Item not found, create a new one
-				Cupones.create({ id_usuario: id_usuario,nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,tipo: tipo})
+				Cupones.create({ id_usuario: id_usuario,nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,cantidad_actual: cantidad,tipo: tipo})
 	.then(res => {
 		let about= JSON.stringify(res)
 		resolve(about);
@@ -1077,7 +1076,7 @@ console.log(fecha_inicio);
   console.log(fecha_final);
 return new Promise((resolve, reject) => {
 
-Cupones.update({ nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,tipo: tipo}, {
+Cupones.update({ nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,cantidad_actual: cantidad,tipo: tipo}, {
 	where: {
 		id: id,
 	}})
@@ -1132,7 +1131,7 @@ consultarCuponMembership(consultar) {
 		fecha=now.toString();
 		return new Promise((resolve, reject) => {
 		
-		Cupones.update({ cantidad: cantidad}, {
+		Cupones.update({ cantidad_actual: cantidad}, {
 			where: {
 				id: id,
 			}})
@@ -1166,7 +1165,10 @@ consultarCuponMembership(consultar) {
 					Used_cupons.findAll({ 
 					where: {
 						id_usuario: id_usuario,
-					} }
+					},order: [
+						// Will escape title and validate DESC against a list of valid direction parameters
+						['updatedAt', 'DESC']
+					  ] }
 				)
 				.then(res => {
 					let ress= JSON.stringify(res)
@@ -1275,7 +1277,16 @@ consultarCuponMembership(consultar) {
 				}})
 			.then(about => {
 				let aboutes= JSON.stringify(about)
+				Gate_SoundC.update({ descargas:descarga}, {
+					where: {
+						id_gate: id,
+					}}).then(() =>{
+						console.log("aqui")
+					})
 				resolve(aboutes);
+
+				
+
 			})
 			.catch(err => {
 			  console.log(err)
@@ -1965,4 +1976,92 @@ consultarCuponMembership(consultar) {
 							})
 					});
 					},
+
+			// SOUNDCLOUD SAVE DETALLES
+			SaveSoundC(id_user,id_gate,title,id_track,permalink_url) {
+				
+				return new Promise((resolve, reject) => {
+					Gate_SoundC.findOne({ 
+						where: {
+							id_gate:id_gate,
+						} }
+					)
+					.then(res => {
+						console.log(res);
+						if (!res) {
+							// Item not found, create a new one
+							Gate_SoundC.create({id_usuario: id_user,id_gate: id_gate,title: title,track_id: id_track,permalink_url: permalink_url,gateId:id_gate})
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(respuesta);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				}else{		
+								Gate_SoundC.update({id_usuario: id_user,id_gate: id_gate,title: title,track_id: id_track,permalink_url: permalink_url}, {
+									where: {
+										id_gate:id_gate,
+									}})
+								.then(resp => {
+									let res= JSON.stringify(resp)
+									resolve("update");
+								 // console.log(res);
+								})
+								.catch(err => {
+								  console.log(err)
+								})
+						}
+					})
+				
+			});
+			},
+
+			obtenerSoundCD() {
+				return new Promise((resolve, reject) => {
+			
+				Gate_SoundC.findAll({
+					include: [
+						{
+							association: Gate_SoundC.Gates
+						}
+					],
+					order: [
+					  // Will escape title and validate DESC against a list of valid direction parameters
+					  ['descargas', 'DESC']
+					]
+					})
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(JSON.stringify(users));
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+			});
+			},
+			obtenerSoundNew() {
+				return new Promise((resolve, reject) => {
+			
+					Gate_SoundC.findAll({include: [
+						{
+							association: Gate_SoundC.Gates
+						}
+					],order: [
+					  // Will escape title and validate DESC against a list of valid direction parameters
+					  ['createdAt', 'DESC']
+					]
+					})
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(JSON.stringify(users));
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+			});
+			},
 	}

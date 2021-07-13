@@ -29,6 +29,7 @@ require('./models/Pagos');
 require('./models/Banner');
 require('./models/Suscripciones');
 require('./models/Notificaciones');
+require('./models/Gate_SoundC');
 
 // Crear el servidor de express
 const app = express();
@@ -75,7 +76,8 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
 	res.locals.messages = req.flash();
-//console.log(req);
+
+//console.log(res);
 	if(req.user) {
 		req.user.basic = req.user.membership === 'Basic' ? true : false;
 		req.user.vip = req.user.membership === 'VIP' ? true : false;

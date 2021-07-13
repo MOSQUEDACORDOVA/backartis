@@ -87,7 +87,7 @@ exports.formCreateFileGate = (req, res) => {
 		for (let i = 0; i < cont; i++) {
 			var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
 			var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
-			console.log(Fecha1)
+			//console.log(Fecha1)
 				
 				var AnyoFecha = Fecha1.getFullYear();
 				var MesFecha = Fecha1.getMonth();
@@ -402,26 +402,21 @@ exports.createGate = (req, res) => {
 			var genero = stream.genre
 			//stream.pipe(fs.createWriteStream('audio.mp3'))
 			console.log(stream)
-			console.log(genero)
+			//console.log(genero)
 	
 			Gates.insertargates(
 				
 				{url_demo,genero,other_gender,url_track,artist_name,music_title,music_desc,music_price,color,color_titulo,color_descripcion,show_watermarker,desing_social,user_logo,privacity,gate_link,promotion,suscribir_youtube,omitir_youtube,url_youtube,nombre_youtube,like_facebook,compartir_facebook,omitir_facebook,url_facebook,seguir_twitter,compartir_twitter,omitir_twitter,url_twitter,seguir_soundcloud,compartir_soundcloud,repost_souncloud,omitir_souncloud,url_souncloud,seguir_instagram,omitir_instagram,url_instagram,seguir_spotify,omitir_spotify,url_spotify,seguir_deezer,guardar_deezer,omitir_deezer,url_deezer,seguir_tiktok,omitir_tiktok,url_tiktok,seguir_mixcloud,repost_mixcloud,like_mixcloud,omitir_mixcloud,url_mixcloud,nuevo_lanzamiento,archivo1,img_flyer,tipo_create, id_user}
 			
 				).then((respuesta) => {
-				console.log(respuesta);
-					let backstore =  false;
-					let bondGate = false;
-					let fileGate =  false;
-					if (tipo_create == "filegate") {
-						fileGate = true
-					}
-					if (tipo_create == "bondgate") {
-						bondGate = true
-					}
-					if (tipo_create == "backstore") {
-						backstore = true
-					}
+				let parsed_ = JSON.parse(respuesta);
+				var id_gate = parsed_.id
+				var title = stream.title
+				var id_track = stream.id
+				var permalink_url = stream.permalink_url
+				
+				Gates.SaveSoundC(id_user,id_gate,title,id_track,permalink_url).then(()=>{
+
 				if (promotion == "Si") {
 					let msg = "Enlace personalizado";
 					//console.log(msg)
@@ -429,6 +424,8 @@ exports.createGate = (req, res) => {
 				}else{
 					res.redirect('/dashboard/filegate')			
 				}
+
+				})					
 					
 			})
 				.catch(err => {
@@ -472,10 +469,11 @@ exports.getGates = async (req, res) => {
 	let fileGateget = true;
 	let bondGateget = false;
 	let backstoreget = false
-	//console.log(req)
+	//console.log(req.session)
 
 	if (req.params.msg) {
 		msg =req.params.msg;
+		console.log(msg)
 	}
 	if (typeof product=== 'undefined') {
 		product= false;
@@ -597,6 +595,8 @@ exports.deleteGate = async (req, res) => {
 }
 
 exports.downloadGate = (req, res) => {
+	console.log(req.params)
+
 	let archivo = req.params.id;
 	var parametro_buscar = req.params.id_gate;
 	var correo = req.params.correo;

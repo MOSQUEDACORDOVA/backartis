@@ -149,7 +149,17 @@ res.redirect('/admin_dash/'+msg)
 }
 exports.deleteUser = async (req, res) => {
 	let parametro_buscar = req.params.id;
+if (req.params.ext) {
+	Modulo_BD
+		.deleteUsuario(parametro_buscar).then((resultado)=>{
+			//let parsed = JSON.parse(resultado);
+			//let cont= parsed.length
+			console.log(resultado);
+			let msg="Se borró con éxito toda la informacion de su cuenta";
+        res.redirect('/?msg='+msg)	 
 
+		})
+}else{
 	Modulo_BD
 		.deleteUsuario(parametro_buscar).then((resultado)=>{
 			//let parsed = JSON.parse(resultado);
@@ -159,6 +169,9 @@ exports.deleteUser = async (req, res) => {
 			res.redirect('/admin_dash');
 
 		})
+
+}
+
 	
 }
 

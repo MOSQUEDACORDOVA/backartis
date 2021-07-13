@@ -19,14 +19,20 @@
 <style>
 table>thead>tr{font-weight: bolder;}
 .linea-oculta{display: none;}
+#listado .form-check-input{
+	margin-left: 0;
+}
 </style>
-
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script>
 	var resultados_por_pagina = 10;
 var pagina_actual = 1;
 var pagina_ultima = 0;
 	$( document ).ready(function() {
-
+		$('#seleccionar-todos').change(function() {
+			console.log("h")
+          $('input[type=checkbox]').prop('checked', $(this).is(':checked'));
+        });
    jQuery("#buscador").keyup(function(){
 	console.log("hola mundo")
     if( jQuery(this).val() != ""){
@@ -36,6 +42,8 @@ var pagina_ultima = 0;
     else{
         jQuery("#tabla_ tbody>tr").show();
     }
+
+	
 });
  
 jQuery.extend(jQuery.expr[":"], 
@@ -130,10 +138,10 @@ var cargarPagina = function(intPaginaP){
 					<tr>
 						<th>Id</th>
 						<th>Correo</th>
-						<th>Selección</th>
+						<th><input type="checkbox" id="seleccionar-todos"> Seleccionar todos</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="listado">
 					{{#each parsed_s as |susc i|}}
 					<tr>
 						<td>{{susc.id}}</td>

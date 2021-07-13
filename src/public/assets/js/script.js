@@ -1816,6 +1816,32 @@ function fixStepIndicator(n) {
 
 })();
 
+(() => {
+	
+$('#url_youtube').on('keyup',function() {
+
+	this.value = this.value.toLowerCase();
+      input = $(this).val();
+	//const btna = $('.form-steps__btn--support');
+	console.log("hola")
+	let link = $('#url_youtube').val();
+		console.log(input)
+		link_ = link.split('/')
+		console.log(link_)
+		console.log(link_.length)
+	/*	if(link_[0] == "https:" && link_[2] == "soundcloud.com" && link_.length > 4){
+			console.log("correcto")
+			btna.removeAttribute('disabled');
+		}else if(link_[0] == "https:" && link_[2] == "soundcloud.es" && link_.length > 4){
+			console.log("correcto1")
+			btna.removeAttribute('disabled');
+		}else{
+			console.log("malo")
+			btna.setAttribute('disabled', true);
+		}*/
+	})
+})();
+
 
 
 
