@@ -500,6 +500,9 @@ input:focus {
 	grid-template-columns: var(--step-number-size) auto;
 	align-items: center;
 }
+.step.active{
+	background-color: #D9AD26;
+}
 
 .step.step--active .step__number {
 	background-color: #D9AD26;
@@ -1275,15 +1278,30 @@ input:focus {
 /* Social Nav */
 .social-nav__link {
 	color: white;
-	font-size: 1.5rem;
-
-	display: block;
+	font-size: 35px;
+	display: inline-block;
+	vertical-align: middle;
+	-webkit-transform: perspective(1px) translateZ(0);
+	transform: perspective(1px) translateZ(0);
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0);
 }
 
-.social-nav__link:hover {
-	text-decoration: none;
-	color: #D9AD26;
-}
+.social-nav__link .hvr-icon {
+	-webkit-transition-duration: 1s;
+	transition-duration: 1s;
+	-webkit-transition-property: transform;
+	transition-property: transform;
+	-webkit-transition-timing-function: ease-in-out;
+	transition-timing-function: ease-in-out;
+  }
+
+  .social-nav__link:hover .hvr-icon, .social-nav__link:focus .hvr-icon, .social-nav__link:active .hvr-icon {
+	-webkit-transform: rotate(360deg);
+	transform: rotate(360deg);
+  }
+  .social-nav__link .fa-youtube-square:hover{
+	  color: #D9AD26;
+  }
 
 @media screen and (min-width: 567px) {
 	.social-nav__link {
@@ -2797,4 +2815,15 @@ select.form-control-steps {
 	background-color: hsl(45, 70%, 45%);
 	border-radius: 25px;
 	border-color: hsl(45, 70%, 45%);
+}
+.holas{
+	background-color: red;
+}
+#descargar_show{
+	max-width: 250px !important;
+	margin: auto;
+}
+a.ytboton{
+	width: 50% !important;
+	height: 26px !important;
 }
