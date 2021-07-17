@@ -1058,7 +1058,7 @@ class validateInput {
 		if(urlDemo) {
 			urlDemo.addEventListener('input', setPreview);
 		}
-		gender.addEventListener('change', setPreview);
+	//	gender.addEventListener('change', setPreview);
 	}
 
 	function setPreview() {
@@ -1067,7 +1067,6 @@ class validateInput {
 			<li>Título: <span>${musicTitle.value}</span></li>
 			<li>Descripción: <span>${musicDesc.value}</span></li>
 			${urlDemo ? `<li>Fuente: <span>${urlDemo.value}</span></li>` : ''}
-			<li>Género: <span>${gender.options[gender.selectedIndex].textContent}</span></li>
 			<li>Enlace: <span id="p1">https://backartis.herokuapp.com/track/${gateLink.value.toLowerCase()}</span><i class="fa fa-copy" onclick="copyToClipboard('#p1')"  style="margin-left: 5px; cursor: pointer;"></i></li>
 		`;
 
@@ -1400,7 +1399,8 @@ class validateInput {
 										</button>
 									</div>
 								`;
-								otherContainer.innerHTML += other;
+								$(otherContainers).append(other)
+								//otherContainer.innerHTML += other;
 							}else {
 								Swal.fire({
 									icon: 'warning',
@@ -1422,7 +1422,8 @@ class validateInput {
 									</button>
 								</div>
 							`;
-							otherContainer.innerHTML += other;
+							$(otherContainers).append(other)
+							//otherContainer.innerHTML += other;
 						}
 					}else {
 						Swal.fire({
@@ -1445,18 +1446,44 @@ class validateInput {
 
 	const promocionarMusica = document.getElementById('promocionar-musica');
 	const btnPromocionar = document.getElementById('btn-promocionar');
-
+	const formulario = document.getElementById('form_fans'); 
+	//let checked = formulario.querySelectorAll('input[type=checkbox]:checked');
+	let checkboxes = Array.from(document.getElementsByClassName('form-check-input'));
+	const selected = '';  
+	  
+	
 	if(promocionarMusica) {
 		promocionarMusica.addEventListener('change', () => {
 			const value = promocionarMusica.options[promocionarMusica.selectedIndex].value;
-
-			if(value !== 'default') {
+		let suma = 0
+			for (var i = 0; i < checkboxes.length; i++){ 
+      if(checkboxes[i].checked != true){
+       suma=suma+1; 
+		}
+	}
+			if(suma !== checkboxes.length && value !== 'default') {
 				btnPromocionar.removeAttribute('disabled');
 				return;
 			}
 
 			btnPromocionar.setAttribute('disabled', true);
 		}); 
+
+		[...checkboxes].map( e => e.addEventListener("click", () =>{
+			const value = promocionarMusica.options[promocionarMusica.selectedIndex].value;
+			let suma = 0
+			for (var i = 0; i < checkboxes.length; i++){ 
+      if(checkboxes[i].checked != true){
+       suma=suma+1; 
+		}
+	}
+			if(suma !== checkboxes.length && value !== 'default') {
+				btnPromocionar.removeAttribute('disabled');
+				return;
+			}
+
+			btnPromocionar.setAttribute('disabled', true);
+		}))
 	}
 
 })();
@@ -1549,11 +1576,126 @@ class validateInput {
     });
 	
 })();
-// Vista previa diseño Gate
+// Añadir más campos a las preguntas
 (() => {
-	
-	
+	var maxField = 10; //Input fields increment limitation
+    var addButton = $('.add-other__btn'); //Add button selector
+    var pregunta = $('.other-container_ayuda'); //Input field pregunta
+    //New input field html 
+    var x = 1; //Initial field counter is 1
+    $(pregunta).on('click', e => { //Once add button is clicked
+		if(e.target.classList.contains('add-other__btn')) {
+			const oInput = e.target.parentElement.querySelector('input');
+			let name_input = oInput.getAttribute('name');
+			var preguntaField = `			
+				<div class="col" >
+			<label class="form-steps__title">Pregunta</label>	
+				<input type="text" class="form-control-steps pregunta_input" name="pregunta" placeholder="Coloque aqui su pregunta" required>
+				<button type="button" class="remove-other__btn" style="height: 35%;top: 40px" >
+					<i class="fa fa-plus"></i>
+				</button>
+			</div>
+			<div class="col">
+				<label class="form-steps__title">Respuesta</label>					
+				<input type="text" class="form-control-steps pregunta_input" id="respuesta" name="respuesta" placeholder="Nombre del canal" required>
+				<button type="button" class="remove-other__btn" style="height: 35%;top: 40px" >
+					<i class="fa fa-plus"></i>
+				</button><!-- .col -->
+			</div>	`;
+			
+        if(x < maxField){ //Check maximum number of input fields
+            x++; //Increment field counter
+            $(pregunta).append(preguntaField); // Add field html
+			const btnayuda = document.getElementById('btn_Ayuda');
+        }
+	}else if(e.target.classList.contains('remove-other__btn')) {
+		e.target.parentElement.remove();
+        x--; //Decrement field counter
+	}
+    });
+    
 })();
+// Visualizar terminos o preguntas
+(() => {
+	const seleccion = $('#tipo'); //Add button selector
+	const btnayuda = document.getElementById('btn_Ayuda');
+    //New input field html 
+    var x = 1; //Initial field counter is 1
+    $(seleccion).on('change', e => { //Once add button is clicked
+		valor = document.getElementById('tipo').value
+		if(valor == "Términos y Condiciones") {
+			$('#terminos').removeAttr('hidden')
+			$('.pregunta_input').removeAttr('required')
+			$("#preguntas_").prop("hidden", !this.checked);	
+			$(".pregunta_input").val('');
+			$("#politicas_privacidad").val('');
+			$('#politicas_privacidad').removeAttr('required')
+			$("#politicas").prop("hidden", !this.checked);
+			btnayuda.setAttribute('disabled', true);
+	}
+	if(valor == "Preguntas Frecuentes") {
+		$('#preguntas_').removeAttr('hidden')
+			$("#terminos").prop("hidden", !this.checked);
+			$("#politicas").prop("hidden", !this.checked);
+			$("#terminos_input").val('');
+			$('#terminos_input').removeAttr('required')
+			$("#politicas_privacidad").val('');
+			$('#politicas_privacidad').removeAttr('required')
+			$(".pregunta_input").prop("required", !this.checked);
+			btnayuda.setAttribute('disabled', true);
+		}
+	if(valor == "Politicas") {
+			$('#politicas').removeAttr('hidden')
+				$("#terminos").prop("hidden", !this.checked);
+				$("#preguntas_").prop("hidden", !this.checked);
+				$("#terminos_input").val('');
+				$('#terminos_input').removeAttr('required')
+				$('.pregunta_input').removeAttr('required')
+				$(".pregunta_input").val('');
+				$("#politicas_privacidad").prop("required", !this.checked);
+				btnayuda.setAttribute('disabled', true);
+			}
+		if(valor == "default") {
+			$('#preguntas_').removeAttr('hidden')
+				$("#terminos").prop("hidden", !this.checked);
+				$("#preguntas_").prop("hidden", !this.checked);
+				btnayuda.setAttribute('disabled', true);
+			}
+    });
+
+	$('#terminos_input').on('change', e => { //Once add button is clicked
+		const valor_terminos = document.getElementById('terminos_input').value;
+		if (valor_terminos != "") {
+		btnayuda.removeAttribute('disabled');
+			return;
+	}else{
+		btnayuda.setAttribute('disabled', true);
+	}
+	})
+
+	$('.pregunta_input').on('change', e => { //Once add button is clicked
+		const valor_pregunt = document.getElementById('pregunta1').value;
+		const valor_respuesta = document.getElementById('respuesta').value;
+		if (valor_pregunt != "" && valor_respuesta != "") {
+		btnayuda.removeAttribute('disabled');
+			return;
+	}else{
+		btnayuda.setAttribute('disabled', true);
+	}
+	})
+
+	$('#politicas_privacidad').on('change', e => { //Once add button is clicked
+		const valor_pregunt = document.getElementById('politicas_privacidad').value;
+		if (valor_pregunt != "" ) {
+		btnayuda.removeAttribute('disabled');
+			return;
+	}else{
+		btnayuda.setAttribute('disabled', true);
+	}
+	})
+    
+})();
+
 // Boton Copiar Portapapeles
 (() => {
 	var progress= document.getElementById('progress_')
@@ -1644,7 +1786,60 @@ function fixStepIndicator(n) {
 
 
 (() => {
+	const ayuda = document.getElementById('tipo');
 	
+	const formulario = document.getElementById('form_fans'); 
+	//let checked = formulario.querySelectorAll('input[type=checkbox]:checked');
+	let checkboxes = Array.from(document.getElementsByClassName('form-check-input'));
+	const selected = '';  
+	const valor_terminos = document.getElementById('terminos');
+	const valor_pregunta = $('.pregunta');
+	const valor_respuesta = $('.respuesta');  
+
+		console.log(valor_pregunta)
+		console.log(valor_respuesta)
+		$(valor_pregunta).on('change', e => { //Once add button is clicked
+			if (valor_pregunta.value != "" && valor_respuesta.value != "") {
+			console.log("hola")
+			btnayuda.removeAttribute('disabled');
+				return;
+		}
+		})
+		
+		$(valor_terminos).on('change', e => { //Once add button is clicked
+			if (valor_terminos.value != "" ) {
+				console.log("hola2")
+				btnayuda.removeAttribute('disabled');
+					return;
+			}
+		})
+
+})();
+
+(() => {
+	
+$('#url_youtube').on('keyup',function() {
+
+	this.value = this.value.toLowerCase();
+      input = $(this).val();
+	//const btna = $('.form-steps__btn--support');
+	console.log("hola")
+	let link = $('#url_youtube').val();
+		console.log(input)
+		link_ = link.split('/')
+		console.log(link_)
+		console.log(link_.length)
+	/*	if(link_[0] == "https:" && link_[2] == "soundcloud.com" && link_.length > 4){
+			console.log("correcto")
+			btna.removeAttribute('disabled');
+		}else if(link_[0] == "https:" && link_[2] == "soundcloud.es" && link_.length > 4){
+			console.log("correcto1")
+			btna.removeAttribute('disabled');
+		}else{
+			console.log("malo")
+			btna.setAttribute('disabled', true);
+		}*/
+	})
 })();
 
 

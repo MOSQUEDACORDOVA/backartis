@@ -233,17 +233,40 @@ exports.descontar_backcoin = (req, res) => {
 	if(user.basic) {
 		return res.redirect('/dashboard');
 	}
-	BD_module.obtenerBackcoinDataPay(user_id).then((res) =>{
-		let parsed_ = JSON.parse(res)[0];
+	BD_module.obtenerBackcoinDataPay(user_id).then((data) =>{
+		let parsed_ = JSON.parse(data)[0];
 		console.log(parsed_.monto)
 		console.log(monto)
 		if (parseInt(parsed_.monto) < parseInt(monto)) {
 
 			console.log ("saldo insuficiente")
 		}else{
+			if (modo == 'back_pay') {
+				
+				var data =  req.params.back_pay
+				let data_s = data.split(',')
+				console.log(data_s);
+				BD_module.descontarBackcoin(user_id,monto).then((resp) =>{
+					//console.log(resp);
+					req.user.backcoins=resp;
+					const  generateRandomString = (num) => {
+						const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+						var result1= Math.random().toString(36).substring(0,num);       
+				
+						return result1;
+					}
+				
+				//console.log(generateRandomString(monto));
+					let numero_referencia = generateRandomString(monto);
+					BD_module.guardarPago(user_id,'Pagado',numero_referencia,monto,producto,'Backcoins').then(()=>{
+						let msg  ="esto es una prueba"
+						return	res.redirect('/ranking/'+data_s[0]+'/'+data_s[2]+'/'+data_s[1]+'/'+data_s[3]+'/back_pay');
+					})
+				})
 
+			}else{
 			BD_module.descontarBackcoin(user_id,monto).then((resp) =>{
-				console.log(resp);
+				//console.log(resp);
 				req.user.backcoins=resp;
 
 				BD_module.actualizarUserMembership(user_id,producto).then(()=>{
@@ -252,8 +275,9 @@ exports.descontar_backcoin = (req, res) => {
 					BD_module.guardarPago(user_id,'Pagado',numero_referencia,monto,producto,'Backcoins').then(()=>{
 						
 						BD_module.guardarPlan_user(user_id,producto,modo,'Backcoins').then((respg)=> {
-							console.log(respg)
+							//console.log(respg)
 						 // res.render('complete_pay', {product,dashboardPage:true});
+						 res.render('complete_pay', {errores,product,dashboardPage:true});
 				
 						  })
 				
@@ -261,15 +285,84 @@ exports.descontar_backcoin = (req, res) => {
 						//return res.redirect('/dashboard');
 					 // 
 				   })
-			  //      res.render('complete_pay', {errores,product,dashboardPage:true});
+			  //      
 				 })
 
 			})
+		}
 			
 		}
 
 	})
 	
-	res.render('complete_pay', {product:true,dashboardPage:true});
+//	res.render('complete_pay', {product:true,dashboardPage:true});
 	
+}
+
+
+exports.retirar_fondos_form = (req, res) => {
+	const user = res.locals.user;
+
+	if(user.basic) {
+		return res.redirect('/dashboard');
+	}
+	BD_module.obtenerBackcoinDataPay(user.id).then((respuesta) => {
+		
+		let parsed = JSON.parse(respuesta)[0];
+		//console.log(parsed);
+
+		if (typeof parsed=== 'undefined') {
+			BD_module.obtenerGatesbyUser(user.id).then((respuesta) =>{
+				let parsed_g = JSON.parse(respuesta);
+				total_gates= parsed_g.length
+				let total_descargas = 0
+			for (let i = 0; i < total_gates; i++) {
+				total_descargas += parseInt(parsed_g[i].descargas) 
+				//console.log(plan_basico_Mensual)
+				//const element = array[index];
+				
+			}
+			BD_module.obtenerSuscripbyUserG(user.id).then((data) =>{
+				let parsed_s = JSON.parse(data);
+				total_sus= parsed_s.length
+			res.render('wallet', {
+				pageName: 'Billetera',
+				dashboardPage: true,
+				datos_pagos: true,
+				total_gates,total_descargas,
+				user,total_sus
+			})
+		})
+		})
+		}else{	
+
+		if (parsed.pais === 'Perú') {
+			var pais_o= false;
+		}else{
+			pais_o = true;
+		}
+		BD_module.obtenerGatesbyUser(user.id).then((respuesta) =>{
+			let parsed_g = JSON.parse(respuesta);
+			total_gates= parsed_g.length
+			let total_descargas = 0
+			for (let i = 0; i < total_gates; i++) {
+				total_descargas += parseInt(parsed_g[i].descargas) 
+				//console.log(plan_basico_Mensual)
+				//const element = array[index];
+				
+			}
+
+			BD_module.obtenerSuscripbyUserG(user.id).then((data) =>{
+				let parsed_s = JSON.parse(data);
+				total_sus= parsed_s.length
+		res.render('wallet', {
+			pageName: 'Billetera',
+			dashboardPage: true,
+			retirar_fondos: true,
+			parsed,pais_o,user,total_gates,total_descargas,total_sus
+		})
+	})
+	})
+}
+});
 }

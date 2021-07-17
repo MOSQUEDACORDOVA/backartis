@@ -1,0 +1,39 @@
+<a href="/" class="btn-return-landing">
+	<i class="fa fa-times"></i>
+</a>
+<form method="post" action="/login_back" class="form-contact">
+	{{#if messages}}
+		{{#showAlerts messages}}
+		{{/showAlerts}}
+	{{/if}}
+	<input type="email" class="form-control" placeholder="Correo" name="email" required autocomplete="off">
+	<input type="password" class="form-control" placeholder="Contraseña" name="password" required autocomplete="off">
+	<input type="text" class="form-control" placeholder="" name="modo" value="{{modo}}"  hidden>
+	<input type="text" class="form-control" placeholder="" name="producto" value="{{product}}" hidden>
+	<input type="text" class="form-control" placeholder="" name="monto" value="{{monto}}" hidden>
+	<p>
+		<a href="/search-account" class="text-dark">¿Olvidaste la contraseña?</a>
+	</p>
+	<button type="submit" class="btn btn-primary btn-block">Ingresar <i class="fa fa-angle-right"></i></button>
+	<p class="o-separator"></p>
+	<a href="/auth/facebook" class="btn btn-gray btn-block btn-login-with">
+		<i class="fab fa-facebook"></i>
+		Continuar con Facebook
+	</a>
+	<a href="/auth/google" class="btn btn-gray btn-block btn-login-with">
+		<img src="/assets/img/google-icon.png" alt="Icono de Google" class="btn-social-icon">
+		Continuar con Google
+	</a>
+	<a href="/auth/mixcloud" class="btn btn-gray btn-block btn-login-with">
+		<i class="fab fa-mixcloud"></i>
+		Continuar con Mixcloud
+	</a>
+	<p class="text-center text-desc">Si continúas, aceptas los <strong>Términos del servicio</strong> y la <strong>Política de privacidad</strong> de nuestro sitio.</p>
+	<p class="text-center" style="margin-bottom: 1em;">¿Aún no formas parte de nosotros?</p>
+	<div class="text-center">
+		<a href="/register" class="btn btn-white font-weight-bold py-0">
+			regístrate
+			<i class="fa fa-angle-right"></i>
+		</a>
+	</div>
+</form>

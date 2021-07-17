@@ -108,6 +108,9 @@
 			<li class="nav-item">
 				<a class="nav-link {{#if tipo_cambio}} active{{/if}}" href="/tipo_cambio" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Tipo Cambio</label></a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link {{#if terminos_ayuda}} active{{/if}}" href="/terminos_ayuda" ><label style="cursor: pointer;"><i class="fa fa-receipt"></i>Ayuda</label></a>
+			</li>
 		</ul>
 	</nav>
 				</div>
@@ -116,13 +119,13 @@
 			<div class="text-center user-statistics__container" style="max-height: 450px;">
 				<div class="card-box shadow">
 					<div class="user-statistics">
-						<p class="user-statistics__title"><i class="fa fa-download"></i>Gates</p>
+						<p class="user-statistics__title"><i class="fa fa-torii-gate"></i>Gates</p>
 						<p class="user-statistics__number">{{total_gates}}</p>
 						<p class="user-statistics__desc"></p>
 					</div><!-- .user-statistics -->
 					
 					<div class="user-statistics">
-						<p class="user-statistics__title"><i class="fa fa-eye"></i>Descargas</p>
+						<p class="user-statistics__title"><i class="fa fa-download"></i>Descargas</p>
 						<p class="user-statistics__number">{{total_descargas}}</p>
 						<p class="user-statistics__desc"></p>
 					</div><!-- .user-statistics -->
@@ -142,7 +145,7 @@
 		</section><!-- .col-md-7 -->
 		{{#if admin_dash1}}{{else}}
 		<aside>
-			<div class="card-box h-100 shadow" style="position: relative; overflow: hidden; min-height: 450px !important;">
+			<div class="card-box h-100 shadow" style="position: relative; overflow: hidden; min-height: 650px !important;">
 				<h2 class="card-box__title card-box__title--lg">Billetera</h2>
 				<div class="widget-box backcoins {{#if user.basic}}sb-disabled{{/if}}">
 					<h2 class="backcoins__title">BackCoins</h2>

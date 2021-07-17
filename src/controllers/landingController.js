@@ -67,3 +67,49 @@ exports.showLandingPage = (req, res) => {
 		})
 	})
 }
+
+
+exports.showRank = (req, res) => {
+
+	Modulo_BD
+		.obtenerSoundCD().then((resultadoS)=>{
+			var parsedSound = JSON.parse(resultadoS);
+			console.log(parsedSound)
+			Modulo_BD
+		.obtenerSoundNew().then((resultadoT)=>{
+			var parsed_new  = JSON.parse(resultadoT);
+			res.render('ranking', {
+				pageName: 'Inicio',
+				landingPage: true,
+				parsed_new,
+				parsedSound,
+				layout: false
+			});
+		})
+	})
+}
+exports.showRankDown = (req, res) => {
+	console.log(req.params)
+
+	let archivo = req.params.id;
+	var parametro_buscar = req.params.id_gate;
+	var correo = req.params.correo;
+	var id_usuario = req.params.id_usuario;
+	Modulo_BD
+	.obtenerSoundCD().then((resultadoS)=>{
+		var parsedSound = JSON.parse(resultadoS);
+		console.log(parsedSound)
+		Modulo_BD
+		.obtenerSoundNew().then((resultadoT)=>{
+			var parsed_new  = JSON.parse(resultadoT);
+	res.render('ranking', {
+		pageName: 'Inicio',
+		parsed_new,
+		parsedSound,
+		landingPage: true,
+		archivo,parametro_buscar,correo,id_usuario,
+		layout: false
+	});
+})
+	})
+}

@@ -127,18 +127,21 @@ module.exports = {
 				}
 			 return out;
 			},
-			formatoFecha: (fecha, user) => {
-				const f = new Date(fecha);
-				 console.log(fecha)
-				var Anyo = f.getFullYear();
-				var Mes = f.getMonth();
-				var Dia = f.getDate();
-					var fecha_ = Dia + "/" +Mes+ "/"+Anyo
-				 return fecha_;
-				},
+			formatoFecha2: (fecha, user) => {
+					const f = new Date(fecha);
+					f.toLocaleString()
+					 
+					var Anyo = f.getFullYear();
+					var Mes = f.getMonth();
+					var Dia = f.getDate();
+						var fecha_ = f.toLocaleString()
+						console.log(fecha_)
+					 return fecha_;
+					},
 			estadoCupon: (fecha, cantidad) => {
 					const f = new Date(fecha);
 						Hoy = new Date();
+
 					var estado = "";
 					if (Hoy > f) {
 						estado = "Caducado"
@@ -152,6 +155,16 @@ module.exports = {
 					 return estado;
 			},
 
+			ColorPay: (metodo, tipo) => {
+				var estado = "";
+				if (metodo == "Paypal" && tipo == "backstore"|| metodo == "MercadoPago" && tipo == "backstore" || metodo == "Backcoins" && tipo == "backstore" || metodo == "Paypal" && tipo == "Backcoin"|| metodo == "MercadoPago" && tipo == "Backcoin") {
+					estado = "ingreso"
+				}
+				if (metodo == "Backcoins") {
+					estado = "egreso"
+				}
+				return estado;
+		},
 		
 	
 }

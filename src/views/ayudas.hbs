@@ -1,0 +1,102 @@
+<script type="text/javascript">
+function valideKey(evt){
+    
+    // code is the decimal ASCII representation of the pressed key.
+    var code = (evt.which) ? evt.which : evt.keyCode;
+    
+    if(code==8) { // backspace.
+      return true;
+    } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else{ // other keys.
+      return false;
+    }
+}
+</script> 
+<div class="card-box shadow position-relative calculate-height">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-money-check" style="transform: translateX(.1em);"></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0">{{pageName}}</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<form action="/ayudas_save" method="post" class="p-to-btn" autocomplete="off" id="form-create-ayuda" enctype='multipart/form-data'>
+	<input type="text" class="form-control-steps" id="id" name="id_user" placeholder="id"  value="{{userID}}" hidden />
+	{{#if parsed_Ayuda}}<input type="text" class="form-control-steps" id="id" name="id_tipo" placeholder="id"  value="{{parsed_Ayuda.id}}" hidden /> {{/if}}
+		<div class="form-update-account" style=" display: block;">
+			<div class="form-update-account__item" style="grid-row-end: 1;">
+				<label class="form-steps__title" for="text">Tipo</label>
+				<div class="form-control-steps__container mb-3">
+					<div class="form-control-steps__placeholder">
+						<i class="fas fa-project-diagram"></i>
+					</div>
+					<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
+					<select class="form-control-steps ayuda" id="tipo" name="tipo" required style="background-color: #11111108;">						
+						{{#if parsed_Ayuda}}<option value="{{parsed_Ayuda.tipo}}" selected>{{parsed_Ayuda.tipo}}</option>{{/if}}
+						<option value="default">Qué desea crear hoy?</option>	
+						<option value="Términos y Condiciones">Términos y Condiciones</option>
+						<option value="Politicas">Políticas de privacidad</option>
+						<option value="Preguntas Frecuentes">Preguntas Frecuentes</option>					
+					</select>
+				</div>
+				
+			</div><!-- .form-update-accound__item -->
+
+			<div class="form-update-account__item" {{#if terminos}}{{else}}hidden="true"{{/if}} id="terminos">
+				<label class="form-steps__title" for="text">Términos y condiciones </label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fa fa-phone"></i>
+						</div>
+				
+					<input type="text" class="form-control-steps"  id="terminos_input" name="terminos" placeholder="Ingrese aqui sus terminos y condiciones"  {{#if terminos}} required value="{{parsed_Ayuda.terminos}}" {{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item" {{#if politicas}}{{else}}hidden="true"{{/if}} id="politicas">
+				<label class="form-steps__title" for="text">Politicas de privacidad</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fa fa-phone"></i>
+						</div>
+				
+					<input type="text" class="form-control-steps"  id="politicas_privacidad" name="politicas_privacidad" placeholder="Ingrese aqui sus politicas"  {{#if politicas}}required value="{{parsed_Ayuda.politicas}}" {{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
+
+				<div class="form-row other-container_ayuda" style="display: grid;grid-template-columns: 1fr 1fr;" {{#if preguntas}}{{else}}hidden="true"{{/if}} id="preguntas_">
+				<div class="col " >
+					<label class="form-steps__title">Pregunta</label>					
+				<div class="add-other">
+					<input type="text" class="form-control-steps pregunta_input" name="pregunta" placeholder="Coloque aqui su pregunta"  id ="pregunta1"  {{#if preguntas}}required value="{{parsed_Ayuda.preguntas}}" {{/if}}>
+					<button type="button" class="add-other__btn">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+				</div>
+				<div>
+				<div class="respuesta">
+					<label class="form-steps__title">Respuesta</label>					
+					<input type="text" class="form-control-steps pregunta_input" id="respuesta" name="respuesta" placeholder="Nombre del canal" {{#if preguntas}} required value="{{parsed_Ayuda.respuestas}}" {{/if}}>
+					</div><!-- .col -->
+				</div>
+				
+			</div><!-- .form-row -->
+			
+			
+			
+			
+		</div><!-- .form-update-account -->
+		<button type="submit" disabled class="btn btn-primary btn-x-lg form-steps__btn" id="btn_Ayuda">Guardar <i class="fa fa-angle-right"></i></button>
+	</form>
+
+	<a href="/admin_dash" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

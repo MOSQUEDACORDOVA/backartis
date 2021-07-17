@@ -84,12 +84,28 @@ $( ".onlynum" ).keypress(function(evt) {
 <style>
 	table>thead>tr{font-weight: bolder;}
 .linea-oculta{display: none;}
+.ingreso{
+	color: green;
+}
+.egreso{
+	color:red;
+}
+.card-title{
+	    font-size: 1em;
+}
 </style>
 <script>
 var resultados_por_pagina = 6;
 var pagina_actual = 1;
 var pagina_ultima = 0;
 	$( document ).ready(function() {
+		$('#monto_retiro').keyup(function(){
+			console.log('hola')
+			$('#monto_recarga').text('$'+ $('#monto_retiro').val())
+
+		})
+
+
    jQuery("#buscador").keyup(function(){
 	console.log("hola mundo")
     if( jQuery(this).val() != ""){
@@ -166,7 +182,7 @@ var cargarPagina = function(intPaginaP){
 		</div>
 		<div class="col-lg-6 d-lg-flex flex-column justify-content-between" style="font-size: 14px;">
 			<a href="/recargar_backcoin" class="btn btn-primary btn-block mb-3 mb-lg-0">Recargar mi saldo</a>
-			<a href="#" class="btn btn-primary btn-block mb-3 mb-lg-0">Realizar pagos</a>
+			<a href="/retirar_fondos" class="btn btn-primary btn-block mb-3 mb-lg-0">Retirar fondos</a>
 			<a href="/datos_wallet" class="btn btn-primary btn-block mb-3 mb-lg-0">Mis datos de pago</a>
 		</div>
 
@@ -184,7 +200,7 @@ var cargarPagina = function(intPaginaP){
 				</thead>
 				<tbody>
 					{{#each parsed_ventas as |venta i|}}	 
-			<tr  class="pagination__item">
+			<tr  class="pagination__item {{#ColorPay venta.metodo_pago venta.tipo_compra}}{{/ColorPay}}">
 				<td>{{venta.createdAt}}</td>
 				<td>{{venta.tipo_compra}}</td>
 				<td>{{venta.metodo_pago}}</td>
@@ -331,7 +347,7 @@ var cargarPagina = function(intPaginaP){
 					<i class="fas fa-file-signature"></i>
 						</div>
 					<input type="hidden" class=""  id="back_re" name="product" value="Backcoin"  >
-					<input type="text" class="form-control-steps"  id="back_re" name="amount" placeholder="1$ = 1 Backcoin"  >
+					<input type="text" class="form-control-steps onlynum"  id="back_re" name="amount" placeholder="1$ = 1 Backcoin"  >
 				</div>
 			</div><!-- .form-update-accound__item -->	
 			<button type="submit" class="btn btn-primary btn-x-lg form-steps__btn" id="create-gate-btn" style="position: relative;height: 3rem; bottom: -1.5rem;"> Procesar <i class="fa fa-check"></i></button>		
@@ -340,6 +356,52 @@ var cargarPagina = function(intPaginaP){
 		</form>	
 		</div>{{/if}}
 
+		{{#if retirar_fondos}}	<div class="col-12" style="margin-top: 1.5rem;">
+			<form action="/retirar_fondos" method="post" class="p-to-btn" autocomplete="off" id="form_datos_wallet" enctype='multipart/form-data'>
+			<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{user.id}}" hidden />
+		<div class="form-update-account">
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Monto a Retirar</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fas fa-file-signature"></i>
+						</div>
+				
+					<input type="text" class="form-control-steps onlynum"  id="monto_retiro" name="monto_retiro" placeholder="Monto a retirar" required>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item" style="grid-row-end: 1;">
+				
+				<div class="form-control-steps__container mb-3">
+					<div class="form-control-steps__placeholder">
+						<i class="fas fa-project-diagram"></i>
+					</div>
+					<div class="card bg-light mb-3" >
+  						<div class="card-header" style="font-size: 1.3em;">Datos del retiro</div>
+  							<div class="card-body" style="font-size: 1.3em;">
+    							<h5 class="card-title">Nombre y Apellido</h5>
+    							<p class="card-text">{{parsed.nombre_apellido}}</p>
+								<h5 class="card-title">Documento</h5>
+    							<p class="card-text">{{parsed.tipo_documento}} : {{parsed.n_documento}}</p>
+								<h5 class="card-title">Correo</h5>
+    							<p class="card-text">{{parsed.correo}}</p>
+								<h5 class="card-title">País</h5>
+    							<p class="card-text">{{parsed.pais}}</p>
+								<h5 class="card-title">Banco</h5>
+    							<p class="card-text">{{parsed.banco}}</p>
+								<h5 class="card-title">Cuenta</h5>
+    							<p class="card-text">{{parsed.cuenta}}</p>
+								<h5 class="card-title">Monto a Retirar</h5>
+    							<p class="card-text" id="monto_recarga"> </p>
+  							</div>
+						</div>
+				</div>
+				
+			</div><!-- .form-update-accound__item -->
+			
+		<button type="submit" class="btn btn-primary btn-x-lg form-steps__btn" id="create-gate-btn">Guardar datos <i class="fa fa-check"></i></button>
+		</form>	
+		</div>{{/if}}
 
 	</div>
 

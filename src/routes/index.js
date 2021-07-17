@@ -25,6 +25,8 @@ const paypal = require('../controllers/paypal');
 
 // Landing Page
 router.get('/', landingController.showLandingPage);
+router.get('/ranking', landingController.showRank);
+router.get('/ranking/:id/:id_gate/:id_usuario/:correo/:modo', landingController.showRankDown);
 // Landing Page
 
 
@@ -32,7 +34,9 @@ router.get('/', landingController.showLandingPage);
 
 // Iniciar sesión
 router.get('/login', userController.formLogin);
+router.get('/login/:product/:monto/:modo', userController.formLoginBack);
 router.post('/login', userController.loginUser);
+router.post('/login_back', userController.loginUserBack);
 
 // Cerrar Sesión
 router.get('/close-session', userController.closeSesion);
@@ -45,6 +49,9 @@ router.post('/register', userController.createUser);
 //email route
 router.post('/subscribe', EmailCtrl.sendEmail);
 router.get('/sendMail/:token/:mail', EmailCtrl.sendEmailResetPass);
+router.get('/sendMail/:gate_link/:id_user/:msg', EmailCtrl.sendEmailFansPromotion);
+router.get('/borra_cuenta/:id_user', EmailCtrl.sendEmail_borra_cuenta);
+
 // Buscar cuenrta
 router.get('/search-account', userController.formSearchAccount);
 router.post('/search-account', userController.sendToken);
@@ -70,6 +77,7 @@ router.get('/admin_dash/:msg', authController.authenticatedUser, adminDash.dashb
 router.get('/planes/:msg', authController.authenticatedUser, adminDash.planes);
 
 router.get('/borrar_user/:id', authController.authenticatedUser, adminDash.deleteUser);
+router.get('/borrar_user/:id/:ext', adminDash.deleteUser);
 router.get('/editar_user/:id', authController.authenticatedUser, adminDash.updateProfile);
 router.post('/actualizar_usuario', authController.authenticatedUser, adminDash.UpdateUser);
 router.get('/agregar_plan', authController.authenticatedUser, adminDash.addplanes);
@@ -112,6 +120,14 @@ router.post('/tipo_cambio_save', authController.authenticatedUser, adminDash.tip
 router.get('/edit_tipo_cambio/:id', authController.authenticatedUser, adminDash.tipo_cambio_edit);
 router.post('/save_edit_tipo_cambio', authController.authenticatedUser, adminDash.tipo_cambio_save);
 router.get('/borrar_tipo_cambio/:id', authController.authenticatedUser, adminDash.tipo_cambio_delete);
+
+
+router.get('/terminos_ayuda', authController.authenticatedUser, adminDash.terminos_ayuda);
+router.get('/terminos_ayuda/:msg', authController.authenticatedUser, adminDash.terminos_ayuda);
+router.get('/terminos_ayuda_create', authController.authenticatedUser, adminDash.terminos_ayuda_add);
+router.post('/ayudas_save', authController.authenticatedUser, adminDash.terminos_ayuda_save);
+router.get('/edit_ayuda/:id', authController.authenticatedUser, adminDash.terminos_ayuda_edit);
+router.get('/borrar_ayuda/:id', authController.authenticatedUser, adminDash.terminos_ayuda_delete);
 
 
 router.get('/ventas', authController.authenticatedUser, adminDash.getPagos);
@@ -171,7 +187,7 @@ router.get('/create-bond-gate', authController.authenticatedUser, gatesControlle
 router.get('/backstore', authController.authenticatedUser, gatesController.formBackstore);
 router.post('/create-gate', authController.authenticatedUser, gatesController.createGate);
 
-router.get('/downgate/:id/:id_gate/:id_usuario/:correo',  gatesController.downloadGate);
+router.get('/downgate/:id/:id_gate/:id_usuario/:correo/:modo',  gatesController.downloadGate);
 
 router.get('/gate/:id', gatesController.viewGate);
 router.get('/track/:enlace', gatesController.viewGatePersonalizado);
@@ -184,8 +200,16 @@ router.get('/datos_wallet', authController.authenticatedUser, walletController.d
 router.post('/guardar_datos_pago_wallet', authController.authenticatedUser, walletController.saveDatos);
 router.get('/recargar_backcoin', authController.authenticatedUser, walletController.recargar_backcoin);
 router.get('/pagar_backcoins/:id/:product/:amount/:modo', authController.authenticatedUser, walletController.descontar_backcoin);
+router.get('/pagar_backcoins/:id/:product/:amount/:modo/:back_pay', authController.authenticatedUser, walletController.descontar_backcoin);
+router.get('/retirar_fondos', authController.authenticatedUser, walletController.retirar_fondos_form);
+
+
+
+
 // Fans
 router.get('/fans', authController.authenticatedUser, dashboardController.fansPage);
+router.get('/fans/:msg', authController.authenticatedUser, dashboardController.fansPage);
+router.post('/fans', authController.authenticatedUser, EmailCtrl.sendEmailFans);
 
 // Inicio de sesión con Facebook
 router.get('/auth/facebook', 

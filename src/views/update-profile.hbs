@@ -1,3 +1,17 @@
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+	$( document ).ready(function() {
+	
+		$("#eliminar_foto").click(function () {
+	//saco el valor accediendo a un input de tipo text y name = nombre
+	$('#profile_img_').val('0');
+			console.log($("#profile_img_").val());
+			$('.form-steps__btn').removeAttr('disabled')
+			$('#img_photo').attr('src','https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg')
+	
+	});
+	})
+</script>
 <h1 class="dashboard-title">Mi cuenta</h1>
 
 <div class="card-box shadow position-relative calculate-height">
@@ -41,9 +55,11 @@
 								<label for="profile-img">Elije un archivo</label>
 							</div>
 						</div>
+						<a id="eliminar_foto" style="cursor: pointer;font-size: 1.3em;  color: #707070;">Eliminar Foto</a>	
 						<div id="resultado"></div>
 					</div>
-					<img src="{{#if user.photo}}/assets/uploads/{{user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Foto de perfil">
+					<img src="{{#if notPhoto}}/assets/uploads/{{user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Foto de perfil" id="img_photo">
+					
 				</div>
 			</div><!-- .form-update-accound__item -->
 			<div class="form-update-account__item">

@@ -18,13 +18,44 @@ exports.formLogin = (req, res) => {
 	});
 }
 
+exports.formLoginBack = (req, res) => {
+	const { error } = res.locals.messages;
+	var product= req.params.product;
+	var monto = req.params.monto;
+	var modo = req.params.modo;
+	console.log(modo);
+
+	res.render('login_back', {
+		pageName: 'Login',
+		layout: 'page-form',
+		modo, monto, product,
+		error
+	});
+}
+
 // Iniciar sesión
 exports.loginUser = passport.authenticate('local', {
 	successRedirect: '/dashboard',
 	failureRedirect: '/login',
 	failureFlash: true,
-	badRequestMessage: 'Ambos campos son oblogatorios'
+	badRequestMessage: 'Ambos campos son obligatorios'
 });
+
+exports.loginUserBack = (req, res) => { 
+	
+	console.log(req.body)
+passport.authenticate('local', function(err, user, info) {
+				if (err) { return next(err); }
+				if (!user) { return res.redirect('/login'); }
+				req.logIn(user, function(err) {
+
+				  if (err) { return next(err); }
+				  console.log(user.dataValues.id)
+				  return res.redirect('/pagar_backcoins/'+user.dataValues.id+'/'+req.body.producto+'/'+req.body.monto+'/back_pay/'+req.body.modo);
+				});
+			  })(req, res);
+}
+
 
 // Formulario de registro
 exports.formCreateUser = (req, res) => {

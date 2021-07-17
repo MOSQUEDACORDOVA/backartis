@@ -1,14 +1,14 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 const bcrypt = require('bcrypt-nodejs');
+const Gates = require('../models/Gate');
 
-const Cupones = db.define('cupones', {
+const Gate_SoundC = db.define('gate_soundc', {
 	id: {
 		type: DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	
 	id_usuario: {
 		type: DataTypes.INTEGER,
 		allowNull: false,
@@ -18,51 +18,37 @@ const Cupones = db.define('cupones', {
 			}
 		}
 	},
-	nombre_cupon: {
-		type: DataTypes.TEXT,
+	id_gate: {
+		type: DataTypes.INTEGER,
 		allowNull: false,
 		validate: {
 			notEmpty: {
-				msg: 'El nombre es obligatorio'
+				msg: 'El id gate es obligatorio'
 			}
 		}
 	},
-
-	valor: {
+		track_id: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
-	},
-	fecha_inicio: {
+	},	title: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
-	},
-	fecha_final: {
+	},permalink_url: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
-	},
-	cantidad: {
+	},	
+	descargas: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		defaultValue: ""
+		defaultValue: 0
 	},
-	cantidad_actual: {
-		type: DataTypes.TEXT,
-		allowNull: true,
-		defaultValue: ""
-	},
-	tipo: {
-		type: DataTypes.TEXT,
-		allowNull: true,
-		defaultValue: ""
-	},
-	
-	
 	
 });
-
+// El trabajador pertenece a una oficina
+Gate_SoundC.Gates = Gate_SoundC.belongsTo(Gates);
 // Métodos personalizados
-module.exports = Cupones;
+module.exports = Gate_SoundC;
 

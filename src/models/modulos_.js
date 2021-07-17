@@ -2,6 +2,7 @@ const { Op } = require('sequelize');
 const db = require('../config/db');
 const bcrypt = require('bcrypt-nodejs');
 const Gates = require('../models/Gate');
+const Gate_SoundC = require('../models/Gate_SoundC');
 const Usuarios = require('../models/Usuarios');
 const Planes = require('../models/Planes');
 const Sobre_nosotros = require('../models/Sobre_nosotros');
@@ -13,6 +14,7 @@ const Backcoin = require('../models/Backcoin');
 const Notificaciones = require('../models/Notificaciones');
 const Used_cupons = require('./Used_cupons');
 const Tipo_cambio = require('./Tipo_cambio');
+const Ayuda = require('./Ayuda');
 
 module.exports = {
 	
@@ -494,8 +496,6 @@ id_usuario=arreglo.id_user;
 fecha=now;
 tema="Oscuro";
 
-
-
 return new Promise((resolve, reject) => {
 
 	Gates.findOne({ 
@@ -507,11 +507,11 @@ return new Promise((resolve, reject) => {
 				console.log(res);
 				if (!res) {
 					// Item not found, create a new one
-					Gates.create({ id_usuario: id_usuario,tipo_create: arreglo.tipo_create,url_fuente: arreglo.url_demo,	genero: arreglo.gender, archivo: arreglo.archivo1,	nombre_artista: arreglo.artist_name,	titulo: arreglo.music_title,	descripcion: arreglo.music_desc,tema: tema,imagen: arreglo.img_flyer,color: color,color_titulo: color_titulo,color_descrip: color_descripcion,	privacidad: arreglo.privacity,	nuevo_lanzamiento: nuevo_lanzamiento,otro_gender: other_gender,	url_track: url_track,music_price: music_price,		show_watermarker: show_watermarker,user_logo: user_logo,	suscribir_youtube:suscribir_youtube,	omitir_youtube:omitir_youtube,	url_youtube:url_youtube,nombre_youtube:nombre_youtube,	like_facebook:like_facebook,compartir_facebook:compartir_facebook,omitir_facebook:omitir_facebook,url_facebook:url_facebook,		seguir_twitter:seguir_twitter,	compartir_twitter:compartir_twitter,	omitir_twitter: omitir_twitter,url_twitter: url_twitter,	seguir_soundcloud: seguir_soundcloud,compartir_soundcloud: compartir_soundcloud,	repost_souncloud: repost_souncloud,	omitir_souncloud: omitir_souncloud,url_souncloud: url_souncloud,	seguir_instagram: seguir_instagram,	omitir_instagram: omitir_instagram,url_instagram: url_instagram,	seguir_spotify:seguir_spotify,	omitir_spotify:omitir_spotify,	url_spotify:url_spotify,seguir_deezer:seguir_deezer,	guardar_deezer:guardar_deezer,	omitir_deezer:omitir_deezer,	url_deezer:url_deezer,		seguir_tiktok:seguir_tiktok,omitir_tiktok:omitir_tiktok,url_tiktok:url_tiktok,	seguir_mixcloud:seguir_mixcloud,repost_mixcloud:repost_mixcloud,like_mixcloud:like_mixcloud,	omitir_mixcloud:omitir_mixcloud,url_mixcloud:url_mixcloud, enlace_perzonalizado:arreglo.gate_link,fecha_registro:fecha })
+					Gates.create({ id_usuario: id_usuario,tipo_create: arreglo.tipo_create,url_fuente: arreglo.url_demo,	genero: arreglo.genero, archivo: arreglo.archivo1,	nombre_artista: arreglo.artist_name,	titulo: arreglo.music_title,	descripcion: arreglo.music_desc,tema: tema,imagen: arreglo.img_flyer,color: color,color_titulo: color_titulo,color_descrip: color_descripcion,	privacidad: arreglo.privacity,	nuevo_lanzamiento: nuevo_lanzamiento,otro_gender: other_gender,	url_track: url_track,music_price: music_price,		show_watermarker: show_watermarker,user_logo: user_logo,	suscribir_youtube:suscribir_youtube,	omitir_youtube:omitir_youtube,	url_youtube:url_youtube,nombre_youtube:nombre_youtube,	like_facebook:like_facebook,compartir_facebook:compartir_facebook,omitir_facebook:omitir_facebook,url_facebook:url_facebook,		seguir_twitter:seguir_twitter,	compartir_twitter:compartir_twitter,	omitir_twitter: omitir_twitter,url_twitter: url_twitter,	seguir_soundcloud: seguir_soundcloud,compartir_soundcloud: compartir_soundcloud,	repost_souncloud: repost_souncloud,	omitir_souncloud: omitir_souncloud,url_souncloud: url_souncloud,	seguir_instagram: seguir_instagram,	omitir_instagram: omitir_instagram,url_instagram: url_instagram,	seguir_spotify:seguir_spotify,	omitir_spotify:omitir_spotify,	url_spotify:url_spotify,seguir_deezer:seguir_deezer,	guardar_deezer:guardar_deezer,	omitir_deezer:omitir_deezer,	url_deezer:url_deezer,		seguir_tiktok:seguir_tiktok,omitir_tiktok:omitir_tiktok,url_tiktok:url_tiktok,	seguir_mixcloud:seguir_mixcloud,repost_mixcloud:repost_mixcloud,like_mixcloud:like_mixcloud,	omitir_mixcloud:omitir_mixcloud,url_mixcloud:url_mixcloud, enlace_perzonalizado:arreglo.gate_link,fecha_registro:fecha })
 					.then(gate => {
 						let gatees= JSON.stringify(gate)
 						resolve(gatees);
-					  console.log(gatees);
+					 // console.log(gatees);
 					})
 					.catch(err => {
 					  console.log(err)
@@ -1035,7 +1035,7 @@ guardarCupon(id_usuario,nombre_cupon,valor,fecha_inicio,fecha_final,cantidad,tip
 			console.log(res);
 			if (!res) {
 				// Item not found, create a new one
-				Cupones.create({ id_usuario: id_usuario,nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,tipo: tipo})
+				Cupones.create({ id_usuario: id_usuario,nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,cantidad_actual: cantidad,tipo: tipo})
 	.then(res => {
 		let about= JSON.stringify(res)
 		resolve(about);
@@ -1076,7 +1076,7 @@ console.log(fecha_inicio);
   console.log(fecha_final);
 return new Promise((resolve, reject) => {
 
-Cupones.update({ nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,tipo: tipo}, {
+Cupones.update({ nombre_cupon:nombre_cupon,valor:valor,fecha_inicio: fecha_inicio,fecha_final: fecha_final,cantidad: cantidad,cantidad_actual: cantidad,tipo: tipo}, {
 	where: {
 		id: id,
 	}})
@@ -1131,7 +1131,7 @@ consultarCuponMembership(consultar) {
 		fecha=now.toString();
 		return new Promise((resolve, reject) => {
 		
-		Cupones.update({ cantidad: cantidad}, {
+		Cupones.update({ cantidad_actual: cantidad}, {
 			where: {
 				id: id,
 			}})
@@ -1165,7 +1165,10 @@ consultarCuponMembership(consultar) {
 					Used_cupons.findAll({ 
 					where: {
 						id_usuario: id_usuario,
-					} }
+					},order: [
+						// Will escape title and validate DESC against a list of valid direction parameters
+						['updatedAt', 'DESC']
+					  ] }
 				)
 				.then(res => {
 					let ress= JSON.stringify(res)
@@ -1274,7 +1277,16 @@ consultarCuponMembership(consultar) {
 				}})
 			.then(about => {
 				let aboutes= JSON.stringify(about)
+				Gate_SoundC.update({ descargas:descarga}, {
+					where: {
+						id_gate: id,
+					}}).then(() =>{
+						console.log("aqui")
+					})
 				resolve(aboutes);
+
+				
+
 			})
 			.catch(err => {
 			  console.log(err)
@@ -1866,4 +1878,190 @@ consultarCuponMembership(consultar) {
 							})
 					});
 					},
+
+					// AYUDA
+
+				obtenerAyuda() {
+					return new Promise((resolve, reject) => {
+				
+					Ayuda.findAll({
+						order: [
+						  // Will escape title and validate DESC against a list of valid direction parameters
+						  ['updatedAt', 'DESC']
+						]
+						})
+					.then(res => {
+						let respuesta= JSON.stringify(res)
+						resolve(respuesta);
+					  //console.log(JSON.stringify(users));
+					})
+					.catch(err => {
+					  console.log(err)
+					})
+				});
+				},
+
+				saveAyuda(id_user,tipo,terminos,politicas_privacidad,pregunta,respuesta,id_tipo) {
+					pregunta=pregunta.toString();
+					respuesta=respuesta.toString();
+					return new Promise((resolve, reject) => {
+						Ayuda.findOne({ 
+							where: {
+								id:id_tipo,
+							} }
+						)
+						.then(res => {
+							console.log(res);
+							if (!res) {
+								// Item not found, create a new one
+								Ayuda.create({id_usuario:id_user,tipo: tipo,terminos: terminos,politicas: politicas_privacidad,preguntas: pregunta,respuestas: respuesta})
+					.then(res => {
+						let respuesta= JSON.stringify(res)
+						resolve(respuesta);
+					  //console.log(respuesta);
+					})
+					.catch(err => {
+					  console.log(err)
+					})
+					}else{		
+									Ayuda.update({id_usuario:id_user,tipo: tipo,terminos: terminos,politicas: politicas_privacidad,preguntas: pregunta,respuestas: respuesta}, {
+										where: {
+											id:id_tipo,
+										}})
+									.then(resp => {
+										let res= JSON.stringify(resp)
+										resolve("0");
+									 // console.log(res);
+									})
+									.catch(err => {
+									  console.log(err)
+									})
+							}
+						})
+					
+				});
+				},
+
+				obtenerAyudaById(id) {
+					return new Promise((resolve, reject) => {
+					
+					Ayuda.findAll({ 
+						where: {
+							id: id,
+						} }
+					)
+					.then(res => {
+						let ress= JSON.stringify(res)
+						resolve(ress);
+					  console.log(id);
+					})
+					.catch(err => {
+					  console.log(err)
+					})
+					});
+					},
+
+					deleteAyuda(parametro_buscar) {
+						return new Promise((resolve, reject) => {
+				
+				
+							Ayuda.destroy({
+								where: {
+									id:parametro_buscar
+								}
+							}).then(() => {
+								//let gates= JSON.stringify(users)
+								resolve("respuesta exitosa");
+							  //console.log(JSON.stringify(users));
+							})
+					});
+					},
+
+			// SOUNDCLOUD SAVE DETALLES
+			SaveSoundC(id_user,id_gate,title,id_track,permalink_url) {
+				
+				return new Promise((resolve, reject) => {
+					Gate_SoundC.findOne({ 
+						where: {
+							id_gate:id_gate,
+						} }
+					)
+					.then(res => {
+						console.log(res);
+						if (!res) {
+							// Item not found, create a new one
+							Gate_SoundC.create({id_usuario: id_user,id_gate: id_gate,title: title,track_id: id_track,permalink_url: permalink_url,gateId:id_gate})
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(respuesta);
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+				}else{		
+								Gate_SoundC.update({id_usuario: id_user,id_gate: id_gate,title: title,track_id: id_track,permalink_url: permalink_url}, {
+									where: {
+										id_gate:id_gate,
+									}})
+								.then(resp => {
+									let res= JSON.stringify(resp)
+									resolve("update");
+								 // console.log(res);
+								})
+								.catch(err => {
+								  console.log(err)
+								})
+						}
+					})
+				
+			});
+			},
+
+			obtenerSoundCD() {
+				return new Promise((resolve, reject) => {
+			
+				Gate_SoundC.findAll({
+					include: [
+						{
+							association: Gate_SoundC.Gates
+						}
+					],
+					order: [
+					  // Will escape title and validate DESC against a list of valid direction parameters
+					  ['descargas', 'DESC']
+					]
+					})
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(JSON.stringify(users));
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+			});
+			},
+			obtenerSoundNew() {
+				return new Promise((resolve, reject) => {
+			
+					Gate_SoundC.findAll({include: [
+						{
+							association: Gate_SoundC.Gates
+						}
+					],order: [
+					  // Will escape title and validate DESC against a list of valid direction parameters
+					  ['createdAt', 'DESC']
+					]
+					})
+				.then(res => {
+					let respuesta= JSON.stringify(res)
+					resolve(respuesta);
+				  //console.log(JSON.stringify(users));
+				})
+				.catch(err => {
+				  console.log(err)
+				})
+			});
+			},
 	}

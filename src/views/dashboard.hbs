@@ -86,7 +86,7 @@ $("#loading").show();
 	<nav class="card-box__nav" id="gates-navigation">
 		<ul class="nav flex-column flex-md-row align-items-center justify-content-md-between">
 			<li class="nav-item mb-4 mb-md-0">
-				<a class="nav-link {{#if fileGateget}} active{{/if}}" href="/dashboard/filegate"><label style="cursor: pointer;"><i class="fa fa-download "> </i>File Gate</label></a>
+				<a class="nav-link {{#if fileGateget}} active{{/if}}" href="/dashboard/filegate"><label style="cursor: pointer;"><i class="fa fa-cloud-download-alt "> </i>File Gate</label></a>
 			</li>
 			<li class="nav-item mb-4 mb-md-0">
 				<a class="nav-link {{#if user.basic}}sb-disabled{{/if}} {{#if bondGateget}} active{{/if}}" href="/dashboard/bondgate" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}><label style="cursor: pointer;"><i class="fa fa-link"></i>Bond Gate</label></a> 
@@ -120,8 +120,11 @@ $("#loading").show();
 					<a href="/editar_/{{item.id}}" class="gate-item__option" >
 						<i class="fa fa-pen"></i>
 					</a>
-					<a href="/mix" class="gate-item__option" onclick="pruebaclick()">
+					<!--<a href="/mix" class="gate-item__option" onclick="pruebaclick()">
 						<i class="fab fa-soundcloud"></i>
+					</a>-->
+					<a href="/sendMail/{{item.enlace_perzonalizado}}/{{item.id_usuario}}/compartido_desde_dash" class="gate-item__option" alt="Compartir con mis contactos">
+						<i class="fas fa-share-alt"></i>
 					</a>
 					
 				</div>

@@ -149,7 +149,17 @@ res.redirect('/admin_dash/'+msg)
 }
 exports.deleteUser = async (req, res) => {
 	let parametro_buscar = req.params.id;
+if (req.params.ext) {
+	Modulo_BD
+		.deleteUsuario(parametro_buscar).then((resultado)=>{
+			//let parsed = JSON.parse(resultado);
+			//let cont= parsed.length
+			console.log(resultado);
+			let msg="Se borró con éxito toda la informacion de su cuenta";
+        res.redirect('/?msg='+msg)	 
 
+		})
+}else{
 	Modulo_BD
 		.deleteUsuario(parametro_buscar).then((resultado)=>{
 			//let parsed = JSON.parse(resultado);
@@ -159,6 +169,9 @@ exports.deleteUser = async (req, res) => {
 			res.redirect('/admin_dash');
 
 		})
+
+}
+
 	
 }
 
@@ -298,7 +311,7 @@ exports.savePlanEdited = async (req, res) => {
 	return res.status(500).send("Error actualizando"+err);
 });
 let msg ="Plan actualizado con exito";
-res.redirect('/admin_dash/'+msg)	
+res.redirect('/planes/'+msg)	
 
 }
 
@@ -976,6 +989,139 @@ exports.tipo_cambio_delete = async (req, res) => {
 			
 			let msg ="Tipo de cambio eliminado con éxito";
 			res.redirect('/tipo_cambio/'+msg)	
+
+		})
+	
+}
+
+
+//AYUDA Y TERMINOS Y CONDICIONES
+exports.terminos_ayuda = (req, res) => {
+	//console.log(req.params.gates);
+	let msg =false;
+	if (req.params.msg) {
+		msg =req.params.msg;
+	}
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
+		Modulo_BD
+		.obtenerAyuda().then((resultado)=>{
+			let parsed_ayuda = JSON.parse(resultado);
+			//let cont= parsed.length
+			Modulo_BD
+		.obtenernotificacionesbyLimit3().then((resultado2)=>{
+			let parsed_lmit = JSON.parse(resultado2);
+			//let cont= parsed.length
+			console.log(parsed_lmit);
+			
+				res.render("index_admin", {
+					parsed_ayuda,
+					dashboardPage: true,
+					parsed_lmit,
+					terminos_ayuda: true,
+					admin_dash1: true,
+					msg,notPhoto
+				});
+
+		})
+
+		})
+}
+
+exports.terminos_ayuda_add = (req, res) => {
+	let userID = req.user.id;
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
+	
+		//console.log(parsed);
+			res.render("ayudas", {
+				pageName: "Crear Ayuda ó  Términos y condiciones",
+				dashboardPage: true,
+				notPhoto,
+				admin_dash1:true,
+				userID
+			});
+}
+
+exports.terminos_ayuda_save = async (req, res) => {
+	const {id_user,tipo,terminos,politicas_privacidad,pregunta,respuesta} = req.body;
+	var id_tipo = req.body.id_tipo
+	console.log(id_tipo)
+	if (typeof id_tipo === 'undefined') {
+		id_tipo = 0
+		}
+		console.log(id_tipo)
+		var msg ="";
+		Modulo_BD.saveAyuda(id_user,tipo,terminos,politicas_privacidad,pregunta,respuesta,id_tipo).then((result) => {
+				console.log(result);
+				if (result==="0") {
+					msg ="Se actualizó con exito el área de ayuda";
+				}else{
+					msg ="Ayuda guardada con exito";	
+				}
+				res.redirect('/terminos_ayuda/'+msg)
+		})
+			.catch(err => {
+	return res.status(500).send("Error actualizando"+err);
+});
+	
+}
+
+exports.terminos_ayuda_edit = (req, res) => {
+	let id_buscar = req.params.id;
+	let userID = req.user.id;
+	var photo = req.user.photo;
+	let notPhoto = true;
+	if (photo=="0") {
+		notPhoto = false;	
+		}
+	Modulo_BD
+		.obtenerAyudaById(id_buscar).then((resultado)=>{
+			let parsed_Ayuda = JSON.parse(resultado)[0];
+			let cont= parsed_Ayuda.length
+		console.log(parsed_Ayuda);
+		let terminos = false;
+		let politicas = false;
+		let preguntas = false;
+			if (parsed_Ayuda.tipo === "Términos y Condiciones") {
+				terminos = true
+			}
+			if (parsed_Ayuda.tipo === "Politicas") {
+				politicas = true
+			}
+			if (parsed_Ayuda.tipo === "Preguntas Frecuentes") {
+				preguntas = true
+			}
+
+	res.render('ayudas', {
+		pageName: 'Editar Ayuda',
+		dashboardPage: true,
+		parsed_Ayuda,notPhoto,
+		admin_dash1: true,userID,terminos,politicas,preguntas
+
+		
+	});
+
+		})
+}
+
+exports.terminos_ayuda_delete = async (req, res) => {
+	let parametro_buscar = req.params.id;
+
+	Modulo_BD
+		.deleteAyuda(parametro_buscar).then((resultado)=>{
+			//let parsed = JSON.parse(resultado);
+			//let cont= parsed.length
+			console.log(resultado);
+			
+			let msg ="Ayuda elimina con éxito";
+			res.redirect('/terminos_ayuda/'+msg)	
 
 		})
 	

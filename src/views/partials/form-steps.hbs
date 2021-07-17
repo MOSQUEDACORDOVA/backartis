@@ -25,6 +25,95 @@
 </script>
 <script>
 	$( document ).ready(function() {
+		document.getElementById("music-title").addEventListener('change', () => {
+		document.getElementById("color_title").innerHTML = document.getElementById("music-title").value + `<label class="input-color-label" for="input-color_titulo" >
+  <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label> `
+		});
+	
+		document.getElementById("music-desc").addEventListener('change', () => {
+		document.getElementById("color_descrip").innerHTML = document.getElementById("music-desc").value + `<label class="input-color-label" for="input-color_descripcion">
+  <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label>`
+		});
+	
+		document.getElementById("artist-name").addEventListener('change', () => {
+		document.getElementById("gate-name-dj").innerHTML = document.getElementById("artist-name").value
+		});
+		var checkboxYT = document.querySelector("input[name=suscribir_youtube]");
+		var like_facebook = document.querySelector("input[name=like_facebook]");
+		var seguir_twitter = document.querySelector("input[name=seguir_twitter]");
+		var seguir_soundcloud = document.querySelector("input[name=seguir_soundcloud]");
+		var seguir_instagram = document.querySelector("input[name=seguir_instagram]");
+		var seguir_spotify = document.querySelector("input[name=seguir_spotify]");
+		var seguir_deezer = document.querySelector("input[name=seguir_deezer]");
+		var seguir_tiktok = document.querySelector("input[name=seguir_tiktok]");
+		var seguir_mixcloud = document.querySelector("input[name=seguir_mixcloud]");
+	
+		
+		checkboxYT.addEventListener('change', () => {
+				if ($('#youtube-square').is(':visible') ) {
+	$('#youtube-square').hide();
+	}else{
+	$('#youtube-square').show();
+	}
+		});
+	
+		like_facebook.addEventListener('change', () => {
+				if ($('#facebook-square').is(':visible') ) {
+	$('#facebook-square').hide();
+	}else{
+	$('#facebook-square').show();
+	}
+		});
+		seguir_twitter.addEventListener('change', () => {
+				if ($('#twitter-square').is(':visible') ) {
+	$('#twitter-square').hide();
+	}else{
+	$('#twitter-square').show();
+	}
+		});
+		seguir_soundcloud.addEventListener('change', () => {
+				if ($('#soundcloud-square').is(':visible') ) {
+	$('#soundcloud-square').hide();
+	}else{
+	$('#soundcloud-square').show();
+	}
+		});
+		seguir_instagram.addEventListener('change', () => {
+				if ($('#instagram-square').is(':visible') ) {
+	$('#instagram-square').hide();
+	}else{
+	$('#instagram-square').show();
+	}
+		});
+		seguir_spotify.addEventListener('change', () => {
+				if ($('#spotify-square').is(':visible') ) {
+	$('#spotify-square').hide();
+	}else{
+	$('#spotify-square').show();
+	}
+		});
+		seguir_deezer.addEventListener('change', () => {
+				if ($('#deezer-square').is(':visible') ) {
+	$('#deezer-square').hide();
+	}else{
+	$('#deezer-square').show();
+	}
+		});
+		seguir_tiktok.addEventListener('change', () => {
+				if ($('#tiktok-square').is(':visible') ) {
+	$('#tiktok-square').hide();
+	}else{
+	$('#tiktok-square').show();
+	}
+		});
+	seguir_mixcloud.addEventListener('change', () => {
+				if ($('#mixcloud-square').is(':visible') ) {
+	$('#mixcloud-square').hide();
+	}else{
+	$('#mixcloud-square').show();
+	}
+		});
+	
 
 		var texto = document.getElementById('chek_gate-link').value,
     textoseparado = texto.split(",");
@@ -44,6 +133,25 @@
 
 
 		});
+
+$('#url-demo').on('keyup',function() {
+const btna = document.getElementById('btn_url');
+console.log("hola")
+let link         = document.getElementById('url-demo').value,
+    link_ = link.split('/')
+	console.log(link_.length)
+	if(link_[0] == "https:" && link_[2] == "soundcloud.com" && link_.length > 4){
+		console.log("correcto")
+		btna.removeAttribute('disabled');
+	}else if(link_[0] == "https:" && link_[2] == "soundcloud.es" && link_.length > 4){
+		console.log("correcto1")
+		btna.removeAttribute('disabled');
+	}else{
+		console.log("malo")
+		btna.setAttribute('disabled', true);
+	}
+})
+
 }); 
 </script>
 <nav class="steps-nav">
@@ -51,9 +159,6 @@
 	{{#if backstore}}{{/if}}{{#if bondGate}}{{/if}}{{#if fileGate}}
 		<div class="steps-nav__item">
 			<div class="steps-nav__number active">1</div>
-		</div>
-		<div class="steps-nav__item">
-			<div class="steps-nav__number">2</div>
 		</div>
 	{{/if}}
 	<div class="steps-nav__item">
@@ -99,7 +204,7 @@
 		{{#if fileGate}}
 		<section class="section-step show" data-step-desc="Fuente">
 			<div class="input-and-title">
-				<h2 class="form-steps__title">Ingresa la URL de MixCloud</h2>
+				<h2 class="form-steps__title">Ingresa la URL de SounCloud</h2>
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-globe"></i>
@@ -107,14 +212,14 @@
 					<input type="url" class="form-control-steps" id="url-demo" name="url_demo" placeholder="https://" required>
 				</div>
 			</div>
-			<button type="button" disabled class="btn btn-primary btn-x-lg form-steps__btn">Siguiente <i class="fa fa-angle-right"></i></button>
+			<button type="button" disabled class="btn btn-primary btn-x-lg form-steps__btn" id="btn_url">Siguiente <i class="fa fa-angle-right"></i></button>
 		</section>
 	{{/if}}
 	
 	
 	<!-- End Section Step -->
 
-	<!-- Section Step -->
+	<!-- Section Step -->{{#if fileGate}}{{else}}
 	<section class="section-step {{#if backstore}}show{{/if}}{{#if bondGate}}show{{/if}}" data-step-desc="Género">
 		<div class="input-and-title">
 			<h2 class="form-steps__title">Selecciona el género de tu título</h2>
@@ -161,7 +266,7 @@
 		</div>
 
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn" disabled>Siguiente <i class="fa fa-angle-right"></i></button>
-	</section>
+	</section>{{/if}}
 	<!-- End Section Step -->
 
 	<!-- Section Step -->
@@ -296,7 +401,7 @@
 
 						</scrip>
 						<p class="main-gate__title" id="color_title">Título de la pista <label class="input-color-label" for="input-color_titulo" >
-  <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label>				 </p>
+  <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label> </p>
 								
 						<p class="main-gate__desc"  id="color_descrip">Descripción de la pista <label class="input-color-label" for="input-color_descripcion">
   <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label></p>
@@ -444,10 +549,10 @@
 	<!-- Section Step -->
 	<section class="section-step" data-step-desc="Promoción">
 		<div class="input-and-title">
-			<h2 class="form-steps__title text-left">Inmediatamente después de descargar esta pista, envíe a los fans un correo electrónico automático promocionando otra de sus puertas de descarga:</h2>
+			<h2 class="form-steps__title text-left">Inmediatamente después de descargar esta pista.. Desea envíar a sus fans un correo electrónico automático promocionando esta pista??:</h2>
 			<select name="promotion" id="promotion" class="form-control-steps">
-				<option value="default" selected>Selecciona la pista. . .</option>
-				<option value="Pase por tu casa">Alguna música</option>
+				<option value="default" selected>No</option>
+				<option value="Si">Si</option>
 			</select>
 		</div>
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn">Siguiente <i class="fa fa-angle-right"></i></button>
