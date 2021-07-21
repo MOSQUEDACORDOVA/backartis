@@ -1,0 +1,253 @@
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+function valideKey(evt){
+    
+    // code is the decimal ASCII representation of the pressed key.
+    var code = (evt.which) ? evt.which : evt.keyCode;
+    
+    if(code==8) { // backspace.
+      return true;
+    } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else{ // other keys.
+      return false;
+    }
+}
+
+$( document ).ready(function() {
+    $('#status').on('change', function(){
+		if($('#status').val() == "En proceso de pago"){
+			$('#btn_').removeAttr('disabled')
+		}
+		if($('#status').val() == "Pagado" && $('#fecha_pago').val() != "" && $('#profile_img_').val() != "" ){
+			$('#btn_').removeAttr('disabled')
+		}
+
+	})
+	$('#fecha_pago').on('change', function(){
+		
+		if($('#status').val() == "Pagado" && $('#fecha_pago').val() != "" && $('#profile_img_').val() != "" ){
+			$('#btn_').removeAttr('disabled')
+		}
+
+	})
+	$('#profile_img_').on('change', function(){
+		
+		if($('#status').val() == "Pagado" && $('#fecha_pago').val() != "" && $('#profile_img_').val() != "" ){
+			console.log($('#profile_img_').val())
+			$('#btn_').removeAttr('disabled')
+		}
+
+	})
+	$('#observacion').on('change', function(){
+		
+		if($('#status').val() == "Pagado" && $('#fecha_pago').val() != "" && $('#profile_img_').val() != "" ){
+			console.log($('#profile_img_').val())
+			$('#btn_').removeAttr('disabled')
+		}
+
+	})
+
+	const subirImagen= event => {
+		const archivos = event.target.files;
+		const data = new FormData();
+	  
+		data.append('archivo', archivos[0]);
+	  
+		fetch('/update-profile/archivo', {
+		  method: 'POST',
+		  body: data
+		})
+		.then(response => response.json())
+		.then(data => {
+		  document.getElementById('resultado').innerHTML = 'El archivo ' + archivos[0].name + ' se ha subido correctamente.';
+		  document.getElementById('profile_img_').value = archivos[0].name;
+		  console.log($('#profile_img_').val())
+		})
+		.catch(error => {
+		  console.error(error);
+		});
+	  }
+
+	const profileImg = document.getElementById('profile-img');
+	const dropUploadProfileImg = document.getElementById('upload-user-img');
+
+	if(profileImg) {
+		profileImg.addEventListener('change', (event) => {
+
+			const file = profileImg.files[0];
+
+			if(file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') {
+				alert('Elige un archivo válido (.png, .jpg, .jpeg)');
+				return;
+			}
+
+			const reader = new FileReader();
+			reader.addEventListener('load', displayFileInfo);
+			reader.readAsDataURL(file);
+			console.log(file);
+			subirImagen(event);
+			
+		});
+
+		dropUploadProfileImg.addEventListener('dragenter', enterFile);
+		dropUploadProfileImg.addEventListener('dragover', overFile);
+		dropUploadProfileImg.addEventListener('dragleave', leaveFile);
+		dropUploadProfileImg.addEventListener('drop', dropFile);
+		
+
+		function enterFile(e) {
+			e.preventDefault();
+			dropUploadProfileImg.style.borderColor = '#D9AD26';
+		}
+
+		function overFile(e) {
+			e.preventDefault();
+		}
+
+		function leaveFile(e) {
+			e.preventDefault();
+			dropUploadProfileImg.style.borderColor = '';
+		}
+
+		function dropFile(e) {
+			e.preventDefault();
+
+			const data = e.dataTransfer;
+			const file = data.files[0];
+
+			dropUploadProfileImg.style.borderColor = '';
+			uploadingProccess(file);
+		}
+
+		function uploadingProccess(file) {
+			// calcular mb
+			const size = file.size / 1048576;
+
+			if(file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/jpg') {
+				alert('Elige un archivo válido (.png, .jpg, .jpeg)');
+				return;
+			}
+
+			const reader = new FileReader();
+			reader.addEventListener('load', displayFileInfo);
+			reader.readAsDataURL(file);
+		}
+
+		function displayFileInfo(e) {
+			const outputImg = document.createElement('img');
+			outputImg.setAttribute('src', e.target.result);
+			
+			dropUploadProfileImg.parentElement.classList.add('divider');
+			if(document.querySelector('.form-update-account .drop-area__wrapper.divider img')) {
+				document.querySelector('.form-update-account .drop-area__wrapper.divider img').remove();
+			}
+			dropUploadProfileImg.parentElement.appendChild(outputImg);
+		}
+	}
+
+});
+</script> 
+<div class="card-box shadow position-relative calculate-height">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-money-check" style="transform: translateX(.1em);"></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0">{{pageName}}</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<form action="/retiros_save" method="post" class="p-to-btn" autocomplete="off" id="form-update-profile" enctype='multipart/form-data'>
+	<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{parsed_retiros.id}}" hidden />
+			<div class="form-update-account">
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-sign-in-alt"></i>
+					</div>
+					<select class="form-control-steps" id="status" name="status" required>	
+						<option value="{{parsed_retiros.status}}">{{parsed_retiros.status}}</option>
+						<option value="En proceso de pago">En proceso de pago</option>
+						<option value="Pagado">Pagado</option>
+						<option value="Error">Error</option>
+						<option value="En espera">En espera</option>
+						
+					</select>
+				</div>
+				<div class="form-update-account__item">
+				<p class="form-steps__title--label form-steps__title text-left" for="user-name">Añade una foto de comprobante de pago</p>
+				<div class="drop-area__wrapper divider">
+					<div class="drop-area" id="upload-user-img">
+						<input type="file" id="profile-img" accept="image/*" class="d-none" name='photo'>
+						<input type="text" id="profile_img_"  class="form-control-steps" name='photo1' {{#if parsed_retiros.comprobante_pago}}value="{{parsed_retiros.comprobante_pago}}" {{/if}}hidden>
+						<div class="drop-content flex-column">
+							<div class="drop-icon mr-0 mb-2" id="drop-icon">
+								<i class="fa fa-upload"></i>
+							</div>
+							<div class="info-drop">
+								<label for="profile-img">Elije un archivo</label>
+							</div>
+						</div>
+						<a id="eliminar_foto" style="cursor: pointer;font-size: 1.3em;  color: #707070;">Eliminar Foto</a>	
+						<div id="resultado"></div>
+					</div>
+					<img src="{{#if parsed_retiros.comprobante_pago}}/assets/uploads/{{parsed_retiros.comprobante_pago}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Foto de baucher" id="img_photo" >
+					
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="confirm-text">Fecha de pago</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fas fa-calendar-alt"></i>
+					</div>
+					<input type="datetime-local" class="form-control-steps" id="fecha_pago" name="fecha_pago" placeholder="Inicio de validez del cupon" value="{{parsed_retiros.fecha_pago}}" autocomplete="off" >
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="last-name">Observación</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-comment-alt"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="observacion" name="observacion" placeholder="Observación" value="{{parsed_retiros.observacion}}">
+				</div>
+			</div><!-- .form-update-accound__item -->
+				
+				<div class="form-control-steps__container mb-3">
+					<div class="form-control-steps__placeholder">
+						<i class="fas fa-project-diagram"></i>
+					</div>
+					<div class="card bg-light mb-3" >
+  						<div class="card-header" style="font-size: 1.3em;">Datos del retiro</div>
+  							<div class="card-body" style="font-size: 1.3em;">
+    							<h5 class="card-title">Nombre y Apellido</h5>
+    							<p class="card-text">{{parsed_retiros.backcoin.nombre_apellido}}</p>
+								<h5 class="card-title">Documento</h5>
+    							<p class="card-text">{{parsed_retiros.backcoin.tipo_documento}} : {{parsed_retiros.backcoin.n_documento}}</p>
+								<h5 class="card-title">Correo</h5>
+    							<p class="card-text">{{parsed_retiros.backcoin.correo}}</p>
+								<h5 class="card-title">País</h5>
+    							<p class="card-text">{{parsed_retiros.backcoin.pais}}</p>
+								<h5 class="card-title">Banco</h5>
+    							<p class="card-text">{{parsed_retiros.backcoin.banco}}</p>
+								<h5 class="card-title">Cuenta</h5>
+    							<p class="card-text">{{parsed_retiros.backcoin.cuenta}}</p>
+								<h5 class="card-title">Monto a Retirar</h5>
+    							<p class="card-text" id="monto_recarga">{{parsed_retiros.monto}} </p>
+  							</div>
+						</div>
+				</div>
+				
+			</div>
+		<button type="submit" disabled class="btn btn-primary btn-x-lg form-steps__btn" id="btn_">Guardar <i class="fa fa-angle-right"></i></button>
+	</form>
+
+	<a href="/admin_dash" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

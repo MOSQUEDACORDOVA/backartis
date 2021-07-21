@@ -1,233 +1,295 @@
-const Modulo_BD = require('../models/modulos_');
-const nodemailer = require('nodemailer');
-
+const Modulo_BD = require("../models/modulos_");
+const nodemailer = require("nodemailer");
 
 // email sender function
-exports.sendEmail = function(req, res){
-	const {email} = req.body;
-    Modulo_BD
-    .guardarSuscripcion('suscripcion_landing',email).then((resultado)=>{
-        if (resultado=="0") {
-            console.log("Email ya registrado en sistema");
-            let msg="Email ya registrado en sistema.";
-        res.redirect('/?msg='+msg)
-        }else{
-          
-// Definimos el transporter
-    var transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, 
-        auth: {
-            user: 'josearzolay287@gmail.com',
-            pass: 'geekjjaa2012'
-        }
-    });
-// Definimos el email
-var mailOptions = {
-    from: 'Remitente',
-    to: email,
-    subject: 'Suscribcion',
-    text: 'Correo de bienvenida de prueba'
-};
-// Enviamos el email
-transporter.sendMail(mailOptions, function(error, info){
-    if (error){
-        console.log(error);
-		let msg="Error al enviar Mensaje";
-		res.redirect('/?msg='+msg)
-       // res.send(500, err.message);
-    } else {
-        console.log("Email sent fine");
-        let msg="Gracias por suscribirte, pronto recibiras noticias nuestras en tu correo.";
-        res.redirect('/?msg='+msg)	 
-     
-        
-      //  res.status(200).jsonp(req.body);
+exports.sendEmail = function (req, res) {
+  const { email } = req.body;
+  Modulo_BD.guardarSuscripcion("suscripcion_landing", email).then(
+    (resultado) => {
+      if (resultado == "0") {
+        console.log("Email ya registrado en sistema");
+        let msg = "Email ya registrado en sistema.";
+        res.redirect("/?msg=" + msg);
+      } else {
+        // Definimos el transporter
+        var transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true,
+          auth: {
+            user: "josearzolay287@gmail.com",
+            pass: "geekjjaa2012",
+          },
+        });
+        // Definimos el email
+        var mailOptions = {
+          from: "Remitente",
+          to: email,
+          subject: "Suscribcion",
+          text: "Correo de bienvenida de prueba",
+        };
+        // Enviamos el email
+        transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error);
+            let msg = "Error al enviar Mensaje";
+            res.redirect("/?msg=" + msg);
+            // res.send(500, err.message);
+          } else {
+            console.log("Email sent fine");
+            let msg =
+              "Gracias por suscribirte, pronto recibiras noticias nuestras en tu correo.";
+            res.redirect("/?msg=" + msg);
+
+            //  res.status(200).jsonp(req.body);
+          }
+        });
+      }
     }
-});
-
-}
-});
+  );
 };
 
+exports.sendEmailResetPass = function (req, res) {
+  //const {email} = req.body;
+  var token = req.params.token;
+  var mail = req.params.mail;
+  const resetUrl = `http://${req.headers.host}/search-account/${token}`;
 
-exports.sendEmailResetPass = function(req, res){
-	//const {email} = req.body;
-    var token = req.params.token
-    var mail = req.params.mail
-    const resetUrl = `http://${req.headers.host}/search-account/${token}`;
-          
-// Definimos el transporter
-    var transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, 
-        auth: {
-            user: 'josearzolay287@gmail.com',
-            pass: 'geekjjaa2012'
-        }
-    });
-// Definimos el email
-var mailOptions = {
-    from: 'Remitente',
-    to: mail,
-    subject: 'Reset Password',
-    text:'Click al siguiente enlace para resetear tu contraseña ' +  resetUrl
-};
-// Enviamos el email
-transporter.sendMail(mailOptions, function(error, info){
-    if (error){
-        console.log(error);
-		let msg="Error al enviar Mensaje";
-		res.redirect('/?msg='+msg)
-       // res.send(500, err.message);
-    } else {
-        console.log("Email sent fine");
-        let msg="A su correo se ha enviado el link para resetear su contraseña. Recuerde revisar su correo no deseado";
-        res.redirect('/?msg='+msg)	 
-     
-        
-      //  res.status(200).jsonp(req.body);
-    }
-});
-};
-
-exports.sendEmailFansPromotion = function(req, res){
-	const promocionar_musica = req.params.gate_link;
-    const id_user = req.params.id_user;
-
-    console.log(promocionar_musica)
-    const tUrl = `http://${req.headers.host}/track/${promocionar_musica}`;
-
-
-    Modulo_BD.obtenerSuscripbyUserG(id_user).then((respuesta) =>{
-        let parsed = JSON.parse(respuesta);
-		let array = []
-		for (let i = 0; i < parsed.length; i++) {
-			const correo = parsed[i].correo;
-			array.push(correo)
-			//console.log(parsed)
-			
-		}
-        console.log(array)
-// Definimos el transporter
-var transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+  // Definimos el transporter
+  var transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
     port: 465,
-    secure: true, 
+    secure: true,
     auth: {
-        user: 'josearzolay287@gmail.com',
-        pass: 'geekjjaa2012'
-    }
-});
-// Definimos el email
-var mailOptions = {
-from: 'Remitente',
-to: array,
-subject: 'Música nueva en Backartis',
-text:'Tenemos una nueva musica para ti, encuentrala en el siguiente enlace ' +  tUrl
-};
-// Enviamos el email
-transporter.sendMail(mailOptions, function(error, info){
-if (error){
-    console.log(error);
-    let msg="Error al enviar Mensaje";
-    res.redirect('/dashb/'+msg)
-   // res.send(500, err.message);
-} else {
-    console.log("Email sent fine");
-    let msg="Se envio con exito la musica seleccionada a los correos suscritos";
-    res.redirect('/dashb/'+msg)	 
- 
-    
-  //  res.status(200).jsonp(req.body);
-}
-});
-
-
-    });
-
-};
-
-exports.sendEmailFans = function(req, res){
-	const {correo,promocionar_musica} = req.body;
-    console.log(correo)
-    console.log(promocionar_musica)
-    const resetUrl = `http://${req.headers.host}/track/${promocionar_musica}`;
-    
-// Definimos el transporter
-  var transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, 
-        auth: {
-            user: 'josearzolay287@gmail.com',
-            pass: 'geekjjaa2012'
-        }
-    });
-// Definimos el email
-var mailOptions = {
-    from: 'Remitente',
-    to: correo,
-    subject: 'Música nueva en Backartis',
-    text:'Tenemos una nueva musica para ti, encuentrala en el siguiente enlace ' +  resetUrl
-};
-// Enviamos el email
-transporter.sendMail(mailOptions, function(error, info){
-    if (error){
-        console.log(error);
-		let msg="Error al enviar Mensaje";
-		res.redirect('/fans/'+msg)
-       // res.send(500, err.message);
+      user: "josearzolay287@gmail.com",
+      pass: "geekjjaa2012",
+    },
+  });
+  // Definimos el email
+  var mailOptions = {
+    from: "Remitente",
+    to: mail,
+    subject: "Reset Password",
+    text: "Click al siguiente enlace para resetear tu contraseña " + resetUrl,
+  };
+  // Enviamos el email
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      let msg = "Error al enviar Mensaje";
+      res.redirect("/?msg=" + msg);
+      // res.send(500, err.message);
     } else {
-        console.log("Email sent fine");
-        let msg="Se envio con exito la musica seleccionada a los correos indicados";
-        res.redirect('/fans/'+msg)	 
-     
-        
+      console.log("Email sent fine");
+      let msg =
+        "A su correo se ha enviado el link para resetear su contraseña. Recuerde revisar su correo no deseado";
+      res.redirect("/?msg=" + msg);
+
       //  res.status(200).jsonp(req.body);
     }
-});
+  });
 };
 
-exports.sendEmail_borra_cuenta = function(req, res){
-	const correo = req.user.email
-    const id_user = req.user.id
-    const resetUrl = `http://${req.headers.host}/borrar_user/${id_user}/ext`;
+exports.sendEmailFansPromotion = function (req, res) {
+  const promocionar_musica = req.params.gate_link;
+  const id_user = req.params.id_user;
 
+  console.log(promocionar_musica);
+  const tUrl = `http://${req.headers.host}/track/${promocionar_musica}`;
 
-// Definimos el transporter
-  var transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true, 
-        auth: {
-            user: 'josearzolay287@gmail.com',
-            pass: 'geekjjaa2012'
-        }
+  Modulo_BD.obtenerSuscripbyUserG(id_user).then((respuesta) => {
+    let parsed = JSON.parse(respuesta);
+    let array = [];
+    for (let i = 0; i < parsed.length; i++) {
+      const correo = parsed[i].correo;
+      array.push(correo);
+      //console.log(parsed)
+    }
+    console.log(array);
+    // Definimos el transporter
+    var transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "josearzolay287@gmail.com",
+        pass: "geekjjaa2012",
+      },
     });
-// Definimos el email
-var mailOptions = {
-    from: 'Remitente',
-    to: correo,
-    subject: 'Borrar Cuenta',
-    text:'Nos informaste que deseas borrar tu cuenta con nosotros, para confirmar haz click al siguiente enlace; recuerda que perderas TODA la informacion ' +  resetUrl
-};
-// Enviamos el email
-transporter.sendMail(mailOptions, function(error, info){
-    if (error){
+    // Definimos el email
+    var mailOptions = {
+      from: "Remitente",
+      to: array,
+      subject: "Música nueva en Backartis",
+      text:
+        "Tenemos una nueva musica para ti, encuentrala en el siguiente enlace " +
+        tUrl,
+    };
+    // Enviamos el email
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
         console.log(error);
-		let msg="Error al enviar Mensaje";
-		res.redirect('/dashb/'+msg)
-       // res.send(500, err.message);
-    } else {
+        let msg = "Error al enviar Mensaje";
+        res.redirect("/dashb/" + msg);
+        // res.send(500, err.message);
+      } else {
         console.log("Email sent fine");
-        let msg="Se envio un correo con el enlace para confirmar la eliminacion de tu cuenta";
-        res.redirect('/dashb/'+msg)	 
-     
-        
+        let msg =
+          "Se envio con exito la musica seleccionada a los correos suscritos";
+        res.redirect("/dashb/" + msg);
+
+        //  res.status(200).jsonp(req.body);
+      }
+    });
+  });
+};
+
+exports.sendEmailFans = function (req, res) {
+  const { correo, promocionar_musica } = req.body;
+  console.log(correo);
+  console.log(promocionar_musica);
+  const resetUrl = `http://${req.headers.host}/track/${promocionar_musica}`;
+
+  // Definimos el transporter
+  var transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "josearzolay287@gmail.com",
+      pass: "geekjjaa2012",
+    },
+  });
+  // Definimos el email
+  var mailOptions = {
+    from: "Remitente",
+    to: correo,
+    subject: "Música nueva en Backartis",
+    text:
+      "Tenemos una nueva musica para ti, encuentrala en el siguiente enlace " +
+      resetUrl,
+  };
+  // Enviamos el email
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      let msg = "Error al enviar Mensaje";
+      res.redirect("/fans/" + msg);
+      // res.send(500, err.message);
+    } else {
+      console.log("Email sent fine");
+      let msg =
+        "Se envio con exito la musica seleccionada a los correos indicados";
+      res.redirect("/fans/" + msg);
+
       //  res.status(200).jsonp(req.body);
     }
-});
+  });
+};
+
+exports.sendEmail_borra_cuenta = function (req, res) {
+  const correo = req.user.email;
+  const id_user = req.user.id;
+  const resetUrl = `http://${req.headers.host}/borrar_user/${id_user}/ext`;
+
+  // Definimos el transporter
+  var transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: "josearzolay287@gmail.com",
+      pass: "geekjjaa2012",
+    },
+  });
+  // Definimos el email
+  var mailOptions = {
+    from: "Remitente",
+    to: correo,
+    subject: "Borrar Cuenta",
+    text:
+      "Nos informaste que deseas borrar tu cuenta con nosotros, para confirmar haz click al siguiente enlace; recuerda que perderas TODA la informacion " +
+      resetUrl,
+  };
+  // Enviamos el email
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      let msg = "Error al enviar Mensaje";
+      res.redirect("/dashb/" + msg);
+      // res.send(500, err.message);
+    } else {
+      console.log("Email sent fine");
+      let msg =
+        "Se envio un correo con el enlace para confirmar la eliminacion de tu cuenta";
+      res.redirect("/dashb/" + msg);
+
+      //  res.status(200).jsonp(req.body);
+    }
+  });
+};
+
+exports.sendEmail_get_retiro = function (req, res) {
+  const user_name = req.user.userName;
+  const nombre = req.user.name + " " + req.user.lastName;
+  const correo = req.user.email;
+  const id_user = req.user.id;
+  var ref_num = req.params.ref_num;
+  var monto = req.params.monto;
+  var status = req.params.status;
+  //const resetUrl = `http://${req.headers.host}/borrar_user/${id_user}/ext`;
+  let mails = [correo, "jkey_09@hotmail.com"];
+  Modulo_BD.obtenerBackcoinDataPay(id_user).then((respuesta) => {
+    let parsed = JSON.parse(respuesta)[0];
+
+    // Definimos el transporter
+    var transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "josearzolay287@gmail.com",
+        pass: "geekjjaa2012",
+      },
+    });
+    // Definimos el email
+    var mailOptions = {
+      from: "Remitente",
+      to: mails,
+      subject: "Solicitud de retiro",
+      text:
+        nombre +
+        " nos informó que desea retirar: $" +
+        monto +
+        " de su billetera Backcoin, quedando actualmente en estado: " +
+        status +
+        " y referendcia numero: " +
+        ref_num +
+        ". \n Dicho monto será acreditado a la cuenta: " +
+        parsed.cuenta +
+        " del banco: " +
+        parsed.banco +
+        " a nombre de: " +
+        parsed.nombre_apellido +
+        " documento de identidad: " +
+        parsed.tipo_documento +
+        " " +
+        parsed.n_documento,
+    };
+    // Enviamos el email
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+        let msg = "Error al enviar Mensaje";
+        res.redirect("/dashb/" + msg);
+        // res.send(500, err.message);
+      } else {
+        console.log("Email sent fine");
+        let msg = "Se envio un correo con los detalles de su retiro";
+        res.redirect("/dashb/" + msg);
+
+        //  res.status(200).jsonp(req.body);
+      }
+    });
+  });
 };

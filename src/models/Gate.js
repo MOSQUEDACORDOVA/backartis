@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 const bcrypt = require('bcrypt-nodejs');
+const Gate_SoundC = require('../models/Gate_SoundC');
 
 const Gates = db.define('gates', {
 	id: {
@@ -123,8 +124,8 @@ const Gates = db.define('gates', {
 		type: DataTypes.TEXT,
 		allowNull: true,
 	},
-	nuevo_lanzamiento: {
-		type: DataTypes.TEXT,
+	fecha_programa: {
+		type: DataTypes.DATE,
 		allowNull: true,
 	},
 	
@@ -261,6 +262,8 @@ const Gates = db.define('gates', {
 	
 });
 
+// El trabajador pertenece a una oficina
+Gates.Gate_SoundC= Gates.belongsTo(Gate_SoundC);
 // Métodos personalizados
 module.exports = Gates;
 

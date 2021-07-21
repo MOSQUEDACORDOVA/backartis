@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 const bcrypt = require('bcrypt-nodejs');
+const Usuarios = require('../models/Usuarios');
 
 const Pagos = db.define('pagos', {
 	id: {
@@ -55,7 +56,8 @@ const Pagos = db.define('pagos', {
 	
 	
 });
-
+// El trabajador pertenece a una oficina
+Pagos.Usuarios= Pagos.belongsTo(Usuarios);
 // Métodos personalizados
 module.exports = Pagos;
 

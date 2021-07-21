@@ -95,7 +95,6 @@ const Usuarios = db.define('usuarios', {
 	hasta: {
 		type: DataTypes.DATE,
 		allowNull: true,
-		defaultValue: ""
 	},
 	metodo_pago: {
 		type: DataTypes.TEXT,

@@ -173,26 +173,29 @@ function Askdelete(id, tipo, link){
 									Cupon
 								</th>
 								<th class="text-xs-center">
+									Usado en
+								</th> 
+								<th class="text-xs-center">
 									Tipo de cupon
 								</th> 
 								<th class="text-xs-center">
 									Valor del cupon
 								</th> 
+								
 								<th class="text-xs-center">
 									Fecha de Uso
 								</th> 
-								<th class="text-xs-center">
-									Usado en
-								</th> 
+								
 							</tr>
 						</thead><tbody ></tbody>
 	{{#each cupones_usados as |cupon i|}}	 
 			<tr>
 				<td>{{cupon.nombre_cupon}}</td>
+				<td>{{cupon.usado_en}}</td>
 				<td>{{cupon.tipo}}</td>
 				<td>{{cupon.valor}}</td>
 				<td>{{#formatoFecha2 cupon.fecha_uso}}{{/formatoFecha2}}</td>
-				<td>{{cupon.usado_en}}</td>
+				
 				
 				
 				</tr>		
@@ -447,9 +450,9 @@ function Askdelete(id, tipo, link){
 <table class="table table-bordered table-striped" id="tabla_" >
 						<thead>
 							<tr>
-                            <!--<th class="text-xs-center">
-									Id
-								</th>-->
+                            	<th class="text-xs-center">
+								Usuario
+								</th>
 								<th class="text-xs-center">
 									Tipo de venta
 								</th>
@@ -471,11 +474,12 @@ function Askdelete(id, tipo, link){
 						<tbody id="paginationdemo">
 	{{#each ventas_parsed as |venta i|}}	 
 			<tr  class="pagination__item">
+				<td>{{venta.usuario.userName}}</td>
 				<td>{{venta.tipo_compra}}</td>
 				<td>{{#formatoFecha2 venta.createdAt}}{{/formatoFecha2}}</td>
 				<td>{{venta.numero_referencia}}</td>
 				<td>{{venta.metodo_pago}}</td>
-				<td>{{venta.monto}}</td>
+				<td>${{venta.monto}}</td>
 				
 				</tr>		
 	{{/each}}
@@ -648,6 +652,68 @@ function Askdelete(id, tipo, link){
 						<i class="fa fa-trash-alt"></i>
 					</a>
 					<a href="/edit_ayuda/{{ayuda.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	
+	</tbody> 
+ 			</table>
+			
+	<!-- .gate-item -->
+	{{/if}}
+	{{#if retiros}}
+	<table class="table table-bordered table-striped" id="tabla_">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Nº Retiro
+								</th>
+								<th class="text-xs-center">
+									A nombre de
+								</th>
+								<th class="text-xs-center">
+									Monto
+								</th>
+								<th class="text-xs-center">
+									Fecha de Solicitud
+								</th>
+								<th class="text-xs-center">
+									Estado
+								</th>
+								<th class="text-xs-center">
+									Fecha de Pago
+								</th>
+								<th class="text-xs-center">
+									Comprobante
+								</th>
+								<th class="text-xs-center">
+									Observación
+								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
+								
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each parsed_retiros as |retiros i|}}	 
+			<tr class="pagedemo ">
+				<td>{{retiros.id}}</td>
+				<td>{{retiros.backcoin.nombre_apellido}}</td>
+				<td>${{retiros.monto}}</td>
+				<td>{{#formatoFecha2 retiros.fecha_solicitud}}{{/formatoFecha2}}</td>
+				<td class="{{#ColorPay retiros.status}}{{/ColorPay}}">{{retiros.status}}</td>
+				<td>{{#if retiros.fecha_pago}}{{#formatoFecha2 retiros.fecha_pago}}{{/formatoFecha2}}{{/if}}</td>
+				<td><img src="{{#if retiros.comprobante_pago}}/assets/uploads/{{retiros.comprobante_pago}}{{else}}https://operaencastellano.com/wp-content/uploads/2019/05/sin-imagen.jpg{{/if}}" alt="Foto de baucher" id="img_photo" style=" height: 100px;    object-fit: cover;    width: 100px;    border-radius: 10%;"></td>
+				<td>{{retiros.observacion}}</td>
+				<td><div class="gate-item__options">
+					<a href="/edit_retiros/{{retiros.id}}" class="gate-item__option">
 						<i class="fa fa-pen"></i>
 					</a>
 					

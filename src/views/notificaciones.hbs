@@ -18,7 +18,7 @@ function valideKey(evt){
 		<div class="col-xl-7">
 			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
 				<div class="card-box__icon card-box__icon--celeste">
-					<i class="fa fa-money-check" style="transform: translateX(.1em);"></i>
+					<i class="fa fa-bell" ></i>
 				</div>
 				<div class="card-box__body">
 					<h2 class="card-box__title m-0">{{pageName}}</h2>
@@ -34,7 +34,7 @@ function valideKey(evt){
 				<label class="form-steps__title" for="text">Nombre</label>
 				<div class="form-control-steps__container mb-3">
 						<div class="form-control-steps__placeholder">
-					<i class="fa fa-phone"></i>
+					<i class="fa fa-user"></i>
 						</div>
 				
 					<input type="text" class="form-control-steps"  id="nombre" name="nombre" placeholder="Nombre para identificar la notificación" required {{#if parsed_notificacion}} value="{{parsed_notificacion.nombre}}" {{/if}}>
@@ -60,9 +60,7 @@ function valideKey(evt){
 			<div class="form-update-account__item" style="grid-row-end: 1;">
 				<label class="form-steps__title" for="ws">Descripción</label>
 				<div class="form-control-steps__container">
-					<div class="form-control-steps__placeholder">
-						<i class="fab fa-whatsapp"></i>
-					</div>
+					
 					<textarea type="text" class="form-control-steps"  id="descripcion" name="descripcion" placeholder="Descripción" required >
 						{{#if parsed_notificacion}}{{parsed_notificacion.descripcion}}{{/if}}</textarea>
 				</div>
@@ -71,23 +69,21 @@ function valideKey(evt){
 		<div class="form-update-account__item">
 				<label class="form-steps__title" for="text">Fecha publicación</label>
 				<div class="form-control-steps__container">
-					<div class="form-control-steps__placeholder">
-						<i class="fab fa-soundcloud"></i>
-					</div>
+					
 					<input type="date" class="form-control-steps" id="fecha_publicacion" name="fecha_publicacion" placeholder="Fecha publicación" {{#if parsed_notificacion}} value="{{parsed_notificacion.fecha_publicacion}}" {{/if}} >
 				</div>
 				
 			</div><!-- .form-update-accound__item -->
-			<div class="form-update-account__item">
+			<div class="form-update-account__item" hidden>
 				<label class="form-steps__title">Destino</label>
 			<div class="form-control-steps__container mb-3">
 				<div class="form-control-steps__placeholder">
-					<i class="fa fa-music"></i>
+					<i class="fa fa-sign-in-alt"></i>
 				</div>
 				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 				<select name="destino" id="destino" class="form-control-steps" style="background-color: #11111108;" {{#if pais_o}} disabled{{/if}}>
 				{{#if parsed_notificacion}}<option value="{{parsed_notificacion.destino}}" selected>{{parsed_notificacion.destino}}</option>{{/if}}
-				<option value="Todos" >Todos</option>				
+				<option value="Todos" selected>Todos</option>				
 				{{#each usuarios_parsed as |usuario i|}}					
 					<option value="{{usuario.userName}}" >{{usuario.name}} / {{usuario.userName}}</option>
 					{{/each}}

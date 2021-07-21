@@ -2,7 +2,6 @@ const router = require('express').Router();
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 const dashboardController = require('../controllers/dashboardController');
-const pasarelacontroller = require('../controllers/pasarelacontroller');
 const gatesController = require('../controllers/gatesController');
 const landingController = require('../controllers/landingController');
 const walletController = require('../controllers/walletController');
@@ -51,6 +50,8 @@ router.post('/subscribe', EmailCtrl.sendEmail);
 router.get('/sendMail/:token/:mail', EmailCtrl.sendEmailResetPass);
 router.get('/sendMail/:gate_link/:id_user/:msg', EmailCtrl.sendEmailFansPromotion);
 router.get('/borra_cuenta/:id_user', EmailCtrl.sendEmail_borra_cuenta);
+router.get('/send_retirar_fondos/:ref_num/:monto/:status', EmailCtrl.sendEmail_get_retiro);
+
 
 // Buscar cuenrta
 router.get('/search-account', userController.formSearchAccount);
@@ -60,6 +61,7 @@ router.post('/search-account/:token', userController.updatePassword);
 
 // Dashboard
 router.get('/dashboard', authController.authenticatedUser, gatesController.getGates);
+router.get('/dashb/', gatesController.getGates);
 router.get('/dashb/:msg', authController.authenticatedUser, gatesController.getGates);
 router.get('/dashboard/:gates', authController.authenticatedUser, gatesController.getGates);
 router.get('/dashboard/:gates/:productUdpt', authController.authenticatedUser, gatesController.getGates);
@@ -130,6 +132,13 @@ router.get('/edit_ayuda/:id', authController.authenticatedUser, adminDash.termin
 router.get('/borrar_ayuda/:id', authController.authenticatedUser, adminDash.terminos_ayuda_delete);
 
 
+router.get('/retiros', authController.authenticatedUser, adminDash.retiros);
+router.get('/retiros/:msg', authController.authenticatedUser, adminDash.retiros);
+router.get('/edit_retiros/:id', authController.authenticatedUser, adminDash.retiros_edit);
+router.post('/retiros_save', authController.authenticatedUser, adminDash.retiros_save);
+
+
+
 router.get('/ventas', authController.authenticatedUser, adminDash.getPagos);
 
 
@@ -156,16 +165,16 @@ router.get('/membership/:msg', authController.authenticatedUser, dashboardContro
 router.post('/membershipCupon', authController.authenticatedUser, dashboardController.changeMembershipCupon);
 
 // Paserela
-//router.get('/change-membership/vip', authController.authenticatedUser, pasarelacontroller.changeMembership);
 router.post('/change-membership/:tipo', authController.authenticatedUser, mercadopago.pasarela);
 router.get('/visa/respuesta/success',  mercadopago.pagar);
 router.get('/visa/respuesta/failure',  mercadopago.pagar);
 router.get('/visa/respuesta/pending',  mercadopago.pagar);
 
-
+//PAGO PAYPAR PASERALA
 router.post('/my-api/create-payment/', authController.authenticatedUser, paypal.crearpago);
 router.post('/my-api/execute-payment/', authController.authenticatedUser, paypal.procesar);
 
+//RECARGAR SALDO
 router.post('/recargar_mi_saldo', authController.authenticatedUser, mercadopago.pasarela);
 router.post('/create-order/:token/:product/:amount',  paypal.crearOrden);
 router.post('/handle-approve/:id/:token/:product/:amount/:id_user/:modo',  paypal.aprobarOrden);
@@ -202,6 +211,8 @@ router.get('/recargar_backcoin', authController.authenticatedUser, walletControl
 router.get('/pagar_backcoins/:id/:product/:amount/:modo', authController.authenticatedUser, walletController.descontar_backcoin);
 router.get('/pagar_backcoins/:id/:product/:amount/:modo/:back_pay', authController.authenticatedUser, walletController.descontar_backcoin);
 router.get('/retirar_fondos', authController.authenticatedUser, walletController.retirar_fondos_form);
+router.post('/retirar_fondos', authController.authenticatedUser, walletController.retirar_fondos_save);
+router.get('/mis_retiros', authController.authenticatedUser, walletController.retiros);
 
 
 
@@ -224,7 +235,9 @@ router.get('/auth/facebook/callback',
  
 //incio sesion con google
 router.get('/auth/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }));
+  passport.authenticate('google', { scope: ['profile', 'email'] }), function(req, res) {
+    console.log("aqui")
+  });
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -232,7 +245,10 @@ router.get('/auth/google',
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 router.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
+  passport.authenticate('google', {
+    successRedirect : '/dashboard',
+   failureRedirect: '/login',
+  failureFlash: 'Invalid Google credentials.' }),
   function(req, res) {
     res.redirect('/dashboard');
   });
@@ -247,7 +263,10 @@ router.get('/auth/mixcloud',
   passport.authenticate('mixcloud'));
 
 router.get('/auth/mixcloud/callback', 
-  passport.authenticate('mixcloud', { failureRedirect: '/login' }),
+  passport.authenticate('mixcloud', { 
+    successRedirect : '/dashboard',
+    failureRedirect: '/login',
+    failureFlash: 'Invalid Google credentials.' }),
   function(req, res) {
     // Successful authentication, redirect home.
     

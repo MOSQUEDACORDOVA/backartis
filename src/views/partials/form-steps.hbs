@@ -25,6 +25,33 @@
 </script>
 <script>
 	$( document ).ready(function() {
+
+		$('#music-price').on('keyup',function() {
+
+console.log("hola")
+let igv = parseFloat($('#music-price').val()) * parseFloat(0.18);
+let igv_r = igv.toFixed(2)
+$('#igv').text(igv_r)
+let total = (parseFloat($('#music-price').val()) + parseFloat(igv_r)).toFixed(2)
+$('#total').text(total)
+$('#total_').val(total)
+
+})
+
+		$('#programado').on('change', function(){
+			console.log("hello")
+			$('#fecha_programa').removeAttr('disabled')
+			$('#fecha_programa').removeAttr('hidden')
+		})
+		
+		$('#publico_').on('change', function(){
+			console.log("hello2")
+			$('#fecha_programa').prop('disabled', true)
+			$('#fecha_programa').prop('hidden', true)
+		})
+
+
+
 		document.getElementById("music-title").addEventListener('change', () => {
 		document.getElementById("color_title").innerHTML = document.getElementById("music-title").value + `<label class="input-color-label" for="input-color_titulo" >
   <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label> `
@@ -152,13 +179,17 @@ let link         = document.getElementById('url-demo').value,
 	}
 })
 
+
 }); 
 </script>
 <nav class="steps-nav">
 	<!-- Step Nav Items -->
-	{{#if backstore}}{{/if}}{{#if bondGate}}{{/if}}{{#if fileGate}}
+	{{#if backstore}}{{/if}}{{#if fileGate}}
 		<div class="steps-nav__item">
 			<div class="steps-nav__number active">1</div>
+		</div>
+		<div class="steps-nav__item">
+			<div class="steps-nav__number">2</div>
 		</div>
 	{{/if}}
 	<div class="steps-nav__item">
@@ -186,7 +217,7 @@ let link         = document.getElementById('url-demo').value,
 	<!-- Steps Nav Desc -->
 	<div class="steps-nav__desc">
 		<p>Paso 1</p>
-		<p>{{#if backstore}}Género{{/if}}{{#if bondGate}}{{/if}}{{#if fileGate}}Fuente{{/if}}</p>
+		<p>{{#if backstore}}{{/if}}{{#if bondGate}}{{/if}}{{#if fileGate}}{{/if}}</p>
 	</div>
 	<!-- End Steps Nav Desc -->
 </nav>
@@ -196,15 +227,10 @@ let link         = document.getElementById('url-demo').value,
 						{{#if fileGate}}<input type="text"  name="tipo_create" value="filegate" hidden>{{/if}}
 						{{#if bondGate}}<input type="text"  name="tipo_create" value="bondgate" hidden>{{/if}}
 	<!-- Section Step -->
-	{{#if backstore}}{{/if}}
-	
-		{{#if bondGate}}
-				{{/if}}
-			
-		{{#if fileGate}}
+	{{#if backstore}}{{else}}
 		<section class="section-step show" data-step-desc="Fuente">
 			<div class="input-and-title">
-				<h2 class="form-steps__title">Ingresa la URL de SounCloud</h2>
+				<h2 class="form-steps__title">Ingresa la URL de {{#if fileGate}}SounCloud{{/if}}{{#if bondGate}} enlace secreto{{/if}}</h2>
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-globe"></i>
@@ -219,8 +245,8 @@ let link         = document.getElementById('url-demo').value,
 	
 	<!-- End Section Step -->
 
-	<!-- Section Step -->{{#if fileGate}}{{else}}
-	<section class="section-step {{#if backstore}}show{{/if}}{{#if bondGate}}show{{/if}}" data-step-desc="Género">
+	<!-- Section Step -->
+	<section class="section-step {{#if backstore}}show{{/if}}" data-step-desc="Género">
 		<div class="input-and-title">
 			<h2 class="form-steps__title">Selecciona el género de tu título</h2>
 			<div class="form-control-steps__container mb-3">
@@ -266,7 +292,7 @@ let link         = document.getElementById('url-demo').value,
 		</div>
 
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn" disabled>Siguiente <i class="fa fa-angle-right"></i></button>
-	</section>{{/if}}
+	</section>
 	<!-- End Section Step -->
 
 	<!-- Section Step -->
@@ -332,8 +358,12 @@ let link         = document.getElementById('url-demo').value,
 			<div class="form-control-steps__placeholder">
 				<i class="fa fa-coins"></i>
 			</div>
-			<input type="number" class="form-control-steps" id="music-price" name="music_price" placeholder="Precio de la pista" required>
+			<input type="number" class="form-control-steps" id="music-price" name="music_price_sinigv" placeholder="Precio de la pista" required>
+			
 		</div>
+			<br><label>IGV (18%) = $<span id="igv"></span></label><br>
+			<label>Total = $<span id="total"></span></label>
+			<input type="number" class="form-control-steps" id="total_" name="music_price"  hidden>
 		{{/if}}
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn" disabled>Siguiente <i class="fa fa-angle-right"></i></button>
 	</section>
@@ -509,25 +539,21 @@ let link         = document.getElementById('url-demo').value,
 		<div class="form-row">
 			<div class="col mb-3">
 				<label class="checkbox-style">
-					<input type="radio" name="privacity" value="publico"checked>
+					<input type="radio" name="privacity" value="publico"checked id="publico_">
 					<span class="checkbox-style__circle"></span>
 					Público
 				</label>
 			</div><!-- .col -->
 			<div class="col mb-3">
 				<label class="checkbox-style">
-					<input type="radio" name="privacity" value="programado">
+					<input type="radio" name="privacity" value="programado" id="programado">
 					<span class="checkbox-style__circle"></span>
 					Programado
 				</label>
 			</div><!-- .col -->
 		</div><!-- .form-row -->
-		<p class="form-steps__title form-steps__title--label text-left">¿Presentar este título en los nuevos lanzamientos?</p>
-		<label class="checkbox-style mb-3">
-			<input type="checkbox" name="nuevo_lanzamiento" value="nuevo_lanzamiento">
-			<span class="checkbox-style__circle"></span>
-			Sí, incluir este título en nuevos lanzamientos
-		</label>
+		<input type="datetime-local" class="form-control-steps" id="fecha_programa" name="fecha_programa" placeholder="Inicio de validez del cupon"  autocomplete="off" disabled hidden>
+		
 
 		<label class="form-steps__title" for="gate-link">Personaliza el enlace hacia el gate</label>
 		<div class="form-control-steps__container">
@@ -539,7 +565,7 @@ let link         = document.getElementById('url-demo').value,
 
 		</div>
 		<div id="gate-link-output" class="mt-3 text-muted text-center">
-			https://backartis.herokuapp.com/track/<span>mitrack123</span>
+			https://josea.mosquedacordova.com/track/<span>mitrack123</span>
 		</div>
 
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn">Siguiente <i class="fa fa-angle-right"></i></button>

@@ -101,7 +101,17 @@ var pagina_ultima = 0;
 	$( document ).ready(function() {
 		$('#monto_retiro').keyup(function(){
 			console.log('hola')
-			$('#monto_recarga').text('$'+ $('#monto_retiro').val())
+			let retiro = parseFloat($('#monto_retiro').val())
+			let saldo = parseFloat($('#backcoins_').text())
+			if ( retiro > saldo ){
+				$('#monto_recarga').text('SALDO INSUFICIENTE')
+			}else{
+				console.log(retiro)
+				console.log(saldo)
+				
+			$('#monto_recarga').text('$'+ $('#monto_retiro').val())	
+			}
+			
 
 		})
 
@@ -178,12 +188,14 @@ var cargarPagina = function(intPaginaP){
 		<div class="col-lg-6 mb-3 mb-lg-0">
 			<div class="card card-box text-center border-0 bg-gradient text-white">
 				<h2 style="line-height: 1.5;">Mi saldo<br>{{user.backcoins}} Backcoins</h2>
+				<label id="backcoins_" hidden>{{user.backcoins}}</label>
 			</div>
 		</div>
 		<div class="col-lg-6 d-lg-flex flex-column justify-content-between" style="font-size: 14px;">
 			<a href="/recargar_backcoin" class="btn btn-primary btn-block mb-3 mb-lg-0">Recargar mi saldo</a>
 			<a href="/retirar_fondos" class="btn btn-primary btn-block mb-3 mb-lg-0">Retirar fondos</a>
 			<a href="/datos_wallet" class="btn btn-primary btn-block mb-3 mb-lg-0">Mis datos de pago</a>
+			<a href="/mis_retiros" class="btn btn-primary btn-block mb-3 mb-lg-0">Mis retiros</a>
 		</div>
 
 		{{#if movimientos}}<div class="col-12" style="margin-top: 1.5rem;">
@@ -347,6 +359,7 @@ var cargarPagina = function(intPaginaP){
 					<i class="fas fa-file-signature"></i>
 						</div>
 					<input type="hidden" class=""  id="back_re" name="product" value="Backcoin"  >
+					<input type="hidden" class=""  id="modo" name="modo" value="Recarga"  >
 					<input type="text" class="form-control-steps onlynum"  id="back_re" name="amount" placeholder="1$ = 1 Backcoin"  >
 				</div>
 			</div><!-- .form-update-accound__item -->	
@@ -358,7 +371,7 @@ var cargarPagina = function(intPaginaP){
 
 		{{#if retirar_fondos}}	<div class="col-12" style="margin-top: 1.5rem;">
 			<form action="/retirar_fondos" method="post" class="p-to-btn" autocomplete="off" id="form_datos_wallet" enctype='multipart/form-data'>
-			<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{user.id}}" hidden />
+			<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{parsed.id}}" hidden />
 		<div class="form-update-account">
 			<div class="form-update-account__item">
 				<label class="form-steps__title" for="text">Monto a Retirar</label>
@@ -401,6 +414,59 @@ var cargarPagina = function(intPaginaP){
 			
 		<button type="submit" class="btn btn-primary btn-x-lg form-steps__btn" id="create-gate-btn">Guardar datos <i class="fa fa-check"></i></button>
 		</form>	
+		</div>{{/if}}
+
+		{{#if movimientos_retiros}}<div class="col-12" style="margin-top: 1.5rem;">
+			<table class="table table-striped table-hover" id="tabla_">
+				<p class="text-center font-weight-bold h3" style="margin-bottom: 1.5rem;">Retiros</p>
+				<thead class="thead-dark">
+					<tr>
+						<th class="text-xs-center">
+									Nº Retiro
+								</th>
+								<th class="text-xs-center">
+									Monto
+								</th>
+								<th class="text-xs-center">
+									Fecha de Solicitud
+								</th>
+								<th class="text-xs-center">
+									Estado
+								</th>
+								<th class="text-xs-center">
+									Fecha de Pago
+								</th>
+								<th class="text-xs-center">
+									Comprobante
+								</th>
+								<th class="text-xs-center">
+									Observación
+								</th>
+					</tr>
+				</thead>
+				<tbody>
+	{{#each parsed_retiros as |retiros i|}}	 
+			<tr class="pagedemo ">
+				<td>{{retiros.id}}</td>
+				<td>${{retiros.monto}}</td>
+				<td>{{#formatoFecha2 retiros.fecha_solicitud}}{{/formatoFecha2}}</td>
+				<td>{{retiros.status}}</td>
+				<td>{{#if retiros.fecha_pago}}{{#formatoFecha2 retiros.fecha_pago}}{{/formatoFecha2}}{{/if}}</td>
+				<td><a href="{{#if retiros.comprobante_pago}}/assets/uploads/{{retiros.comprobante_pago}}{{/if}}">{{#if retiros.comprobante_pago}}Click Para ver{{/if}}</a>
+					</td>
+				<td>{{retiros.observacion}}</td>
+				</tr>		
+	{{/each}}
+					
+				</tbody>
+				<tfoot>
+	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
+	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td id="indicador_paginas"></td>
+	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
+	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+</tfoot>
+			</table>
 		</div>{{/if}}
 
 	</div>

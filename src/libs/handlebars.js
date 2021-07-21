@@ -63,10 +63,10 @@ module.exports = {
 	URLRSS: (str1, class1, text) => {
 	var aux = str1.split(",");
 	 let cont =	aux.length;
-	 console.log(cont)
+	 //console.log(cont)
 	 var out = "";
 	 for (let i = 0; i < cont; i++) {
-	//	console.log(aux[i])
+	//	//console.log(aux[i])
 		out += `<a class="${class1} div_share" id="div_share" >${text}</a>
 		<label class="label_url" hidden>${aux[i]}</label>`
 		 
@@ -76,14 +76,14 @@ module.exports = {
 	URLRSS2: (str1, class1, text, social) => {
 		var aux = str1.split(",");
 		 let cont =	aux.length;
-		 console.log(cont)
+		 //console.log(cont)
 		 var out = "";
 		 if (text == "Compartir" && class1 == "tweet"){
 			var share_tw ="http://twitter.com/share?text=Gracias por compartir"
 			}
 
 		 for (let i = 0; i < cont; i++) {
-		//	console.log(aux[i])
+		//	//console.log(aux[i])
 		if (text == "soundcloud"){
 			out += `<div class="soundc"><a class="div_share" id="div_share" ><i class="fab fa-${social}" style="padding-right: 16px;"></i>${text}</a>
 			<label class="label_url" hidden>${share_tw} ${aux[i]}</label> </div>`
@@ -111,7 +111,7 @@ module.exports = {
 			 for (let i = 0; i < cont; i++) {
 				var Fecha_aux = arreglo[i].fecha_publicacion.split("-");
 				var Fecha1 = new Date(parseInt(Fecha_aux[0]),parseInt(Fecha_aux[1]-1),parseInt(Fecha_aux[2]));
-				//console.log(Fecha1)
+				////console.log(Fecha1)
 					
 					var AnyoFecha = Fecha1.getFullYear();
 					var MesFecha = Fecha1.getMonth();
@@ -135,7 +135,7 @@ module.exports = {
 					var Mes = f.getMonth();
 					var Dia = f.getDate();
 						var fecha_ = f.toLocaleString()
-						console.log(fecha_)
+						//console.log(fecha_)
 					 return fecha_;
 					},
 			estadoCupon: (fecha, cantidad) => {
@@ -163,8 +163,24 @@ module.exports = {
 				if (metodo == "Backcoins") {
 					estado = "egreso"
 				}
+
+				if (tipo == "Retiro Backcoins") {
+					estado = "egreso"
+				}
+				if (metodo == "En espera") {
+					estado = "Agotado"
+				}
+				if (metodo == "Pagado") {
+					estado = "Activo"
+				}
+				if (metodo == "En proceso de pago") {
+					estado = "Caducado"
+				}
 				return estado;
 		},
-		
+		mathposition: (posicion) => {
+			
+			return posicion+1;
+	},	
 	
 }

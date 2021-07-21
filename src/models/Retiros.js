@@ -1,14 +1,15 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 const bcrypt = require('bcrypt-nodejs');
+const Backcoin = require('../models/Backcoin');
 
-
-const Gate_SoundC = db.define('gate_soundc', {
+const Retiros = db.define('retiros', {
 	id: {
 		type: DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
+	
 	id_usuario: {
 		type: DataTypes.INTEGER,
 		allowNull: false,
@@ -18,36 +19,42 @@ const Gate_SoundC = db.define('gate_soundc', {
 			}
 		}
 	},
-	id_gate: {
-		type: DataTypes.INTEGER,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El id gate es obligatorio'
-			}
-		}
+	status: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
 	},
-		track_id: {
+	comprobante_pago: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
-	},	title: {
+	},
+	monto: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
-	},permalink_url: {
+	},
+	fecha_solicitud: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""
-	},	
-	descargas: {
+	},
+	fecha_pago: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		defaultValue: 0
+		defaultValue: ""
+	},
+	observacion: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
 	},
 	
+	
+	
 });
-
+// El trabajador pertenece a una oficina
+Retiros.Backcoin = Retiros.belongsTo(Backcoin);
 // Métodos personalizados
-module.exports = Gate_SoundC;
+module.exports = Retiros;
 
