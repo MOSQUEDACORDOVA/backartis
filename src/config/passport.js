@@ -1,9 +1,9 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook');
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
+//var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var MixCloudStrategy = require('passport-mixcloud').Strategy;
-
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // Modelo a auntenticar
 const Usuarios = require('../models/Usuarios');
@@ -64,19 +64,20 @@ passport.use('facebook',
  //inicio con google
  passport.use('google',new GoogleStrategy({
     clientID: '425427803550-5hcacf2hmbmj1k2nm1o1a5c6cg5kgk8j.apps.googleusercontent.com',
-    clientSecret: 'j1LvjQRjJpJQANwu9Wt6F1M1',
-    callbackURL: "http://localhost:3000/auth/google/callback"
+    clientSecret: 'RPmihfCgf5iuIugPX-pe_xSH',
+    callbackURL: "https://backartis.herokuapp.com/auth/google/callback"
   },
   async (token, tokenSecret, profile, done) =>{
 	  console.log(profile._json);
-	  const {sub, name, given_name, family_name}=profile._json
-	  const usuario = await Usuarios.findOne({where: {email: sub+"@algo.com"}});
+	  console.log(token);
+	  const {sub, email, name, given_name, family_name}=profile._json
+	  const usuario = await Usuarios.findOne({where: {email: email}});
 	  if (!usuario) {
 		  console.log("No hay:"+ usuario);
 		  await Usuarios.create({
 			  name: given_name,
 			  lastName: family_name,
-			  email: sub+"@algo.com",
+			  email: email,
 			  password: sub,
 		  });	
 	  }
