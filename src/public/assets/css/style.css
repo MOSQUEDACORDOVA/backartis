@@ -2827,3 +2827,11 @@ a.ytboton{
 	width: 50% !important;
 	height: 26px !important;
 }
+body, h1, h2, h3, h4, h5, h6, p, span, b, strong, a, section, i, *{
+	font-family: "Poppins", sans-serif !important;
+}
+@media(max-width:1324px){
+	.main-gate__user{
+		margin-bottom: 1rem !important;
+	}
+}
