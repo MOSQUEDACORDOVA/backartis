@@ -1,3 +1,19 @@
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	<!-- Sweet Alert -->
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>	
+	{{#if msg}}
+<script>
+	$( document ).ready(function() {
+    if ( $("#msgs").length ) {
+     let mensaje = `{{msg}}`;
+	 console.log("mensaje");
+	 Swal.fire(mensaje)
+	}
+});	 
+</script>
+<label id="msgs"></label>
+{{/if}}
 <h1 class="dashboard-title">Membresía</h1>
 
 <div class="card-box shadow position-relative">
@@ -37,8 +53,9 @@
 								<span id="anual_vip" hidden>{{monto_anual_vip}}</span>
 								<span id="mensual_vip" hidden>{{monto_mensual_vip}}</span>
 								<span class="card-press__divider"></span>
-								<span id="vip-time">/ Año + </span>
-								<!--<span>{{plan_VIP_Anual.0.descuento}}% de Dsct. Por apertura</span>-->
+								<span id="vip-time">/ Año {{#if plan_VIP_Anual.0.detalles}}({{plan_VIP_Anual.0.detalles}}) {{/if}}</span>
+								<span id="vip-detalle" hidden>{{#if plan_VIP_Mensual.0.detalles}}({{plan_VIP_Mensual.0.detalles}}) {{/if}}</span>
+								<span id="vip-detalle_anual" hidden>{{#if plan_VIP_Anual.0.detalles}}({{plan_VIP_Anual.0.detalles}}) {{/if}}</span>
 							</p>
 				<ul class="card-list">
 								<li>{{plan_VIP_Anual.0.linea1}}</li>
@@ -53,7 +70,11 @@
 								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea10}}</li>
 							</ul>
 				{{#showBtnMembership user.membership 'VIP' 'primary' 'change-membership/vip' monto_anual_vip "Anual"}}{{/showBtnMembership}}
-				{{#showBtnMembershipCupon user.membership 'VIP' 'primary' 'membershipCupon' }}{{/showBtnMembershipCupon}}
+				<form  method="post" style="display: grid;grid-template-columns: 1fr 1fr;" id="cuponMembership1">
+			<input type="text"   name="cupon" class="form-control-steps" style="width: 90%;	height: 50px;margin-top: 2rem !important;" placeholder="Cupón" required>
+			<button type="button"  id="1" class="btn btn-block btn-primary btncuponMembership" value="Aplicar Cupón">Aplicar Cupón</button>
+			</form>
+				{{!-- {{#showBtnMembershipCupon user.membership 'VIP' 'primary' 'membershipCupon' }}{{/showBtnMembershipCupon}} --}}
 				
 			</div>
 		</div>
@@ -71,7 +92,9 @@
 								<span id="anual_gold" hidden>{{monto_anual_gold}}</span>
 								<span id="mensual_gold" hidden>{{monto_mensual_gold}}</span>
 								<span class="card-press__divider"></span>
-								<span id="gold-time">/ Año + </span>
+								<span id="gold-time">/ Año {{#if plan_Gold_Anual.0.detalles}}({{plan_Gold_Anual.0.detalles}}) {{/if}} </span>
+								<span id="gold-detalle" hidden>{{#if plan_Gold_mensual.0.detalles}}({{plan_Gold_mensual.0.detalles}}) {{/if}}</span>
+								<span id="gold-detalle_anual" hidden>{{#if plan_Gold_Anual.0.detalles}}({{plan_Gold_Anual.0.detalles}}) {{/if}}</span>
 								<!--<span>{{plan_Gold_Anual.0.descuento}}% de Dsct. Por apertura</span>-->
 				</p>
 				<ul class="card-list">
@@ -87,7 +110,11 @@
 								<li class="">{{plan_Gold_Anual.0.linea10}}</li>
 				</ul>
 				{{#showBtnMembership user.membership 'Gold' 'light' 'change-membership/gold' monto_anual_gold "Anual"}}{{/showBtnMembership}}
-				{{#showBtnMembershipCupon user.membership 'Gold' 'light' 'membershipCupon' }}{{/showBtnMembershipCupon}}
+				<form  method="post" style="display: grid;grid-template-columns: 1fr 1fr;" id="cuponMembership2">
+			<input type="text"   name="cupon" class="form-control-steps" style="width: 90%;	height: 50px;margin-top: 2rem !important;" placeholder="Cupón" required>
+			<button type="button"  id="2" class="btn btn-block btn-primary btncuponMembership" value="Aplicar Cupón">Aplicar Cupón</button>
+			</form>
+				{{!-- {{#showBtnMembershipCupon user.membership 'Gold' 'light' 'membershipCupon' }}{{/showBtnMembershipCupon}} --}}
 			</div>
 		</div>
 	</div><!-- Planes Anuales -->

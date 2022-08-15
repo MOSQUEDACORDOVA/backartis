@@ -3,6 +3,8 @@ const scdl = require("soundcloud-downloader").default;
 const fs = require("fs");
 const path = require("path");
 const Swal = require("sweetalert2");
+var moment = require('moment-timezone');
+var pdf = require('html-pdf');
 //const {getStreamUrls} = require('mixcloud-audio')
 
 exports.dashboard = (req, res) => {
@@ -24,40 +26,31 @@ exports.shareMusic = (req, res) => {
     notPhoto = false;
   }
   Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
-    let parsed_lmit = JSON.parse(resultado2);
-    let cont = parsed_lmit.length;
-
-    Hoy = new Date(); //Fecha actual del sistema
-    var AnyoHoy = Hoy.getFullYear();
-    var MesHoy = Hoy.getMonth();
-    var DiaHoy = Hoy.getDate();
-    var hay_not = false;
-    for (let i = 0; i < cont; i++) {
-      var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
-      var Fecha1 = new Date(
-        parseInt(Fecha_aux[0]),
-        parseInt(Fecha_aux[1] - 1),
-        parseInt(Fecha_aux[2])
-      );
-      console.log(Fecha1);
-
-      var AnyoFecha = Fecha1.getFullYear();
-      var MesFecha = Fecha1.getMonth();
-      var DiaFecha = Fecha1.getDate();
-
-      if (parsed_lmit[i].estado == "Activa") {
-        if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy) {
-          break;
-        } else {
-          console.log("hay fecha");
-          hay_not = true;
-        }
-      } else {
-        console.log("hay activo");
+     let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
         hay_not = true;
-        break;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
       }
-    }
 
     Modulo_BD.obtenerGatesbyUser(user.id).then((respuesta) => {
       let parsed_g = JSON.parse(respuesta);
@@ -141,43 +134,30 @@ exports.changeMembership = (req, res) => {
       }
       Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
         let parsed_lmit = JSON.parse(resultado2);
-        let cont = parsed_lmit.length;
-
-        Hoy = new Date(); //Fecha actual del sistema
-        var AnyoHoy = Hoy.getFullYear();
-        var MesHoy = Hoy.getMonth();
-        var DiaHoy = Hoy.getDate();
-        var hay_not = false;
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
         for (let i = 0; i < cont; i++) {
-          var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
-          var Fecha1 = new Date(
-            parseInt(Fecha_aux[0]),
-            parseInt(Fecha_aux[1] - 1),
-            parseInt(Fecha_aux[2])
-          );
-          console.log(Fecha1);
-
-          var AnyoFecha = Fecha1.getFullYear();
-          var MesFecha = Fecha1.getMonth();
-          var DiaFecha = Fecha1.getDate();
-
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
           if (parsed_lmit[i].estado == "Activa") {
-            if (
-              AnyoFecha == AnyoHoy &&
-              MesFecha == MesHoy &&
-              DiaFecha == DiaHoy
-            ) {
-              break;
-            } else {
-              console.log("hay fecha");
-              hay_not = true;
-            }
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
           } else {
-            console.log("hay activo");
             hay_not = true;
             break;
           }
         }
+      }
         Modulo_BD.obtenerSuscripbyUserG(user.id).then((data) => {
           let parsed_s = JSON.parse(data);
           total_sus = parsed_s.length;
@@ -206,6 +186,7 @@ exports.changeMembership = (req, res) => {
 
 exports.changeMembershipCupon = (req, res) => {
   const user = res.locals.user;
+  console.log(req.body)
   const { cupon } = req.body;
 
   Modulo_BD.consultarCuponMembership(cupon).then((resultado) => {
@@ -214,7 +195,7 @@ exports.changeMembershipCupon = (req, res) => {
 
     if (typeof parsed === "undefined") {
       let msg = "El cupón no existe favor verificar";
-      res.redirect("/membership/" + msg);
+      return res.send({mensaje: msg})
     } else {
       //Comprobamos que tenga formato correcto
 
@@ -224,11 +205,11 @@ exports.changeMembershipCupon = (req, res) => {
       console.log(Fecha1);
       Hoy = new Date(); //Fecha actual del sistema
       var AnyoFecha = Fecha1.getFullYear();
-      var MesFecha = Fecha1.getMonth();
+      var MesFecha = ('0' + (Fecha1.getMonth()+1)).slice(-2)
       var DiaFecha = Fecha1.getDate();
 
       var AnyoHoy = Hoy.getFullYear();
-      var MesHoy = Hoy.getMonth();
+      var MesHoy = ('0' + (Hoy.getMonth()+1)).slice(-2)
       var DiaHoy = Hoy.getDate();
       var horaHoy = Hoy.getHours();
       var minutosHoy = Hoy.getMinutes();
@@ -240,15 +221,24 @@ exports.changeMembershipCupon = (req, res) => {
       console.log("/////");
       console.log(horafinal);
       console.log(minutosfinal);
+      console.log("/////");
+      console.log(MesFecha);
+      console.log(MesHoy);
       if (parsed.cantidad_actual == 0) {
         let msg = "Cupon agotado";
-        res.redirect("/membership/" + msg);
+        return res.send({mensaje: msg})
+      //  return res.redirect("/membership/" + msg);
       } else {
         if (
           AnyoFecha >= AnyoHoy &&
           MesFecha >= MesHoy &&
           DiaFecha >= DiaHoy &&
           horafinal >= horaHoy
+          || 
+          AnyoFecha >= AnyoHoy &&
+          MesFecha >= MesHoy &&
+          DiaFecha >= DiaHoy &&
+          horafinal <= horaHoy
         ) {
           console.log("Has introducido la fecha de Hoy");
           var cantidad_act = parsed.cantidad_actual - 1;
@@ -339,10 +329,11 @@ exports.changeMembershipCupon = (req, res) => {
                 plan_Gold_mensual[0].costo - descuento_mensual_gold;
               console.log(monto_mensual_gold);
             }
-            Modulo_BD.obtenerSuscripbyUserG(user.id).then((data) => {
-              let parsed_s = JSON.parse(data);
-              total_sus = parsed_s.length;
-
+              msg ="Se aplicó el cupón correctamente"
+              return res.send({status: 'ok',mensaje: msg, monto_anual_vip: monto_anual_vip,
+                monto_mensual_vip: monto_mensual_vip,
+                monto_anual_gold: monto_anual_gold,
+                monto_mensual_gold: monto_mensual_gold})
               res.render("membership_cupon", {
                 pageName: "Membresía",
                 dashboardPage: true,
@@ -356,13 +347,15 @@ exports.changeMembershipCupon = (req, res) => {
                 monto_anual_gold,
                 monto_mensual_gold,
                 total_sus,
-                user,
+                user,parsed_lmit,
+                hay_not,total_gates,
+                total_descargas, msg
               });
-            });
-          });
+            })
         } else {
           let msg = "Cupon fuera de fecha u hora";
-          res.redirect("/membership/" + msg);
+          return res.send({mensaje: msg})
+        //  res.redirect("/membership/" + msg);
         }
       }
     }
@@ -376,41 +369,37 @@ exports.updateProfile = (req, res) => {
   if (photo == "0") {
     notPhoto = false;
   }
-  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
-    let parsed_lmit = JSON.parse(resultado2);
-    let cont = parsed_lmit.length;
-
-    Hoy = new Date(); //Fecha actual del sistema
-    var AnyoHoy = Hoy.getFullYear();
-    var MesHoy = Hoy.getMonth();
-    var DiaHoy = Hoy.getDate();
-    var hay_not = false;
-    for (let i = 0; i < cont; i++) {
-      var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
-      var Fecha1 = new Date(
-        parseInt(Fecha_aux[0]),
-        parseInt(Fecha_aux[1] - 1),
-        parseInt(Fecha_aux[2])
-      );
-      console.log(Fecha1);
-
-      var AnyoFecha = Fecha1.getFullYear();
-      var MesFecha = Fecha1.getMonth();
-      var DiaFecha = Fecha1.getDate();
-
-      if (parsed_lmit[i].estado == "Activa") {
-        if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy) {
-          break;
-        } else {
-          console.log("hay fecha");
-          hay_not = true;
-        }
-      } else {
-        console.log("hay activo");
-        hay_not = true;
-        break;
-      }
+  let msg = false;
+  if (req.params.msg) {
+      msg = req.params.msg;
+      ////console.log(msg);
     }
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+     let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
 
     Modulo_BD.obtenerGatesbyUser(user.id).then((respuesta) => {
       let parsed_g = JSON.parse(respuesta);
@@ -445,6 +434,7 @@ exports.updateProfile = (req, res) => {
             total_descargas,
             total_sus,
             user,
+            msg
           });
         });
       });
@@ -464,40 +454,31 @@ exports.fansPage = (req, res) => {
     msg = req.params.msg;
   }
   Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
-    let parsed_lmit = JSON.parse(resultado2);
-    let cont = parsed_lmit.length;
-
-    Hoy = new Date(); //Fecha actual del sistema
-    var AnyoHoy = Hoy.getFullYear();
-    var MesHoy = Hoy.getMonth();
-    var DiaHoy = Hoy.getDate();
-    var hay_not = false;
-    for (let i = 0; i < cont; i++) {
-      var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
-      var Fecha1 = new Date(
-        parseInt(Fecha_aux[0]),
-        parseInt(Fecha_aux[1] - 1),
-        parseInt(Fecha_aux[2])
-      );
-      console.log(Fecha1);
-
-      var AnyoFecha = Fecha1.getFullYear();
-      var MesFecha = Fecha1.getMonth();
-      var DiaFecha = Fecha1.getDate();
-
-      if (parsed_lmit[i].estado == "Activa") {
-        if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy) {
-          break;
-        } else {
-          console.log("hay fecha");
-          hay_not = true;
-        }
-      } else {
-        console.log("hay activo");
+     let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
         hay_not = true;
-        break;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
       }
-    }
 
     Modulo_BD.obtenerGatesbyUser(user.id).then((respuesta) => {
       let parsed_g = JSON.parse(respuesta);
@@ -537,6 +518,21 @@ exports.fansPage = (req, res) => {
         });
       });
     });
+  });
+};
+
+
+
+exports.deletefan = async (req, res) => {
+  let parametro_buscar = req.params.id;
+  
+  Modulo_BD.deleteFan(parametro_buscar).then((resultado) => {
+    let msg ="Se eliminó el fan con éxito"
+    res.redirect("/fans/"+msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
 };
 
@@ -586,4 +582,96 @@ exports.mixcloud = (req, res) => {
 		   });
 	})*/
   });
+};
+
+exports.genera_pdf = (req, res) => {
+  var producto = "1111";
+  var monto = "ssss";
+  var nombre = "ssss";
+  var user = "ssss";
+  var correo = "ssss";
+  var modo = "000";
+  var fech = moment().format('DD/MM/YYYY')
+  var contenido = `<html>
+  <head>
+  
+  </head>
+  <body style="font-family: 'Poppins', sans-serif; font-size: 1.4em;">
+  <div style="width: 100%;margin-left: auto;margin-right: auto;padding: 25px;">
+    
+
+    <div>
+    <div  style="font-weight: bold;display: inline-flex; padding-top: .3125rem;padding-bottom: .3125rem; margin-right: 1rem;font-size: 3rem;   line-height: inherit;white-space: nowrap;align-items: center; "> 
+      <img src="https://josea.mosquedacordova.com/assets/img/logo-ba.png" style="vertical-align: middle; border-style: none;width: 9rem;" alt="..." />
+      <div>
+          Backartist
+      </div>
+    </div>
+      <div style="top: -100px;position: relative;left: 450px;width: 30%;border: solid 1px;margin: 0;padding: 1rem;border-radius: 15px;">
+          Fecha: ${fech}
+      </div>
+    </div>
+    <h3>INFORMACIÓN DEL CLIENTE</h3>
+    <div style="border: solid 1px;border-radius: 15px;padding: 1rem;width: 90%;">
+        
+<div style="margin-bottom: 10px;">Nombre: <span>${nombre}</span></div>
+<div style="margin-bottom: 10px;">Usuario: <span>${user}</span></div>
+<div>Correo: <span>${correo}</span></div>
+    </div>
+    <div style="text-align: center; margin-top: 20px;"> 
+      <!-- <label style="font-size: 1.8rem;font-weight: bold;color: darkgoldenrod;"><i class="fas fa-exclamation-circle"></i> Gracias!!</label><br> -->
+      <h1>Su membresia a sido renovada!!</h1>
+    </div>			
+<table style="border-collapse: collapse;width: 88%;max-width: 100%;margin-bottom: 1rem;background-color: transparent;">
+<thead >
+  <tr>
+    <th scope="col" style="color: #fff; background-color: #212529; border-color: #32383e; vertical-align: bottom; border-bottom: 2px solid #dee2e6;padding: .75rem;
+  vertical-align: top; border-top: 1px solid #dee2e6;">Producto</th>
+    <th scope="col"  style="color: #fff; background-color: #212529; border-color: #32383e; vertical-align: bottom;border-bottom: 2px solid #dee2e6;padding: .75rem;
+  vertical-align: top; border-top: 1px solid #dee2e6;">Cantidad</th>
+    <th scope="col" style="color: #fff; background-color: #212529; border-color: #32383e; vertical-align: bottom;border-bottom: 2px solid #dee2e6;padding: .75rem;
+  vertical-align: top; border-top: 1px solid #dee2e6;">Duracion</th>
+    <th scope="col" style="color: #fff; background-color: #212529; border-color: #32383e; vertical-align: bottom; border-bottom: 2px solid #dee2e6;padding: .75rem;
+  vertical-align: top; border-top: 1px solid #dee2e6;">Costo</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <th scope="row" style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;">${producto}</th>
+    <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6; text-align: center;">1</td>
+    <td style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6; text-align: center;">${modo}</td>
+    <td  style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6; text-align: center;">$ ${monto}</td>
+  </tr>
+  <tr class="subtotal">
+    <th  style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6; text-align: center;" scope="row"></th>
+    <td  style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6; text-align: center;" colspan="2"  style="text-align: right;">Subtotal:</td>
+    <td  style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6; text-align: center;" class="cell_center">$ ${monto}</td>
+  </tr>
+  <tr class="total">
+    <th  style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;" scope="row"></th>
+    <td  style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;" colspan="2"  style="text-align: right;">Total</td>
+    <td  style="padding: .75rem; vertical-align: top; border-top: 1px solid #dee2e6;color: darkgoldenrod; font-weight: bold;font-size: 1.2em;text-align: center;">$ ${monto}</td>
+  </tr>
+</tbody>
+</table>
+<div style="text-align: center; margin-top: 20px;"> 
+      <label style="font-size: 1.8rem;font-weight: bold;color: darkgoldenrod;"><i class="fas fa-exclamation-circle"></i> Gracias!!</label><br> 
+    </div>
+</div>
+</body>
+
+</html>
+`;
+let fechaaa=Number(moment())
+var envio
+pdf.create(contenido).toFile(`./sa${fechaaa}.pdf`, function(err, rest) {
+    if (err){
+        console.log(err);
+    } else {
+        console.log(rest);
+      return  envio = rest
+    }
+});
+
+res.send({envio})
 };

@@ -7,7 +7,6 @@
 {{/if}}
 {{#if msg}}
 	<!-- Sweet Alert -->
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script>
 	$( document ).ready(function() {
@@ -16,14 +15,25 @@
 	 console.log("mensaje");
 	 Swal.fire(mensaje)
 	}
-	
+
+
 }); 
 </script>
 <label id="msgs"></label>
 {{/if}}
 
 <script>
-function deletegate(id){
+	$( document ).ready(function() {
+		if ($('.contador_v').is(':visible')){
+
+
+//let vistas = (parseInt($('.contador_v').text()).toLocaleString()
+		//usuarios.digits();
+		//$('.contador_v').text(vistas)
+		}
+	
+}); 
+function deletegate(id, tipo){
 	Swal.fire({
   title: 'Eliminar',
   text: "Seguro desea eliminar el gate indicado!",
@@ -35,14 +45,17 @@ function deletegate(id){
   confirmButtonText: 'Eliminar'
 }).then((result) => {
   if (result.isConfirmed) {
-	  window.location.href = '/borrar/'+id;
+	  window.location.href = '/borrar/'+id+'/'+tipo;
     Swal.fire(
-      'Deleted!',
-      'Your file has been deleted.',
-      'success'
+      'Eliminado!',
+      'Su gate ha sido eliminado.',
+      'Correcto'
     )
   }
 })
+}
+function edit_num(valor){
+	console.log(valor)
 }
  
  function pruebaclick(){
@@ -52,7 +65,12 @@ $("#loading").show();
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
  <h2 id="loading"style="display:none">Loading...</h2>
-
+<style>
+	.swal2-image{
+		margin: 0 !important;
+		cursor: pointer;
+	}
+</style>
 <div class="card-box data-user text-center text-lg-left d-lg-inline-block">
 	<h2 class="data-user__name">{{user.name}} {{user.lastName}}</h2>
 	<p class="data-user__user-name">{{user.userName}}</p>
@@ -98,34 +116,41 @@ $("#loading").show();
 	</nav>
 	<div class="grid-gates">
 {{#each gates as |item i| }}		<article class="gate-item">
+	
 			<a href="/track/{{item.enlace_perzonalizado}}" class="gate-item__img" target="_blank">
 				<img src="/assets/uploads/{{item.imagen}}" alt="Gate 1">
 			</a>
+			
 			<div class="gate-item__body">
  <h3 class="gate-item__author"> {{item.nombre_artista}}</h3>
 			
-				<h3 class="gate-item__title">{{item.titulo}}</h3>
+				<h3 class="gate-item__title">{{item.titulo}} </h3>
 				<div class="gate-item__statistics">
-					<p><i class="fa fa-eye"></i></p>
-					<p><i class="fa fa-download"></i>{{item.descargas}}</p>
-					<p><i class="fa fa-envelope"></i>{{item.correos}}</p>
+					<p ><i class="fa fa-eye "></i>{{#convert_miles vista}}{{/convert_miles}}</p>
+					<p><i class="fa fa-download"></i>{{#convert_miles descargas}}{{/convert_miles}}</p>
+					<p><i class="fa fa-envelope"></i>{{#convert_miles correos}}{{/convert_miles}}</p>
 				</div>
 				<form action="/dashboard/id_delete.prueba"  method="POST">
 
 				</form>
 				<div class="gate-item__options">
-					<a href="#" class="gate-item__option" onclick="deletegate({{item.id}})">
+					<a href="#" class="gate-item__option" onclick="deletegate({{item.id}},'{{item.tipo_create}}')">
 						<i class="fa fa-trash-alt"></i>
 					</a>
-					<a href="/editar_/{{item.id}}" class="gate-item__option" >
+					<a href="/editar_/{{item.id}}" class="gate-item__option " >
 						<i class="fa fa-pen"></i>
 					</a>
-					<!--<a href="/mix" class="gate-item__option" onclick="pruebaclick()">
-						<i class="fab fa-soundcloud"></i>
-					</a>-->
 					<a href="/sendMail/{{item.enlace_perzonalizado}}/{{item.id_usuario}}/compartido_desde_dash" class="gate-item__option" alt="Compartir con mis contactos">
 						<i class="fas fa-share-alt"></i>
 					</a>
+					{{#each ../parsed_top as |top j|}}
+					{{#Topdash id ../id j}}{{/Topdash}}
+					
+					{{/each}}					
+					
+					{{#if item.fecha_programa}}<a  class="gate-item__option" data-toggle="tooltip" data-placement="top" title="Programado: {{#fecha_hora item.fecha_programa}}{{/fecha_hora}}">
+						<i class="far fa-clock"></i>
+					</a>{{/if}}
 					
 				</div>
 			</div>

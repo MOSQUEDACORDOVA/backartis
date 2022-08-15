@@ -1,4 +1,30 @@
+<!-- include libraries(jQuery, bootstrap) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+ <link href="/assets/summernote/summernote-bs4.min.css" rel="stylesheet">
+    <script src="/assets/summernote/summernote-bs4.min.js"></script>
 <script type="text/javascript">
+$(document).ready(function() {
+  const seleccion = $("#tipo"); //Add button selector
+  const btnayuda = document.getElementById("btn_Ayuda");
+  //New input field html
+  var x = 1; //Initial field counter is 1
+  $(seleccion).on("change", (e) => {
+    //Once add button is clicked
+    valor = document.getElementById("tipo").value;
+    if (valor == "Términos y Condiciones") {
+     btnayuda.removeAttribute("disabled");
+    }
+	if (valor == "Politicas") {
+      btnayuda.removeAttribute("disabled");
+    }
+	if (valor == "Preguntas Frecuentes") {
+      btnayuda.removeAttribute("disabled");
+    }
+  })
+});
 function valideKey(evt){
     
     // code is the decimal ASCII representation of the pressed key.
@@ -13,6 +39,7 @@ function valideKey(evt){
     }
 }
 </script> 
+
 <div class="card-box shadow position-relative calculate-height">
 	<div class="row">
 		<div class="col-xl-7">
@@ -39,8 +66,7 @@ function valideKey(evt){
 					</div>
 					<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 					<select class="form-control-steps ayuda" id="tipo" name="tipo" required style="background-color: #11111108;">						
-						{{#if parsed_Ayuda}}<option value="{{parsed_Ayuda.tipo}}" selected>{{parsed_Ayuda.tipo}}</option>{{/if}}
-						<option value="default">Qué desea crear hoy?</option>	
+						{{#if parsed_Ayuda}}<option value="{{parsed_Ayuda.tipo}}" selected>{{parsed_Ayuda.tipo}}</option>{{/if}}	
 						<option value="Términos y Condiciones">Términos y Condiciones</option>
 						<option value="Politicas">Políticas de privacidad</option>
 						<option value="Preguntas Frecuentes">Preguntas Frecuentes</option>					
@@ -55,8 +81,25 @@ function valideKey(evt){
 						<div class="form-control-steps__placeholder">
 					<i class="fa fa-phone"></i>
 						</div>
-				
-					<input type="text" class="form-control-steps"  id="terminos_input" name="terminos" placeholder="Ingrese aqui sus terminos y condiciones"  {{#if terminos}} required value="{{parsed_Ayuda.terminos}}" {{/if}}>
+				   
+  
+					<textarea type="text" class="form-control-steps"  id="summernote" name="terminos" placeholder="Ingrese aqui sus terminos y condiciones"  style="height: 430px;">{{#if terminos}} {{parsed_Ayuda.terminos}} {{/if}}</textarea>
+					  <script>
+      $('#summernote').summernote({
+        placeholder: 'Ingrese aqui sus terminos y condiciones',
+        tabsize: 2,
+        height: 100,
+		toolbar: [
+    ['fontname', ['fontname']],
+    ['style', ['bold', 'italic', 'underline', 'clear']],
+    ['font', ['strikethrough', 'superscript', 'subscript']],
+    ['fontsize', ['fontsize']],
+    ['color', ['color']],
+    ['para', ['ul', 'ol', 'paragraph']],
+    ['height', ['height']]
+  ]
+      });
+    </script>
 				</div>
 			</div><!-- .form-update-accound__item -->
 			<div class="form-update-account__item" {{#if politicas}}{{else}}hidden="true"{{/if}} id="politicas">
@@ -66,26 +109,59 @@ function valideKey(evt){
 					<i class="fa fa-phone"></i>
 						</div>
 				
-					<input type="text" class="form-control-steps"  id="politicas_privacidad" name="politicas_privacidad" placeholder="Ingrese aqui sus politicas"  {{#if politicas}}required value="{{parsed_Ayuda.politicas}}" {{/if}}>
+					<textarea type="text" class="form-control-steps"  id="politicas_privacidad" name="politicas_privacidad" placeholder="Ingrese aqui sus politicas" style="height: 430px;"> {{#if politicas}}{{parsed_Ayuda.politicas}} {{/if}}</textarea>
+								  <script>
+      $('#politicas_privacidad').summernote({
+        placeholder: 'Ingrese aqui sus politicas',
+        tabsize: 2,
+        height: 100,
+		toolbar: [
+    // [groupName, [list of button]]
+	['fontname', ['fontname']],
+    ['style', ['bold', 'italic', 'underline', 'clear']],
+    ['font', ['strikethrough', 'superscript', 'subscript']],
+    ['fontsize', ['fontsize']],
+    ['color', ['color']],
+    ['para', ['ul', 'ol', 'paragraph']],
+    ['height', ['height']]
+  ]
+      });</script>
 				</div>
 			</div><!-- .form-update-accound__item -->
 
 				<div class="form-row other-container_ayuda" style="display: grid;grid-template-columns: 1fr 1fr;" {{#if preguntas}}{{else}}hidden="true"{{/if}} id="preguntas_">
 				<div class="col " >
-					<label class="form-steps__title">Pregunta</label>					
-				<div class="add-other">
+					<label class="form-steps__title">Pregunta</label>	
+						
+					<textarea type="text" class="form-control-steps"  id="preguntas" name="pregunta" placeholder="Ingrese aqui sus preguntas" style="height: 430px;"> {{#if preguntas}}{{parsed_Ayuda.preguntas}} {{/if}}</textarea>
+								  <script>
+      $('#preguntas').summernote({
+        placeholder: 'Ingrese aqui sus politicas',
+        tabsize: 2,
+        height: 100,
+		toolbar: [
+    ['fontname', ['fontname']],
+    ['style', ['bold', 'italic', 'underline', 'clear']],
+    ['font', ['strikethrough', 'superscript', 'subscript']],
+    ['fontsize', ['fontsize']],
+    ['color', ['color']],
+    ['para', ['ul', 'ol', 'paragraph']],
+    ['height', ['height']]
+  ]
+      });</script>				
+	<!--<div class="add-other">
 					<input type="text" class="form-control-steps pregunta_input" name="pregunta" placeholder="Coloque aqui su pregunta"  id ="pregunta1"  {{#if preguntas}}required value="{{parsed_Ayuda.preguntas}}" {{/if}}>
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
+				</div>-->
 				</div>
-				</div>
-				<div>
+				<!--<div>
 				<div class="respuesta">
 					<label class="form-steps__title">Respuesta</label>					
 					<input type="text" class="form-control-steps pregunta_input" id="respuesta" name="respuesta" placeholder="Nombre del canal" {{#if preguntas}} required value="{{parsed_Ayuda.respuestas}}" {{/if}}>
-					</div><!-- .col -->
-				</div>
+					</div> .col 
+				</div>-->
 				
 			</div><!-- .form-row -->
 			

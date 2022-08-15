@@ -1,13 +1,14 @@
 var express = require("express");
 var request = require("request");
 const BD_conect = require("../models/modulos_");
+let fs = require("fs");
 // Add your credentials:
 // Add your client ID and secret
 var CLIENT_ID =
-  "AQEp93PNKe5pQUGK4bMiah30CZzi_9YYP5pw1LqnWELnymhFyIvEQgjYT782ChQrqmSy8tUb81WNMcBF";
+  "AXAh-Ze4KzcjXTdOFXJ6U3ZagzU3aM8HUhRSI9Xn10Z8Ac2yXFQg58AbRzaGdfDS0achuY62g6sO_H9c";
 var SECRET =
-  "EB5Wbz_NTICPraelJFn-5rK1T0tbp87DTmF8TvaQRjL3xckJyYIU4aC_Xbj41KqosgbKk5M4YIjuk__W";
-var PAYPAL_API = "https://api-m.sandbox.paypal.com";
+  "ENE0CtubJ5-TSMh1TB9FN5kZW87G37C6tLi0c-c1hG-Zruz_yHKAOPEyllzTd-Lhzcl__PBllJ3-mGsk";
+var PAYPAL_API = "https://api-m.paypal.com";
 express();
 // Set up the payment:
 // 1. Set up a URL to handle requests from the PayPal button
@@ -114,6 +115,10 @@ exports.procesar = async (req, res, next) => {
             //req.user.membership=producto;
 
             res.render("complete_pay", { product, dashboardPage: true });
+          }).catch((err) => {
+            console.log(err)
+            let msg = "Error en sistema";
+            return res.redirect("/?msg=" + msg);
           });
         });
       }
@@ -170,6 +175,13 @@ exports.crearOrden = async (req, res, next) => {
     function (err, response, body) {
       if (err) {
         console.error(err);
+        let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
         return res.sendStatus(500);
       }
       console.log(response.body);
@@ -201,6 +213,13 @@ exports.aprobarOrden = async (req, res, next) => {
     function (err, response, body) {
       if (err) {
         console.error(err);
+        let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
         return res.sendStatus(500);
       }
 
@@ -211,7 +230,7 @@ exports.aprobarOrden = async (req, res, next) => {
       console.log(status);
       const userId = req.params.id_user;
       let errores = false;
-      console.log(userId);
+      console.log(product);
       if (product == "Backcoin" || product == "backstore") {
         BD_conect.recargaBackcoin(userId, amount).then((data) => {
           console.log(data + "b");
@@ -221,7 +240,7 @@ exports.aprobarOrden = async (req, res, next) => {
             req.user.backcoins = data;
             console.log(req.user.backcoins);
           }
-        });
+       
         BD_conect.guardarPago(
           userId,
           status,
@@ -231,11 +250,39 @@ exports.aprobarOrden = async (req, res, next) => {
           "Paypal"
         ).then((resp) => {
           console.log(resp);
-
-          res.json({
-            status: "ok",
+          let fecha = new Date()
+          fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+            if (error)
+              console.log(error);
+            else
+              console.log('El archivo fue creado');
           });
+         return res.redirect("/dashb/");
+        }).catch((err) => {
+          console.log(err)
+          let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+          let msg = "Error en sistema";
+          return res.redirect("/?msg=" + msg);
         });
+ }).catch((err) => {
+  console.log(err)
+  let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
+
       } else {
         BD_conect.actualizarUserMembership(userId, product).then(() => {
           res.locals.user.membership = product;
@@ -249,20 +296,182 @@ exports.aprobarOrden = async (req, res, next) => {
             "Paypal"
           ).then(() => {
             //req.user.membership=producto;
-            console.log(modo);
+            console.log(res.locals.user.membership);
             BD_conect.guardarPlan_user(userId, product, modo, "Paypal").then(
               (respg) => {
-                console.log(respg);
-                res.render("complete_pay", {
-                  errores,
-                  product,
-                  dashboardPage: true,
-                });
+                console.log("aqui redirecciona a send mail");
+                return res.redirect("/actualizo_membresia/"+product+"/"+amount+ "/"+modo);
               }
-            );
-          });
-        });
+            ).catch((err) => {
+              console.log(err)
+              let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+              let msg = "Error en sistema";
+              return res.redirect("/?msg=" + msg);
+            });
+          }).catch((err) => {
+      console.log(err)
+      let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+        }).catch((err) => {
+      console.log(err)
+      let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
       }
     }
-  );
+  ).catch((err) => {
+    console.log(err)
+    let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });;
+};
+
+exports.aprobarOrden2 = async (req, res, next) => {
+  var OrderID = req.params.id;
+  var token = req.params.token;
+  var amount = req.params.amount;
+  var product = req.params.product;
+  var modo = req.params.modo;
+  console.log("entro aqui");
+  console.log(JSON.parse(req.body.purchase))
+
+      let payment = JSON.parse(req.body.purchase);
+
+      let numero_referencia = payment[0].payments.captures[0].id;
+      let status = payment[0].payments.captures[0].status;
+      console.log(status);
+      const userId = req.params.id_user;
+      let errores = false;
+      console.log(product);
+      if (product == "Backcoin" || product == "backstore") {
+        BD_conect.recargaBackcoin(userId, amount).then((data) => {
+          console.log(data + "b");
+
+          if (product == "backstore") {
+             req.user.backcoins = data;
+            console.log(req.user.backcoins);
+          } else {
+            req.user.backcoins = data;
+            console.log(req.user.backcoins);
+          }
+       
+        BD_conect.guardarPago(
+          userId,
+          status,
+          numero_referencia,
+          amount,
+          product,
+          "Paypal"
+        ).then((resp) => {
+          console.log(resp);
+         return res.redirect("/dashb/");
+        }).catch((err) => {
+          console.log(err)
+          let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+          let msg = "Error en sistema";
+          return res.redirect("/?msg=" + msg);
+        });
+ }).catch((err) => {
+  console.log(err)
+  let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
+
+      } else {
+        BD_conect.actualizarUserMembership(userId, product).then(() => {
+          res.locals.user.membership = product;
+          //res.render('complete_pay', {product, dashboardPage:true});
+          BD_conect.guardarPago(
+            userId,
+            status,
+            numero_referencia,
+            amount,
+            product,
+            "Paypal"
+          ).then(() => {
+            //req.user.membership=producto;
+            console.log(res.locals.user.membership);
+            BD_conect.guardarPlan_user(userId, product, modo, "Paypal").then(
+              (respg) => {
+                console.log("aqui redirecciona a send mail");
+                return res.redirect("/actualizo_membresia/"+product+"/"+amount+ "/"+modo);
+              }
+            ).catch((err) => {
+              console.log(err)
+              let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+              let msg = "Error en sistema";
+              return res.redirect("/?msg=" + msg);
+            });
+          }).catch((err) => {
+      console.log(err)
+      let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+        }).catch((err) => {
+      console.log(err)
+      let fecha = new Date()
+      fs.writeFile('./error'+Number(fecha)+'.txt', err, error => {
+        if (error)
+          console.log(error);
+        else
+          console.log('El archivo fue creado');
+      });
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+      }
 };

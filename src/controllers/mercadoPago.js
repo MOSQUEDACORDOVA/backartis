@@ -1,12 +1,14 @@
 // SDK de Mercado Pago
 const mercadopago = require("mercadopago");
 const BD_conect = require("../models/modulos_");
+
+var moment = require('moment-timezone');
 var request = require("request");
 var CLIENT_ID =
-  "AQEp93PNKe5pQUGK4bMiah30CZzi_9YYP5pw1LqnWELnymhFyIvEQgjYT782ChQrqmSy8tUb81WNMcBF";
+  "AXAh-Ze4KzcjXTdOFXJ6U3ZagzU3aM8HUhRSI9Xn10Z8Ac2yXFQg58AbRzaGdfDS0achuY62g6sO_H9c";
 var SECRET =
-  "EB5Wbz_NTICPraelJFn-5rK1T0tbp87DTmF8TvaQRjL3xckJyYIU4aC_Xbj41KqosgbKk5M4YIjuk__W";
-var PAYPAL_API = "https://api-m.sandbox.paypal.com";
+  "ENE0CtubJ5-TSMh1TB9FN5kZW87G37C6tLi0c-c1hG-Zruz_yHKAOPEyllzTd-Lhzcl__PBllJ3-mGsk";
+var PAYPAL_API = "https://api-m.paypal.com";
 
 exports.pasarela = async (req, res, next) => {
   var archivo = false;
@@ -14,7 +16,7 @@ exports.pasarela = async (req, res, next) => {
   var amount = false;
   var product = false;
   var backstore_sell = false;
-  var correo = false;
+  var correo = false, back_product= false
   var modo = "";
   if (req.params.archivo) {
     archivo = req.params.archivo;
@@ -22,6 +24,7 @@ exports.pasarela = async (req, res, next) => {
     amount = req.params.costo;
     product = req.params.tipo;
     correo = req.params.correo;
+    back_product = req.params.productob;
     var userId = req.params.user_id;
     backstore_sell = true;
     modo = false;
@@ -115,14 +118,16 @@ exports.pasarela = async (req, res, next) => {
                   return res.sendStatus(500);
                 }
                 let parsed2 = JSON.parse(response2.body);
-                console.log(userId);
+                console.log(parsed2);
                 const clien_token = parsed2.client_token;
                 var Backcoin = false;
 
                 if (product == "Backcoin") {
                   Backcoin = true;
                 }
+                console.log(access_token)
                 if (product == "backstore") {
+                  
                   res.render("pasarela_de_pago", {
                     pageName: "Pasarela",
                     dashboardPage: true,
@@ -141,6 +146,7 @@ exports.pasarela = async (req, res, next) => {
                     correo,
                     backstore_sell,
                     userId,
+                    back_product
                     //user
                   });
                 } else {
@@ -154,6 +160,32 @@ exports.pasarela = async (req, res, next) => {
                       //console.log(plan_basico_Mensual)
                       //const element = array[index];
                     }
+                    BD_conect.obtenernotificacionesbyLimit3().then((resultado2) => {
+                      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
                     BD_conect.obtenerSuscripbyUserG(userId).then((data) => {
                       let parsed_s = JSON.parse(data);
                       total_sus = parsed_s.length;
@@ -172,14 +204,29 @@ exports.pasarela = async (req, res, next) => {
                         id_gate,
                         Backcoin,
                         total_descargas,
-                        total_gates,
+                        total_gates,parsed_lmit,
+                        hay_not,
                         backstore_sell,
                         userId,
                         total_sus,
+                        back_product
                         //user
                       });
+                    }).catch((err) => {
+                      console.log(err)
+                      let msg = "Error en sistema";
+                      return res.redirect("/?msg=" + msg);
                     });
+                  }).catch((err) => {
+                    console.log(err)
+                    let msg = "Error en sistema";
+                    return res.redirect("/?msg=" + msg);
                   });
+                  }).catch((err) => {
+                    console.log(err)
+                    let msg = "Error en sistema";
+                    return res.redirect("/?msg=" + msg);
+                  });;
                 }
               }
             );
@@ -194,11 +241,16 @@ exports.pasarela = async (req, res, next) => {
   product,
   dashboardPage: true,
 });*/
-      })
-      .catch(function (error) {
-        console.log(error);
+      }).catch((err) => {
+        console.log(err)
+        let msg = "Error en sistema";
+        return res.redirect("/?msg=" + msg);
       });
-  });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });;
 };
 
 exports.pagar = async (req, res, next) => {
@@ -254,11 +306,9 @@ exports.pagar = async (req, res, next) => {
             "MercadoPago"
           ).then((respg) => {
             console.log(respg);
-            res.render("complete_pay", {
-              errores,
-              product,
-              dashboardPage: true,
-            });
+            console.log("aqui redirecciona a send mail");
+            res.locals.user.membership = producto
+            res.redirect("/actualizo_membresia/"+producto+"/"+monto+ "/"+modo);
           });
         });
         //      res.render('complete_pay', {errores,product,dashboardPage:true});

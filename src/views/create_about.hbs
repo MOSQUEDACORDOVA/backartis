@@ -1,15 +1,17 @@
 <script type="text/javascript">
-  function valideKey(evt){ // code is the decimal ASCII representation of the
-  pressed key. var code = (evt.which) ? evt.which : evt.keyCode; if(code==8) {
-  // backspace. return true; } else if(code>=48 && code<=57) { // is a number.
-  return true; } else{ // other keys. return false; } }
+  function valideKey(evt) { // code is the decimal ASCII representation of the pressed
+   key.var code = (evt.which) ? evt.which : evt.keyCode; if (code == 8) {
+      // backspace. 
+      return true; } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else { // other
+     keys. return false; } }
 </script>
 <div class="card-box shadow position-relative calculate-height">
   <div class="row">
     <div class="col-xl-7">
       <div
-        class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center"
-      >
+        class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
         <div class="card-box__icon card-box__icon--celeste">
           <i class="fa fa-money-check" style="transform: translateX(.1em);"></i>
         </div>
@@ -20,23 +22,8 @@
     </div><!-- .col-xl-7 -->
   </div><!-- .row -->
 
-  <form
-    action="/save_aboutus"
-    method="post"
-    class="p-to-btn"
-    autocomplete="off"
-    id="form-create-plan"
-    enctype="multipart/form-data"
-  >
-    <input
-      type="text"
-      class="form-control-steps"
-      id="id"
-      name="id"
-      placeholder="id"
-      value="{{userID}}"
-      hidden
-    />
+  <form action="/save_aboutus" method="post" class="p-to-btn" autocomplete="off" enctype="multipart/form-data">
+    <input type="text" class="form-control-steps" id="id" name="id" placeholder="id" value="{{userID}}" hidden />
     <div class="form-update-account">
       <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Teléfono (s)</label>
@@ -45,16 +32,10 @@
             <i class="fa fa-phone"></i>
           </div>
 
-          <input
-            type="text"
-            class="form-control-steps"
-            id="telefono"
-            name="telefono"
-            placeholder="Teléfono (s)"
-            required
-          />
+          <input type="text" class="form-control-steps" id="telefono" name="telefono" placeholder="Teléfono (s)"
+            required />
         </div>
-      </div><!-- .form-update-accound__item -->
+      </div>
 
       <div class="form-update-account__item" style="grid-row-end: 1;">
         <label class="form-steps__title" for="ws">Whatsapp</label>
@@ -62,51 +43,31 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-whatsapp"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="ws"
-            name="ws"
-            placeholder="Whatsapp"
-            required
-          />
+          <input type="text" class="form-control-steps" id="ws" name="ws" placeholder="Whatsapp" required />
         </div>
-      </div><!-- .form-update-accound__item -->
+      </div>
       <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Facebook</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-soundcloud"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="facebook"
-            name="facebook"
-            placeholder="Facebook"
-            autocomplete="off"
-          />
+          <input type="text" class="form-control-steps" id="facebook" name="facebook" placeholder="Facebook"
+            autocomplete="off" />
         </div>
 
-      </div><!-- .form-update-accound__item --><div
-        class="form-update-account__item"
-      >
+      </div>
+      <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Instagram</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-soundcloud"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="instagram"
-            name="instagram"
-            placeholder="Instagram"
-            autocomplete="off"
-          />
+          <input type="text" class="form-control-steps" id="instagram" name="instagram" placeholder="Instagram"
+            autocomplete="off" />
         </div>
 
-      </div><!-- .form-update-accound__item -->
+      </div>
 
       <div class="form-update-account__item">
         <label class="form-steps__title" for="text">SoundCloud</label>
@@ -114,122 +75,75 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-soundcloud"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="souncloud"
-            name="souncloud"
-            placeholder="SoundCloud"
-            autocomplete="off"
-          />
+          <input type="text" class="form-control-steps" id="souncloud" name="souncloud" placeholder="SoundCloud"
+            autocomplete="off" />
         </div>
 
-      </div><!-- .form-update-accound__item -->
+      </div>
       <div class="form-update-account__item">
         <label class="form-steps__title" for="confirm-text">MixCloud</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-mixcloud"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="mixcloud"
-            name="mixcloud"
-            placeholder="MixCloud"
-            autocomplete="off"
-          />
+          <input type="text" class="form-control-steps" id="mixcloud" name="mixcloud" placeholder="MixCloud"
+            autocomplete="off" />
         </div>
-      </div><!-- .form-update-accound__item -->
+      </div>
       <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Youtube</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-youtube"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="youtube"
-            name="youtube"
-            placeholder="Youtube"
-            autocomplete="off"
-          />
+          <input type="text" class="form-control-steps" id="youtube" name="youtube" placeholder="Youtube"
+            autocomplete="off" />
         </div>
-      </div><!-- .form-update-accound__item -->
+      </div>
       <div class="form-update-account__item">
         <label class="form-steps__title" for="confirm-text">Correo</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fa fa-envelope-open-text"></i>
           </div>
-          <input
-            type="email"
-            class="form-control-steps"
-            id="correo"
-            name="correo"
-            placeholder="Correo"
-            autocomplete="off"
-            required
-          />
+          <input type="email" class="form-control-steps" id="correo" name="correo" placeholder="Correo"
+            autocomplete="off" required />
         </div>
-      </div><!-- .form-update-accound__item -->
+      </div>
       <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Twitter</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-twitter"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="twitter"
-            name="twitter"
-            placeholder="Twitter"
-            autocomplete="off"
-          />
+          <input type="text" class="form-control-steps" id="twitter" name="twitter" placeholder="Twitter"
+            autocomplete="off" />
         </div>
-      </div><!-- .form-update-accound__item -->
+      </div>
       <div class="form-update-account__item">
         <label class="form-steps__title" for="confirm-text">Spotify</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-spotify"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="spotify"
-            name="spotify"
-            placeholder="Spotify"
-            autocomplete="off"
-          />
+          <input type="text" class="form-control-steps" id="spotify" name="spotify" placeholder="Spotify"
+            autocomplete="off" />
         </div>
-      </div><!-- .form-update-accound__item --><div
-        class="form-update-account__item"
-      >
+      </div>
+      <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Tiktok</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-tiktok"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="tiktok"
-            name="tiktok"
-            placeholder="Tiktok"
-            autocomplete="off"
-          />
+          <input type="text" class="form-control-steps" id="tiktok" name="tiktok" placeholder="Tiktok"
+            autocomplete="off" />
         </div>
-      </div><!-- .form-update-accound__item -->
+      </div>
 
     </div><!-- .form-update-account -->
-    <button
-      type="submit"
-      disabled
-      class="btn btn-primary btn-x-lg form-steps__btn"
-    >Guardar <i class="fa fa-angle-right"></i></button>
+    <button type="submit" class="btn btn-primary btn-x-lg form-steps__btn">Guardar <i
+        class="fa fa-angle-right"></i></button>
   </form>
 
   <a href="/admin_dash" class="before-page">

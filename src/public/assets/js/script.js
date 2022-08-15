@@ -1,7 +1,3 @@
-//const Swal = require('sweetalert2');
-
-//const { default: Swal } = require("sweetalert2");
-
 // Alertas
 (() => {
   const alertsInputs = document.querySelectorAll("[data-swal-title]");
@@ -21,6 +17,7 @@
   }
 })();
 
+
 // select plan
 (() => {
   const selectPlan = document.getElementById("select-plan");
@@ -36,9 +33,18 @@
     const vipanualCost = document.getElementById("anual_vip");
     const goldanualCost = document.getElementById("anual_gold");
 
-    const monto_plan = document.getElementById("monto_plan");
-    const tipo_plan = document.getElementById("tipo_plan");
-    const modo_plan = document.getElementById("modo_plan");
+    const monto_planVIP = document.getElementById("monto_planVIP");
+    const tipo_planVIP = document.getElementById("tipo_planVIP");
+    const modo_planVIP = document.getElementById("modo_planVIP");
+
+    const monto_planGold = document.getElementById("monto_planGold");
+    const tipo_planGold = document.getElementById("tipo_planGold");
+    const modo_planGold = document.getElementById("modo_planGold");
+
+    var detalle_vip = document.getElementById("vip-detalle");
+    var detalle_vip_anual = document.getElementById("vip-detalle_anual");
+    var detalle_gold = document.getElementById("gold-detalle");
+    var detalle_gold_anual = document.getElementById("gold-detalle_anual");
 
     selectPlan.addEventListener("click", changePlan);
 
@@ -54,41 +60,45 @@
           if (e.target.dataset.plan === "anual") {
             vipPress.textContent = vipanualCost.innerHTML;
             goldPress.textContent = goldanualCost.innerHTML;
-            if (tipo_plan.value === "Gold") {
-              monto_plan.value = goldanualCost.innerHTML;
-              modo_plan.value = "Anual";
+            if (tipo_planGold.value === "Gold") {
+              monto_planGold.value = goldanualCost.innerHTML;
+              modo_planGold.value = "Anual";
             }
-            if (tipo_plan.value === "VIP") {
-              monto_plan.value = vipanualCost.innerHTML;
-              modo_plan.value = "Anual";
+            if (tipo_planVIP.value === "VIP") {
+              monto_planVIP.value = vipanualCost.innerHTML;
+              modo_planVIP.value = "Anual";
             }
 
             if (document.body.classList.contains("dashboard-body")) {
               goldTime.innerHTML =
-                '/ Año <span style="font-size: .7em;">(Obtienes 2 meses gratis)</span>';
+                '/ Año <span style="font-size: .7em;">'+detalle_gold_anual.innerHTML+'</span>';
               vipTime.innerHTML =
-                '/ Año <span style="font-size: .7em;">(Obtienes 2 meses gratis)</span>';
+                '/ Año <span style="font-size: .7em;">'+detalle_vip_anual.innerHTML+'</span>';
             } else {
-              goldTime.textContent = "/ Año + ";
-              vipTime.textContent = "/ Año + ";
+              goldTime.innerHTML = "/ Año "+detalle_gold_anual.innerHTML;
+              vipTime.innerHTML = "/ Año " +detalle_vip_anual.innerHTML;
             }
           } else {
             vipPress.textContent = vipmensualCost.innerHTML;
             goldPress.textContent = goldmensualCost.innerHTML;
-            if (tipo_plan.value === "Gold") {
-              monto_plan.value = goldmensualCost.innerHTML;
-              modo_plan.value = "Mensual";
+            if (tipo_planGold.value === "Gold") {
+              monto_planGold.value = goldmensualCost.innerHTML;
+              modo_planGold.value = "Mensual";
             }
-            if (tipo_plan.value === "VIP") {
-              monto_plan.value = vipmensualCost.innerHTML;
-              modo_plan.value = "Mensual";
+            if (tipo_planVIP.value === "VIP") {
+              monto_planVIP.value = vipmensualCost.innerHTML;
+              modo_planVIP.value = "Mensual";
             }
             if (document.body.classList.contains("dashboard-body")) {
-              goldTime.innerHTML = "/ Mes";
-              vipTime.innerHTML = "/ Mes";
-            } else {
-              goldTime.textContent = "/ Mes + ";
-              vipTime.textContent = "/ Mes + ";
+              goldTime.innerHTML = "/ Mes <span style='font-size: .7em;'>"+detalle_gold.innerHTML+'</span>';
+              vipTime.innerHTML = "/ Mes <span style='font-size: .7em;'>"+detalle_vip.innerHTML+'</span>';
+            } 
+            
+            
+            if (document.body.classList.contains("page-body")){
+              console.log("entro aqui")
+              goldTime.innerHTML = "/ Mes " +detalle_gold.innerHTML;
+              vipTime.innerHTML = "/ Mes " +detalle_vip.innerHTML;
             }
           }
         }
@@ -96,6 +106,7 @@
     }
   }
 })();
+
 
 // Steps
 (() => {
@@ -111,7 +122,7 @@
     window.addEventListener("resize", setLeftToSteps);
 
     function setLeftToSteps() {
-      if (matchMedia("screen and (min-width: 992px)").matches) {
+      if (matchMedia("screen and (min-width: 0px)").matches) {
         stepsItems.forEach((item) => {
           const left = item.querySelector(".step__number").offsetLeft;
           item.querySelector(".step__body").style.left = `${left}px`;
@@ -265,7 +276,34 @@
     formSteps.addEventListener("submit", (e) => {
       e.preventDefault();
     });
-    formSteps.addEventListener("click", changeStep);
+    formSteps.addEventListener("click", (e)=>  
+    {
+      if (e.target.classList.contains("form-steps__btn--support")) {
+        const itemsActive = Array.from(
+          document.querySelectorAll(".support-nav__item.active")
+        );
+  console.log(itemsActive.length)
+        if (itemsActive.length == 0) {
+            Swal.fire({
+              title: '¿Seguro desea continuar?',
+              text: "No ha colocado ninguna red social!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Continuar!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                changeStep(e)
+              }
+            })              
+        }else{
+          changeStep(e)
+          }
+      }else{
+        changeStep(e)
+        }
+    });
     beforePage.addEventListener("click", beforeStep);
     createGateBtn.addEventListener("click", () => {
       formSteps.submit();
@@ -312,6 +350,7 @@
         );
 
         if (e.target.classList.contains("form-steps__btn--support")) {
+          
           if (!validateSupport(e.target)) {
             return;
           }
@@ -347,6 +386,7 @@
       const sectionsActive = itemsActive.map((item) =>
         document.querySelector(item.getAttribute("href"))
       );
+      
 
       const arrResultG = sectionsActive.map((section) => {
         if (section) {
@@ -515,6 +555,21 @@
     const input = inputWrapper.querySelector("input");
     input.addEventListener("input", () => {
       inputWrapper.style.background = input.value;
+      let pintar = document.getElementById('color_bg');
+      pintar.style.background = input.value;
+    });
+    document.getElementById('input-color_titulo').addEventListener("input", () => {
+      let pintar = document.getElementById('color_title');
+      let pintar2 = document.getElementById('gate-name-dj');
+      let pintar3 = document.getElementById('gate-name-dj2');
+      pintar.style.color = document.getElementById('input-color_titulo').value;
+      pintar2.style.color = document.getElementById('input-color_titulo').value;
+     pintar3.style.color = document.getElementById('input-color_titulo').value;
+     $('.main-gate__footer .social-nav__link').attr('style','color:' +document.getElementById('input-color_titulo').value)
+    }); 
+    document.getElementById('input-color_descripcion').addEventListener("input", () => {
+      let pintar = document.getElementById('color_descrip');
+      pintar.style.color = document.getElementById('input-color_descripcion').value;
     });
   }
 })();
@@ -545,15 +600,20 @@
 
       // Si existe el target
       if (target) {
+        if (target.classList.contains("sb-disabled")) {
+          
+            return
+        }
         if (target.classList.contains("active")) {
           removePrevShow();
+          $('.form-steps__btn--support').removeAttr('disabled')
           document
             .querySelector(target.getAttribute("href"))
             .classList.add("s-show");
         } else {
           if (canNext()) {
             target.classList.add("active");
-
+            $('.form-steps__btn--support').removeAttr('disabled')
             removePrevShow();
             document
               .querySelector(target.getAttribute("href"))
@@ -562,7 +622,7 @@
         }
       } else if (e.target.classList.contains("deselect-icon")) {
         e.target.parentElement.parentElement.classList.remove("active");
-
+       // $('.form-steps__btn--support').attr('disabled', true)
         const removeSection = document.querySelector(
           e.target.parentElement.parentElement.getAttribute("href")
         );
@@ -610,6 +670,15 @@
               text: "Llena los campos correctamente para continuar",
               button: false,
             });
+          }
+          
+          if (sectionActive.classList.contains("basic")) {
+            Swal.fire({
+              icon: "warning",
+              text: "Usted esta seleccionando más de una red social, Le invitamos a mejorar tu membresía.",
+              button: false,
+            });
+            return false;
           }
           return arrayResult.includes(false) ? false : true;
         }
@@ -749,7 +818,7 @@ class validateInput {
         gateLink.style.borderColor = "lime";
         buttonGateLink.removeAttribute("disabled");
         gateLinkOutput.querySelector("span").innerHTML =
-          gateLink.value.toLowerCase();
+          gateLink.value;
       } else {
         gateLinkOutput.querySelector("span").innerHTML = "";
         gateLink.style.borderColor = "red";
@@ -761,25 +830,73 @@ class validateInput {
 
 // Desing preview
 (() => {
+    // selecting loading div
+const loader = document.querySelector("#loadingflyer");
+
+// showing loading
+function displayLoading() {
+    loader.classList.add("display");
+    // to stop loading after some time
+   
+}
+
+// hiding loading 
+function hideLoading() {
+    loader.classList.remove("display");
+}
   const subirarchivo_flyr = (event) => {
-    const archivos = event.target.files;
+    const archivos = event;
     const data = new FormData();
-
-    data.append("archivo", archivos[0]);
-
-    fetch("/create-file-gate/archivo", {
-      method: "POST",
-      body: data,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("resultado_imagen").innerHTML =
+    data.append("archivo", archivos);
+    displayLoading()
+    $("#loadingflyer").show()
+    $("#info-drop").hide()
+    
+    $.ajax({
+      url: '/create-file-gate/archivo',
+      type: 'POST',
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      xhr: function () {        
+          var xhr = $.ajaxSettings.xhr();
+          xhr.upload.onprogress = function (event) {
+              var perc = Math.round((event.loaded / event.total) * 100);
+             // $("#nombreArchivoCalendario1").text(inputFile.name);
+             
+              $("#progressBarflyer").text(perc + '%');
+              $("#progressBarflyer").css('width', perc + '%');
+          };
+          return xhr;
+      },
+      beforeSend: function (xhr) {
+        displayLoading()
+          $("#progressBarflyer").text('0%');
+          $("#progressBarflyer").css('width', '0%');
+      },
+      success: function (data, textStatus, jqXHR)
+      {      
+      //  $("#loadingflyer").hide()
+          $("#progressBarflyer").addClass("progress-bar-success");
+          $("#progressBarflyer").text('100% - Carga realizada'); 
+         
+          document.getElementById("resultado_imagen").innerHTML =
           "La imagen se ha subido correctamente.";
-        document.getElementById("img_flyer").value = archivos[0].name;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+          $('#text_btn_flyer').text('Cambiar imagen')
+        document.getElementById("img_flyer").value = archivos.name;
+        
+      const reader = new FileReader();
+      reader.addEventListener("load", displayFileInfo);
+      reader.readAsDataURL(archivos);
+      },
+      error: function (jqXHR, textStatus) { 
+          $("#progressBarflyer").text('100% - Error al cargar el archivo');
+          $("#progressBarflyer").removeClass("progress-bar-success");
+          $("#progressBarflyer").addClass("progress-bar-danger");
+      }
+  });
+
   };
 
   // Upload gate flyer
@@ -803,24 +920,21 @@ class validateInput {
         file.type !== "image/png" &&
         file.type !== "image/jpg"
       ) {
-        output.innerHTML = `<p class="mt-2 mb-0 text-danger">Solo se puden subir archivos .png, .jpg, .jpeg. Intenta de nuevo</p>`;
+        output.innerHTML = `<p class="mt-2 mb-0 text-danger">Solo se pueden subir archivos .png, .jpg, .jpeg. Intenta de nuevo</p>`;
         setTimeout(() => {
           output.innerHTML = "";
         }, 5000);
         btnStepDesing.setAttribute("disabled", true);
         return;
       }
-
       const reader = new FileReader();
-      reader.addEventListener("load", displayFileInfo);
+      reader.addEventListener("load", chekFileInfo);
       reader.readAsDataURL(file);
-      subirarchivo_flyr(event);
+      // subirarchivo_flyr(event);
+      
     });
 
-    dropUploadFlyer.addEventListener("dragenter", enterFile);
-    dropUploadFlyer.addEventListener("dragover", overFile);
-    dropUploadFlyer.addEventListener("dragleave", leaveFile);
-    dropUploadFlyer.addEventListener("drop", dropFile);
+    
 
     function enterFile(e) {
       e.preventDefault();
@@ -864,29 +978,36 @@ class validateInput {
       }
 
       const reader = new FileReader();
-      reader.addEventListener("load", displayFileInfo);
+      reader.addEventListener("load", chekFileInfo);
       reader.readAsDataURL(file);
     }
   }
-
-  function displayFileInfo(e) {
+  function chekFileInfo(e) {
     const img = document.createElement("img");
     img.setAttribute("src", e.target.result);
 
     img.addEventListener("load", () => {
       if (img.naturalWidth < 1000 || img.naturalHeight < 1000) {
-        output.innerHTML = `<p class="mt-2 mb-0 text-danger">El tamaño mínimo de tu imágen debe ser 1000px x 1000px</p>`;
+        output.innerHTML = `<p class="mt-2 mb-0 text-danger tamano_img">El tamaño mínimo de tu imágen debe ser 1000px x 1000px</p>`;
         setTimeout(() => {
           output.innerHTML = "";
         }, 5000);
         btnStepDesing.setAttribute("disabled", true);
         return;
       }
-
+      subirarchivo_flyr(uploadFlyer.files[0]);
+      
+    });
+  }
+  function displayFileInfo(e) {
+    const img = document.createElement("img");
+    img.setAttribute("src", e.target.result);
+    img.addEventListener("load", () => {      
       confirmationCardBannerImg.setAttribute("src", e.target.result);
+      $('#img_flyer2').attr('src', e.target.result)
       outputImg.style.backgroundImage = `url(${e.target.result})`;
-      outputImg.style.backgroundSize = "cover";
-      outputImg.querySelector(".before").style.display = "none";
+      outputImg.style.backgroundSize = "cover";      
+      //outputImg.querySelector(".before").style.display = "none";
       btnStepDesing.removeAttribute("disabled");
     });
   }
@@ -1007,25 +1128,73 @@ class validateInput {
 
 // Select Music
 (() => {
+  // selecting loading div
+const loader = document.querySelector("#loading");
+//const loadertext = document.querySelector("#textloading");
+
+// showing loading
+function displayLoading() {
+    loader.classList.add("display");
+    //loadertext.classList.add("display");
+    // to stop loading after some time
+  
+}
+
   const subirarchivo_zip = (event) => {
     const archivos = event.target.files;
     const data = new FormData();
 
     data.append("archivo", archivos[0]);
-
-    fetch("/create-file-gate/archivo", {
-      method: "POST",
-      body: data,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("resultado_zip").innerHTML =
-          "El archivo " + archivos[0].name + " se ha subido correctamente.";
+    $("#loading").show()
+    $("#info-drop").hide()
+    
+    const dropArea1 = document.getElementById("upload-audio");
+    const infoDrop1 = dropArea1.querySelector(".info-drop");
+    $.ajax({
+      url: '/create-file-gate/archivo',
+      type: 'POST',
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      xhr: function () {        
+          var xhr = $.ajaxSettings.xhr();
+          xhr.upload.onprogress = function (event) {
+              var perc = Math.round((event.loaded / event.total) * 100);
+             // $("#nombreArchivoCalendario1").text(inputFile.name);
+             
+              $("#progressBar1").text(perc + '%');
+              $("#progressBar1").css('width', perc + '%');
+          };
+          return xhr;
+      },
+      beforeSend: function (xhr) {
+        displayLoading()
+        $('.drop-content').attr('style','display:none')
+          $("#progressBar1").text('0%');
+          $("#progressBar1").css('width', '0%');
+        
+      },
+      success: function (data, textStatus, jqXHR)
+      {  
+        $("#loading").hide()    
+        $('.drop-content').removeAttr('style')
+        
+          $("#progressBar1").addClass("progress-bar-success");
+          $("#progressBar1").text('100% - Carga realizada');
+        
+        infoDrop1.innerHTML = `<label for="music-file"><i class="fa fa-upload"></i>Cambiar Archivo</label><p>El archivo " + ${archivos[0].name} + " se ha subido correctamente.</p>`;
+        //document.getElementById("resultado_zip").innerHTML = "El archivo " + archivos[0].name + " se ha subido correctamente.";
         document.getElementById("archivo1").value = archivos[0].name;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        const button = musicFile.parentElement.parentElement.querySelector("button[data-step-page]");
+      button.removeAttribute("disabled");
+      },
+      error: function (jqXHR, textStatus) { 
+          $("#progressBar1").text('100% - Error al cargar el archivo');
+          $("#progressBar1").removeClass("progress-bar-success");
+          $("#progressBar1").addClass("progress-bar-danger");
+      }
+  });
   };
 
   const musicFile = document.getElementById("music-file");
@@ -1033,9 +1202,7 @@ class validateInput {
   if (musicFile) {
     const fileOutput = document.getElementById("file-output");
     const iconState = document.getElementById("drop-icon");
-    const button = musicFile.parentElement.parentElement.querySelector(
-      "button[data-step-page]"
-    );
+   // const button = musicFile.parentElement.parentElement.querySelector(  "button[data-step-page]" );
 
     // With Drag and Drop
     const dropArea = document.getElementById("upload-audio");
@@ -1092,17 +1259,14 @@ class validateInput {
         }
       }
 
-      if (musicFile.getAttribute("accept") === "audio/*, .zip, .rar") {
+      if (musicFile.getAttribute("accept") === "audio/*, .zip, .rar" || musicFile.getAttribute("accept") === ".zip") {
         if (
-          file.type !== "audio/mpeg" &&
-          file.type !== "audio/mp3" &&
-          file.type !== "audio/wav" &&
-          file.type !== "audio/aiff" &&
-          file.type !== "application/zip"
+            file.type !== 'application/x-zip-compressed'
         ) {
+          console.log(file.type)
           dropArea.classList.add("drop-error", "text-center");
           iconState.innerHTML = '<i class="fa fa-times"></i>';
-          infoDrop.innerHTML = `Solo se pueden subir archivos .mp3, .mpeg, .wav, .aiff, .zip<br><label for="music-file">Sube otro archivo</label> o arratralo aquí`;
+          infoDrop.innerHTML = `Solo se pueden subir archivos .zip<br><label for="music-file">Sube otro archivo</label> o arratralo aquí`;
           return;
         }
       } else {
@@ -1112,8 +1276,7 @@ class validateInput {
       dropArea.classList.add("success", "text-center");
       iconState.innerHTML = '<i class="fa fa-check"></i>';
       // infoDrop.innerHTML = `<p>El archivo se subio correctamente<br><label for="music-file">Sube otro</label> o arrastralo aquí</p>`;
-      infoDrop.innerHTML = `<p>El archivo se cargó correctamente</p>`;
-      button.removeAttribute("disabled");
+     // infoDrop.innerHTML = `<p></p>`;
     }
   }
 })();
@@ -1146,7 +1309,7 @@ class validateInput {
 			<li>Título: <span>${musicTitle.value}</span></li>
 			<li>Descripción: <span>${musicDesc.value}</span></li>
 			${urlDemo ? `<li>Fuente: <span>${urlDemo.value}</span></li>` : ""}
-			<li>Enlace: <span id="p1">https://josea.mosquedacordova.com/track/${gateLink.value.toLowerCase()}</span><i class="fa fa-copy" onclick="copyToClipboard('#p1')"  style="margin-left: 5px; cursor: pointer;"></i></li>
+			<li>Enlace: <span id="p1">https://www.backartist.com/track/${gateLink.value}</span><i class="fa fa-copy" onclick="copyToClipboard('#p1')"  style="margin-left: 5px; cursor: pointer;"></i></li>
 		`;
 
     previewList.innerHTML = html;
@@ -1205,22 +1368,53 @@ class validateInput {
   const subirImagen = (event) => {
     const archivos = event.target.files;
     const data = new FormData();
-
+    const reader = new FileReader();
+console.log(archivos)
     data.append("archivo", archivos[0]);
-
-    fetch("/update-profile/archivo", {
-      method: "POST",
-      body: data,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        document.getElementById("resultado").innerHTML =
+    $("#loadingP").show()
+    $("#info-drop").hide()
+    
+    $.ajax({
+      url: '/create-file-gate/archivo',
+      type: 'POST',
+      data: data,
+      cache: false,
+      contentType: false,
+      processData: false,
+      xhr: function () {        
+          var xhr = $.ajaxSettings.xhr();
+          xhr.upload.onprogress = function (event) {
+              var perc = Math.round((event.loaded / event.total) * 100);
+             // $("#nombreArchivoCalendario1").text(inputFile.name);
+             
+              $("#progressBar1").text(perc + '%');
+              $("#progressBar1").css('width', perc + '%');
+          };
+          return xhr;
+      },
+      beforeSend: function (xhr) {
+        //displayLoading()
+          $("#progressBar1").text('0%');
+          $("#progressBar1").css('width', '0%');
+      },
+      success: function (data, textStatus, jqXHR)
+      {      
+          $("#loadingP").hide()
+          $("#progressBar1").addClass("progress-bar-success");
+          $("#progressBar1").text('100% - Carga realizada');
+          document.getElementById("resultado").innerHTML =
           "El archivo " + archivos[0].name + " se ha subido correctamente.";
         document.getElementById("profile_img_").value = archivos[0].name;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        reader.addEventListener("load", displayFileInfo);
+      reader.readAsDataURL(archivos[0]);
+      },
+      error: function (jqXHR, textStatus) { 
+          $("#progressBar1").text('100% - Error al cargar el archivo');
+          $("#progressBar1").removeClass("progress-bar-success");
+          $("#progressBar1").addClass("progress-bar-danger");
+      }
+  });
+
   };
 
   const profileImg = document.getElementById("profile-img");
@@ -1238,12 +1432,11 @@ class validateInput {
         alert("Elige un archivo válido (.png, .jpg, .jpeg)");
         return;
       }
-
-      const reader = new FileReader();
-      reader.addEventListener("load", displayFileInfo);
-      reader.readAsDataURL(file);
-      console.log(file);
-      subirImagen(event);
+    subirImagen(event);
+      
+      
+     // console.log(file);
+      
     });
 
     dropUploadProfileImg.addEventListener("dragenter", enterFile);
@@ -1296,6 +1489,7 @@ class validateInput {
     function displayFileInfo(e) {
       const outputImg = document.createElement("img");
       outputImg.setAttribute("src", e.target.result);
+      outputImg.setAttribute("id", 'img_photo');
 
       dropUploadProfileImg.parentElement.classList.add("divider");
       if (
@@ -1419,7 +1613,12 @@ class validateInput {
             formUpdateProfile[i].name == "mixcloud" ||
             formUpdateProfile[i].name == "youtube" ||
             formUpdateProfile[i].name == "facebook" ||
-            formUpdateProfile[i].name == "instagram"
+            formUpdateProfile[i].name == "detalles" ||
+            formUpdateProfile[i].name == "instagram"  ||
+            formUpdateProfile[i].name == "deezer"  ||
+            formUpdateProfile[i].name == "twitch"  ||
+            formUpdateProfile[i].name == "apple_music"  ||
+            formUpdateProfile[i].name == "descuento"
           ) {
             todoCorrecto = true;
           } else if (
@@ -1490,18 +1689,64 @@ class validateInput {
                 let contar_container =
                   otherContainer.querySelectorAll(".remove-other__btn").length +
                   1;
-                console.log(contar_container);
-                const other = `
-									<div class="add-other mt-3">
-										<input type="url" class="form-control-steps" name="" placeholder="${oInput.getAttribute(
-                      "placeholder"
-                    )}">
-										<button type="button" class="remove-other__btn">
-											<i class="fa fa-times"></i>
-										</button>
-									</div>
-								`;
-                $(otherContainers).append(other);
+                console.log(oInput.getAttribute(
+                  "class"
+                ));
+               
+              let clase =oInput.classList.item(1)
+              console.log(clase);
+              let name_input = oInput.getAttribute("name");
+              const other = `
+								<div class="add-other mt-3">
+									<input type="url" class="form-control-steps ${clase}" name="${name_input}" placeholder="${oInput.getAttribute(
+                "placeholder"
+              )}" onchange="validar(this)">
+									<button type="button" class="remove-other__btn">
+										<i class="fa fa-times"></i>
+									</button>
+								</div>
+							`;
+                
+              switch (clase) {
+                case 'url_facebook':
+                  const otherContainersfb = document.querySelectorAll(".cont_fb");
+                  $(otherContainersfb).append(other);
+                  break;
+                  case 'url_youtube':
+                    const otherContainersyt = document.querySelectorAll(".cont_yt");
+                    $(otherContainersyt).append(other);
+                    break;
+                    case 'url_twitter':
+                      const otherContainers = document.querySelectorAll(".other-container");
+                  $('.cont_tw').append(other);
+                  break;
+                  case 'url_souncloud':
+                  $('.cont_so').append(other);
+                  break;
+                  case 'url_instagram':
+                  $('.cont_ins').append(other);
+                  break;
+                  case 'url_spotify':
+                  $('.cont_spt').append(other);
+                  break;
+                  case 'url_deezer':
+                  $('.cont_dee').append(other);
+                  break;
+                  case 'url_tiktok':
+                  $('.cont_tik').append(other);
+                  break;
+                  case 'url_mixcloud':
+                  $('.cont_mix').append(other);
+                  break;
+                  case 'url_twitch':
+                  $('.cont_twic').append(other);
+                  break;
+                  case 'url_applemusic':
+                  $('.cont_appl').append(other);
+                  break;
+                default:
+                  break;
+              }
                 //otherContainer.innerHTML += other;
               } else {
                 Swal.fire({
@@ -1513,24 +1758,62 @@ class validateInput {
                 });
               }
             } else {
-              let contar_container =
-                otherContainer.querySelectorAll(".remove-other__btn").length +
-                1;
               const oInput = e.target.parentElement.querySelector("input");
-              console.log(oInput.getAttribute("name") + contar_container);
+              let clase =oInput.classList.item(1)
+              console.log(clase);
               let name_input = oInput.getAttribute("name");
               const other = `
 								<div class="add-other mt-3">
-									<input type="url" class="form-control-steps" name="${name_input}" placeholder="${oInput.getAttribute(
+									<input type="url" class="form-control-steps ${clase}" name="${name_input}" placeholder="${oInput.getAttribute(
                 "placeholder"
-              )}">
+              )}" onchange="validar(this)">
 									<button type="button" class="remove-other__btn">
 										<i class="fa fa-times"></i>
 									</button>
 								</div>
 							`;
-              $(otherContainers).append(other);
-              //otherContainer.innerHTML += other;
+              switch (clase) {
+                case 'url_facebook':
+                  const otherContainersfb = document.querySelectorAll(".cont_fb");
+                  $(otherContainersfb).append(other);
+                  break;
+                  case 'url_youtube':
+                    const otherContainersyt = document.querySelectorAll(".cont_yt");
+                    $(otherContainersyt).append(other);
+                    break;
+                    case 'url_twitter':
+                      const otherContainers = document.querySelectorAll(".other-container");
+                  $('.cont_tw').append(other);
+                  break;
+                  case 'url_souncloud':
+                  $('.cont_so').append(other);
+                  break;
+                  case 'url_instagram':
+                  $('.cont_ins').append(other);
+                  break;
+                  case 'url_spotify':
+                  $('.cont_spt').append(other);
+                  break;
+                  case 'url_deezer':
+                  $('.cont_dee').append(other);
+                  break;
+                  case 'url_tiktok':
+                  $('.cont_tik').append(other);
+                  break;
+                  case 'url_mixcloud':
+                  $('.cont_mix').append(other);
+                  break;
+                  case 'url_twitch':
+                  $('.cont_twic').append(other);
+                  break;
+                  case 'url_applemusic':
+                  $('.cont_appl').append(other);
+                  break;
+                default:
+                  break;
+              }
+              
+              
             }
           } else {
             Swal.fire({
@@ -1600,17 +1883,18 @@ class validateInput {
 
 // Boton Compartir
 (() => {
-  $("#prueba").on("click", ".share_fb", function (event) {
-    console.log("hola");
-    event.preventDefault();
+ $(".share_fb").on("click", function (event) {
+    console.log("hola bpot");
+    event.preventDefault();    
     var that = $(this);
-    var href = document.getElementById("url_facebook").innerHTML;
-    var post = that.parents("article.post-area");
+    console.log($('.share_fb_label').text())
+    var href = $('.share_fb_label').text();
+    console.log(href)
     $.ajax({ cache: true });
     $.getScript("//connect.facebook.net/en_US/sdk.js", function () {
       FB.init({
-        appId: "1533357533669938",
-        version: "v2.3", // or v2.0, v2.1, v2.0
+        appId: "1059585144777269",
+        version: "v11.0", // or v2.0, v2.1, v2.0
       });
       FB.ui(
         {
@@ -1621,22 +1905,72 @@ class validateInput {
           href: href,
         },
         function (response) {
+          console.log(response)
+          if (typeof response === "undefined") {
+            console.log("aqSiga adelante")
+            $('.share_fb').addClass('undone')
+          }
           if (response && !response.error_code) {
-            Swal.fire("Gracias por compartir");
-            let link = document.getElementById("descargar_link");
-            link.style.pointerEvents = null;
-          } else {
-            Swal.fire({
-              title: "Error!",
-              text: "No le has dado compartir a nuestra pagina",
-              icon: "error",
-              confirmButtonText: "OK",
-            });
-            // setTimeout(function(){
-            //	let link = document.getElementById('descargar_link')
-            //	link.style.pointerEvents = null;
-            //link.style.color = 'blue';
-            //}, 2000);
+            var last = document.getElementById("nextBtn").innerHTML;
+          let link = document.getElementById("descargar_link");
+            
+            if($('.fb-like').length){
+              if($('.fb-like').length == $('.fb-like.done').length){
+           
+            if (last === "") {
+             $('#next_btn').hide()
+             $('#descargar_link').show()
+             link.style.pointerEvents = null;
+             link.classList.remove("btn_disabled");
+             $('#regForm').removeAttr('style');
+             $('#gracias').removeAttr('style');
+             $('#error_redes').attr('style', 'display: none !important;');
+             link.innerHTML = "Descargar";
+     
+           }else{
+             if($('.share_fb').length){
+              $('.share_fb').removeClass('share_fb')
+           }else{
+             
+           $("#nextBtn").click();
+           $('.fb-like').removeClass('done')
+           $('.fb-like').addClass('undone')
+           }
+           }
+                 
+         }else{
+           console.log("Debe dar me gusta en todas opciones porfavor")
+           mostrar()
+         }
+           }
+           if($('.share_fb').length){
+            if($('.share_fb').length == $('.share_fb.done').length){
+         
+          if (last === "") {
+           $('#next_btn').hide()
+           $('#descargar_link').show()
+           link.style.pointerEvents = null;
+           link.classList.remove("btn_disabled");
+           $('#regForm').removeAttr('style');
+           $('#gracias').removeAttr('style');
+           $('#error_redes').attr('style', 'display: none !important;');
+           link.innerHTML = "Descargar";
+   
+         }else{
+           if($('.share_fb').length){
+            $('.share_fb').removeClass('share_fb')
+            $("#nextBtn").click();
+         }else{
+           
+         $("#nextBtn").click();
+         }
+         }
+               
+       }else{
+         console.log("Debe dar me gusta en todas opciones porfavor")
+         mostrar()
+       }
+         }
           }
         }
       );
@@ -1660,29 +1994,28 @@ class validateInput {
     //var url = document.getElementById('url_facebook').innerHTML;
     var openDialog = function (uri, name, options, closeCallback) {
       var win = window.open(uri, name, options);
+      
       var interval = window.setInterval(function () {
         try {
           if (win == null || win.closed) {
             clearInterval(interval);
             //window.setInterval(0)
             closeCallback(win);
-            console.log("se cerro por click");
+            console.log("click");
           }
-        } catch (e) {}
-      }, 5000);
+        } catch (e) {
+          console.log(e)
+        }
+      }, 2000);
       return win;
     };
 
-    openDialog(url, "Social Media", "width=640,height=580", function () {
-      let link = document.getElementById("descargar_link");
-      if (last === "") {
-        link.style.pointerEvents = null;
-        link.classList.remove("btn_disabled");
-      } else {
-        $("#nextBtn").click();
-      }
+    openDialog(url, "Social Media", "width=640,height=580", function (e) {
+      console.log("se creo la venta")      
+      
     });
   });
+
 })();
 // Añadir más campos a las preguntas
 (() => {
@@ -1724,6 +2057,140 @@ class validateInput {
     }
   });
 })();
+// Select Music
+(() => {
+  // selecting loading div
+const loader2 = document.querySelector("#loading3");
+//const loadertext = document.querySelector("#textloading");
+
+// showing loading
+function displayLoading() {
+    loader2.classList.add("display");
+    //loadertext.classList.add("display");
+    // to stop loading after some time
+  
+}
+
+  const subirarchivo_music = (event) => {
+    const archivos2 = event.target.files;
+    const data2 = new FormData();
+
+    data2.append("archivo", archivos2[0]);
+    $("#loading3").show()
+    $("#info-drop").hide()
+    
+    const dropArea12 = document.getElementById("upload-audio2");
+    const infoDrop12 = dropArea12.querySelector(".info-drop");
+    $.ajax({
+      url: '/create-file-gate/archivo',
+      type: 'POST',
+      data: data2,
+      cache: false,
+      contentType: false,
+      processData: false,
+      xhr: function () {        
+          var xhr = $.ajaxSettings.xhr();
+          xhr.upload.onprogress = function (event) {
+              var perc = Math.round((event.loaded / event.total) * 100);
+             // $("#nombreArchivoCalendario1").text(inputFile.name);
+             
+              $("#progressBar3").text(perc + '%');
+              $("#progressBar3").css('width', perc + '%');
+          };
+          return xhr;
+      },
+      beforeSend: function (xhr) {
+        displayLoading()
+        $('.drop-content2').attr('style','display:none')
+          $("#progressBar3").text('0%');
+          $("#progressBar3").css('width', '0%');
+        
+      },
+      success: function (data, textStatus, jqXHR)
+      {  
+        $("#loading3").hide()    
+        $('.drop-content2').removeAttr('style')
+        
+          $("#progressBar3").addClass("progress-bar-success");
+          $("#progressBar3").text('100% - Carga realizada');
+        
+        infoDrop12.innerHTML = `<label for="music-fileback"><i class="fa fa-upload"></i>Cambiar Archivo</label><p>El archivo " + ${archivos2[0].name} + " se ha subido correctamente.</p>`;
+        //document.getElementById("resultado_zip").innerHTML = "El archivo " + archivos[0].name + " se ha subido correctamente.";
+        document.getElementById("archivo_back").value = archivos2[0].name;
+        const button2 = musicBack.parentElement.parentElement.querySelector("button[data-step-page]");
+      button2.removeAttribute("disabled");
+      $('#btn_url').removeAttr('disabled')
+
+      
+      },
+      error: function (jqXHR, textStatus) { 
+          $("#progressBar2").text('100% - Error al cargar el archivo');
+          $("#progressBar2").removeClass("progress-bar-success");
+          $("#progressBar2").addClass("progress-bar-danger");
+      }
+  });
+  };
+
+  const musicBack = document.getElementById("music-fileback");
+
+  if (musicBack) {
+    console.log('musica-back')
+    const fileOutput = document.getElementById("file-outputback");
+    const iconState2 = document.getElementById("drop-icon2");
+   // const button = musicBack.parentElement.parentElement.querySelector(  "button[data-step-page]" );
+
+    // With Drag and Drop
+    const dropArea2 = document.getElementById("upload-audio2");
+    const infoDrop2 = dropArea2.querySelector(".info-drop");
+
+    musicBack.addEventListener("change", (event) => {
+      const file2 = musicBack.files[0];
+
+      uploadingProccess2(file2, event);
+    });
+
+
+    function uploadingProccess2(file, event) {
+      // calcular mb
+      const size2 = file.size / 1048576;
+      const maxSizeFile2 = musicBack.dataset.maxSizeFile;
+
+      if (maxSizeFile2 !== "unlimited") {
+        if (size2 > Number(maxSizeFile2)) {
+          dropArea2.classList.add("drop-error", "text-center");
+          iconState2.innerHTML = '<i class="fa fa-times"></i>';
+          infoDrop2.innerHTML = `No puedes subir archivos mayores a ${
+            maxSizeFile2 === "10" ? "10mb" : "1gb"
+          } actualiza tu membresía<br><label for="music-file">Sube otro archivo</label> o arratralo aquí`;
+          return;
+        }
+      }
+
+      if (musicBack.getAttribute("accept") === "audio/*, .zip, .rar") {
+        if (
+          file2.type !== "audio/mpeg" &&
+          file2.type !== "audio/mp3" &&
+          file2.type !== "audio/wav" &&
+          file2.type !== "audio/aiff" &&
+          file2.type !== "application/zip"
+        ) {
+          dropArea2.classList.add("drop-error", "text-center");
+          iconState2.innerHTML = '<i class="fa fa-times"></i>';
+          infoDrop2.innerHTML = `Solo se pueden subir archivos .mp3, .mpeg, .wav, .aiff, .zip<br><label for="music-file">Sube otro archivo</label> o arratralo aquí`;
+          return;
+        }
+      } else {
+      }
+      subirarchivo_music(event);
+      dropArea2.classList.remove("uploading", "drop-error");
+      dropArea2.classList.add("success", "text-center");
+      iconState2.innerHTML = '<i class="fa fa-check"></i>';
+      // infoDrop.innerHTML = `<p>El archivo se subio correctamente<br><label for="music-file">Sube otro</label> o arrastralo aquí</p>`;
+     // infoDrop.innerHTML = `<p></p>`;
+    }
+  }
+})();
+
 // Visualizar terminos o preguntas
 (() => {
   const seleccion = $("#tipo"); //Add button selector
@@ -1741,14 +2208,14 @@ class validateInput {
       $("#politicas_privacidad").val("");
       $("#politicas_privacidad").removeAttr("required");
       $("#politicas").prop("hidden", !this.checked);
-      btnayuda.setAttribute("disabled", true);
+      btnayuda.setAttribute("disabled", false);
     }
     if (valor == "Preguntas Frecuentes") {
       $("#preguntas_").removeAttr("hidden");
       $("#terminos").prop("hidden", !this.checked);
       $("#politicas").prop("hidden", !this.checked);
-      $("#terminos_input").val("");
-      $("#terminos_input").removeAttr("required");
+      $("#summernote").val("");
+      $("#summernote").removeAttr("required");
       $("#politicas_privacidad").val("");
       $("#politicas_privacidad").removeAttr("required");
       $(".pregunta_input").prop("required", !this.checked);
@@ -1758,12 +2225,12 @@ class validateInput {
       $("#politicas").removeAttr("hidden");
       $("#terminos").prop("hidden", !this.checked);
       $("#preguntas_").prop("hidden", !this.checked);
-      $("#terminos_input").val("");
-      $("#terminos_input").removeAttr("required");
+      $("#summernote").val("");
+      $("#summernote").removeAttr("required");
       $(".pregunta_input").removeAttr("required");
       $(".pregunta_input").val("");
       $("#politicas_privacidad").prop("required", !this.checked);
-      btnayuda.setAttribute("disabled", true);
+      btnayuda.setAttribute("disabled", false);
     }
     if (valor == "default") {
       $("#preguntas_").removeAttr("hidden");
@@ -1773,9 +2240,9 @@ class validateInput {
     }
   });
 
-  $("#terminos_input").on("change", (e) => {
+  $("#summernote").on("change", (e) => {
     //Once add button is clicked
-    const valor_terminos = document.getElementById("terminos_input").value;
+    const valor_terminos = document.getElementById("summernote").value;
     if (valor_terminos != "") {
       btnayuda.removeAttribute("disabled");
       return;
@@ -1810,94 +2277,104 @@ class validateInput {
 
 // Boton Copiar Portapapeles
 (() => {
-  var progress = document.getElementById("progress_");
-  progress.addEventListener("click", adelantar);
-  function adelantar(e) {
-    const scrubTime = (e.offsetX / progress.offsetWidth) * player.duration;
-    player.currentTime = scrubTime;
-    //console.log(e);
-  }
 
-  var currentTab = 0; // Current tab is set to be the first tab (0)
-  showTab(currentTab); // Display the current tab
-
-  function showTab(n) {
-    // This function will display the specified tab of the form ...
-    var x = document.getElementsByClassName("tab");
-    x[n].style.display = "block";
-    //x[n].style.display = "block";
-    // ... and fix the Previous/Next buttons:
-    if (n == 0) {
-      document.getElementById("prevBtn").style.display = "none";
-    } else {
-      document.getElementById("prevBtn").style.display = "inline";
+  var gate = document.getElementsByClassName('main-gate')
+  if (gate.length >0){
+    console.log(gate)
+    var progress = document.getElementById("progress_");
+    progress.addEventListener("click", adelantar);
+    function adelantar(e) {
+      const scrubTime = (e.offsetX / progress.offsetWidth) * player.duration;
+      player.currentTime = scrubTime;
+      //console.log(e);
     }
-    if (n == x.length - 1) {
-      document.getElementById("nextBtn").innerHTML = "";
-      document.getElementById("nextBtn").setAttribute("disabled", "disabled");
-    } else {
-      document.getElementById("nextBtn").innerHTML =
-        "<i class='fa fa-angle-right' style='display:none'></i>";
-    }
-    // ... and run a function that displays the correct step indicator:
-    fixStepIndicator(n);
-  }
-
-  function nextPrev(n) {
-    // This function will figure out which tab to display
-    var x = document.getElementsByClassName("tab");
-    // Exit the function if any field in the current tab is invalid:
-    if (n == 1 && !validateForm()) return false;
-    // Hide the current tab:
-    x[currentTab].style.display = "none";
-    // Increase or decrease the current tab by 1:
-    currentTab = currentTab + n;
-    // if you have reached the end of the form... :
-    if (currentTab >= x.length) {
-      //...the form gets submitted:
-      document.getElementById("regForm").submit();
-      return false;
-    }
-    // Otherwise, display the correct tab:
-    showTab(currentTab);
-  }
-
-  function validateForm() {
-    // This function deals with validation of the form fields
-    var x,
-      y,
-      i,
-      valid = true;
-    x = document.getElementsByClassName("tab");
-    y = x[currentTab].getElementsByTagName("input");
-    // A loop that checks every input field in the current tab:
-    for (i = 0; i < y.length; i++) {
-      // If a field is empty...
-      if (y[i].value == "") {
-        // add an "invalid" class to the field:
-        y[i].className += " invalid";
-        // and set the current valid status to false:
-        valid = false;
+  
+    var currentTab = 0; // Current tab is set to be the first tab (0)
+    showTab(currentTab); // Display the current tab
+  
+    function showTab(n) {
+      // This function will display the specified tab of the form ...
+      var x = document.getElementsByClassName("tab");
+      //x[n].style.display = "block";
+      x[n].classList.add('show-tab');
+      x[n].addEventListener("animationend", function () {
+        console.log("hola mundo");
+        x[n].style.display = "block";
+      });
+      // ... and fix the Previous/Next buttons:
+      if (n == 0) {
+        document.getElementById("prevBtn").style.display = "none";
+      } else {
+        document.getElementById("prevBtn").style.display = "none";
       }
+      if (n == x.length - 1) {
+        document.getElementById("nextBtn").innerHTML = "";
+        document.getElementById("nextBtn").setAttribute("disabled", "disabled");
+      } else {
+        document.getElementById("nextBtn").innerHTML =
+          "<i class='fa fa-angle-right' style='display:none'></i>";
+      }
+      // ... and run a function that displays the correct step indicator:
+      fixStepIndicator(n);
     }
-    // If the valid status is true, mark the step as finished and valid:
-    if (valid) {
-      document.getElementsByClassName("step")[currentTab].className +=
-        " finish";
+  
+    function nextPrev(n) {
+      // This function will figure out which tab to display
+      var x = document.getElementsByClassName("tab");
+      // Exit the function if any field in the current tab is invalid:
+      if (n == 1 && !validateForm()) return false;
+      // Hide the current tab:
+      x[currentTab].style.display = "none";
+      // Increase or decrease the current tab by 1:
+      currentTab = currentTab + n;
+      // if you have reached the end of the form... :
+      if (currentTab >= x.length) {
+        //...the form gets submitted:
+        document.getElementById("regForm").submit();
+        return false;
+      }
+      // Otherwise, display the correct tab:
+      showTab(currentTab);
     }
-    return valid; // return the valid status
+  
+    function validateForm() {
+      // This function deals with validation of the form fields
+      var x,
+        y,
+        i,
+        valid = true;
+      x = document.getElementsByClassName("tab");
+      y = x[currentTab].getElementsByTagName("input");
+      // A loop that checks every input field in the current tab:
+      for (i = 0; i < y.length; i++) {
+        // If a field is empty...
+        if (y[i].value == "") {
+          // add an "invalid" class to the field:
+          y[i].className += " invalid";
+          // and set the current valid status to false:
+          valid = false;
+        }
+      }
+      // If the valid status is true, mark the step as finished and valid:
+      if (valid) {
+        document.getElementsByClassName("step")[currentTab].className +=
+          " finish";
+      }
+      return valid; // return the valid status
+    }
+  
+    function fixStepIndicator(n) {
+      // This function removes the "active" class of all steps...
+      var i,
+        x = document.getElementsByClassName("step");
+      for (i = 0; i < x.length; i++) {
+        x[i].className = x[i].className.replace(" active", "");
+      }
+      //... and adds the "active" class to the current step:
+      x[n].className += " active";
+    }
   }
-
-  function fixStepIndicator(n) {
-    // This function removes the "active" class of all steps...
-    var i,
-      x = document.getElementsByClassName("step");
-    for (i = 0; i < x.length; i++) {
-      x[i].className = x[i].className.replace(" active", "");
-    }
-    //... and adds the "active" class to the current step:
-    x[n].className += " active";
-  }
+  
 })();
 
 (() => {
@@ -1936,7 +2413,7 @@ class validateInput {
 
 (() => {
   $("#url_youtube").on("keyup", function () {
-    this.value = this.value.toLowerCase();
+   // this.value = this.value.toLowerCase();
     input = $(this).val();
     //const btna = $('.form-steps__btn--support');
     console.log("hola");
@@ -1957,5 +2434,3 @@ class validateInput {
 		}*/
   });
 })();
-
-// Vista previa diseño Gate

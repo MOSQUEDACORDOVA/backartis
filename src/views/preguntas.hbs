@@ -1,0 +1,76 @@
+{{> header }}
+{{#if archivo}}
+	<!-- Sweet Alert -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+	$( document ).ready(function() {
+    Swal.fire({
+  title: 'Gracias por preferirnos su descarga comenzará en unos segundos',
+  timer: 2000,
+  timerProgressBar: true,
+  width: 600,
+  padding: '3em',
+  showConfirmButton: false,
+  background: '#fff url(/images/trees.png)',
+  backdrop: `
+  
+    rgba(227, 197, 104,0.4)
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat
+  `
+}).then((result) =>{
+    console.log(result)
+    console.log(Swal.DismissReason)
+    
+    if (result.isConfirmed) {
+    window.location.href = '/downgate/{{archivo}}/{{parametro_buscar}}/{{id_usuario}}/{{correo}}/pasarela'
+  }
+    if (result.isDismissed) {
+        {{#if bond}}
+        window.location.href = '{{URL_fuente}}'
+        {{else}}
+        window.location.href = '/downgate/{{archivo}}/{{parametro_buscar}}/{{id_usuario}}/{{correo}}/pasarela'
+        {{/if}}
+    
+  }
+})
+   
+	
+}); 
+</script>
+{{/if}}
+
+<style>
+        .TituloTerminos{
+            color:#d9ad26;
+            margin-bottom: 1rem;
+        }
+    </style>
+
+
+<div class="container" style="margin-top:115px; padding-bottom:120px;" >
+    <div class="row" >
+        <div class="col-12">
+                <h1 class="mb-3" style="text-align: center; color: #d9ad26;">Preguntas y Respuestas</h1>
+            </div>
+     {{#each parsed as |parsedt i|}}
+        
+            
+            <div class="col-12" style="text-align: justify;">
+                <!--<h3 class="TituloTerminos">Subtitulos</h3>-->
+                <p>
+                   {{#breaklines parsedt.preguntas}}{{/breaklines}}
+                </p>
+                <p>
+                </p>
+            </div>
+        
+{{/each}}
+</div>
+
+
+
+    </div>
+{{> footer }}

@@ -32,7 +32,12 @@ const Notificaciones = db.define('notificaciones', {
 		allowNull: true,
 		defaultValue: ""
 	},
-	fecha_publicacion: {
+	fecha_inicio: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
+		fecha_final: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""

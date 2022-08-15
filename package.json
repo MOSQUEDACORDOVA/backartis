@@ -15,16 +15,19 @@
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
+    "countup.js": "^2.0.8",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
     "express-handlebars": "^5.3.0",
     "express-session": "^1.17.1",
     "fbgraph": "^1.4.4",
+    "html-pdf": "^3.0.1",
     "mercadopago": "^1.5.7",
     "mixcloud-audio": "0.0.3",
+    "moment-timezone": "^0.5.33",
     "mysql2": "^2.2.5",
-    "nodemailer": "^6.6.1",
+    "nodemailer": "^6.6.3",
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth": "^2.0.0",
@@ -36,6 +39,5 @@
     "soundcloud-downloader": "^1.0.0",
     "sweetalert2": "^11.0.8"
   },
-  "devDependencies": {},
   "keywords": []
 }

@@ -1,0 +1,20 @@
+<a href="/" class="btn-return-landing">
+	<i class="fa fa-times"></i>
+</a>
+<form method="post" action="/soporte" class="form-contact">
+	{{#if messages}}
+		{{#showAlerts messages}}
+		{{/showAlerts}}
+	{{/if}}
+	<input type="text" class="form-control" name="userid" required autocomplete="off" value="{{user_id}}" hidden>
+	<input type="text" class="form-control" placeholder="Nombre y Apellido" name="nombre" required autocomplete="off">
+	<input type="number" class="form-control" placeholder="Teléfono de contacto" name="telefono" required autocomplete="off">
+	<input type="email" class="form-control" placeholder="Correo" name="email" required autocomplete="off">
+	<textarea type="text" class="form-control" placeholder="Descripción" name="descripcion" required autocomplete="off"></textarea>
+	
+	<button type="submit" class="btn btn-primary btn-block">Enviar <i class="fa fa-angle-right"></i></button>
+
+
+	
+
+</form>

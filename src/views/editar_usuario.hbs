@@ -10,6 +10,16 @@
 			$('#img_photo').attr('src','https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg')
 	
 	});
+	$(`#tipoMembresia`).change((e)=>{
+		let valor = e.target.value
+		if (valor !="Basic"){
+			$('#finalPlan').removeClass('d-none')
+			$('#fecha_final').removeAttr('disabled')
+			return
+		}
+		$('#finalPlan').addClass('d-none')
+		$('#fecha_final').attr('disabled', true)
+	})
 	})
 </script>
 <div class="card-box shadow position-relative calculate-height">
@@ -54,9 +64,9 @@
 							</div>
 						</div>
 						<a id="eliminar_foto" style="cursor: pointer;font-size: 1.3em;  color: #707070;">Eliminar Foto</a>
-						<div id="resultado"></div>
+						<div id="resultado" style="text-align: center;"></div>
 					</div>
-					<img src="{{#if notPhoto}}/assets/uploads/{{parsed_user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Foto de perfil" id="img_photo">
+					<img src="{{#if parsed_user.photo}}/assets/uploads/{{parsed_user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Foto de perfil" id="img_photo">
 				</div>
 			</div><!-- .form-update-accound__item -->
 			<div class="form-update-account__item">
@@ -95,7 +105,7 @@
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-user"></i>
 					</div>
-					<select class="form-control-steps" id="tipo" name="membresia" required>	
+					<select class="form-control-steps" id="tipoMembresia" name="membresia" required>	
 						<option value="{{parsed_user.membership}}">{{parsed_user.membership}}</option>
 						<option value="Gold">Gold</option>
 						<option value="VIP">VIP</option>
@@ -103,6 +113,15 @@
 						
 					</select>
 				</div>
+				<div class="form-update-account__item d-none" id="finalPlan">
+				<label class="form-steps__title" for="text">Fecha final plan</label>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fas fa-calendar-alt"></i>
+					</div>
+					<input type="datetime-local" class="form-control-steps" id="fecha_final" name="fecha_final" placeholder="Fecha finalización" autocomplete="off" disabled>
+				</div>
+			</div>
 				</div>
 			<div class="form-update-account__item">
 				<label class="form-steps__title" for="password">Actualiza contraseña</label>

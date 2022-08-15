@@ -4,17 +4,47 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="/assets/img/logo-ba-2.png" type="image/png">
-	<title>{{ pageName }} by BackArtist </title>
+	<title>{{ pageName }} {{#if gate}}by BackArtist {{/if}}</title>
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
 	<!-- Google Fonts -->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
 	<!-- Bootstrap CSS -->
-	<link rel="stylesheet" href="/assets/css/bootstrap.css">
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.js" ></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.js" ></script>
+	
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.css"/>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.10.25/datatables.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.1/js/bootstrap.bundle.min.js" ></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/javascript.util/0.12.12/javascript.util.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.1/umd/popper.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" ></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.min.js"></script>
 	<!-- Custom CSS -->
 	<link rel="stylesheet" href="/assets/css/style.css">
 	<link rel="stylesheet" href="/assets/css/style_dash.css">
+	<script>
+	$( document ).ready(function() {
+	 	 $('#AbrirMenuResponsive').on('click',()=>{
+			$('.MenuResponcive').attr('style', 'display:flex;')
+			})
+	})
+		$( document ).ready(function() {
+	 	 $('#CerrarMenuResponcive').on('click',()=>{
+			$('.MenuResponcive').attr('style', 'display:none;')
+			})
+	})
+	</script>
+
 </head>
 <body class="{{#if dashboardPage}}dashboard-body{{else}}page-body{{/if}}">
 	{{#if landingPage}}
@@ -26,9 +56,12 @@
 					<img src="/assets/img/logo-ba.png" alt="Logo BackArtist">
 					<span>BackArtist</span>
 				</a>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+				<button style="display: none;" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
 					aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
+				</button>
+				<button class="toggler-editado" id="AbrirMenuResponsive">
+					<i class="fas fa-bars"></i>
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
 					<ul class="navbar-nav ml-auto">
@@ -36,16 +69,16 @@
 							<a class="nav-link" href="/">Inicio</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="ranking">Ranking</a>
+							<a class="nav-link" href="/ranking">Ranking</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link nav-link--new" href="#backstore">BackStore</a>
+							<a class="nav-link nav-link--new" href="../#backstore">BackStore</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#planes">Planes</a>
+							<a class="nav-link" href="../#planes">Planes</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">Foro</a>
+							<a class="nav-link" href="https://www.facebook.com/groups/backartist" target="_blank">Foro</a>
 						</li>
 						<li class="nav-item nav-item-login">
 							<a class="btn btn-primary btn-login" href="/login">
@@ -57,7 +90,38 @@
 				</div>
 			</div>
 		</nav>
+			<div class="MenuResponcive">
+				<div class="cerrar-menu-responcive">
+					<a href="" id="CerrarMenuResponcive">
+						<i class="fas fa-times"></i>
+					</a>
+				</div>
+				<div>
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="nav-link" href="/">Inicio</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="/ranking">Ranking</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link nav-link--new" href="../#backstore">BackStore</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="../#planes">Planes</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="https://www.facebook.com/groups/backartist" target="_blank">Foro</a>
+						</li>
+						<li class="nav-item nav-item-login">
+							<a class="btn btn-primary btn-login" href="/login">
+								Iniciar Sesión
+								<i class="fa fa-angle-right"></i>
+							</a>
+						</li>
+					</ul>
+				</div>
+	</div>
 	</header>
-
 	<!-- End Header -->
 	{{/if}}

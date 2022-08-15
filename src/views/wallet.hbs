@@ -1,4 +1,3 @@
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script>
 	$( document ).ready(function() {
@@ -99,12 +98,53 @@ var resultados_por_pagina = 6;
 var pagina_actual = 1;
 var pagina_ultima = 0;
 	$( document ).ready(function() {
+///----TABLA Ventas
+if ($('.Pagado')){
+	$('.Pagado').attr('style','pointer-events: none;')
+	$('.fa-check-circle>Pagado').removeAttr('style')
+	$('.fa-ban>Pagado').removeAttr('style')
+}
+  
+$('.cancelar').on('click', (e)=>{
+    let id = e.target.classList.item(2)
+    let tipo = e.target.classList.item(3)
+	let monto = e.target.classList.item(4)
+
+	if (monto == "espera"){
+		monto = e.target.classList.item(5)
+	}
+		if (tipo == "Cancelado" || tipo == "Error"){
+		 Swal.fire('Orden Cancelada')
+		 return
+	}
+
+	console.log(id+"tipo:"+tipo)
+    Swal.fire({
+  title: 'Cancelar',
+  text: "Seguro desea cancelar el retiro indicado!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  cancelButtonText: 'Cancelar',
+  confirmButtonText: 'Eliminar'
+}).then((result) => {
+  if (result.isConfirmed) {
+    window.location.href = `/cancelar_back/${id}/${monto}`;
+  }
+})
+  })
+
+
+
+
 		$('#monto_retiro').keyup(function(){
 			console.log('hola')
 			let retiro = parseFloat($('#monto_retiro').val())
 			let saldo = parseFloat($('#backcoins_').text())
 			if ( retiro > saldo ){
 				$('#monto_recarga').text('SALDO INSUFICIENTE')
+				$('#valida_fondo').val('SALDO INSUFICIENTE')
 			}else{
 				console.log(retiro)
 				console.log(saldo)
@@ -212,7 +252,7 @@ var cargarPagina = function(intPaginaP){
 				</thead>
 				<tbody>
 					{{#each parsed_ventas as |venta i|}}	 
-			<tr  class="pagination__item {{#ColorPay venta.metodo_pago venta.tipo_compra}}{{/ColorPay}}">
+			<tr  class="pagination__item {{#ColorPay venta.metodo_pago venta.tipo_compra ../user.id id_usuario}}{{/ColorPay}}">
 				<td>{{venta.createdAt}}</td>
 				<td>{{venta.tipo_compra}}</td>
 				<td>{{venta.metodo_pago}}</td>
@@ -223,11 +263,11 @@ var cargarPagina = function(intPaginaP){
 					
 				</tbody>
 				<tfoot>
-	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
-	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
 	<td id="indicador_paginas"></td>
-	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
-	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
 </tfoot>
 			</table>
 		</div>{{/if}}
@@ -268,7 +308,7 @@ var cargarPagina = function(intPaginaP){
 					<i class="fas fa-file-signature"></i>
 						</div>
 				
-					<input type="text" class="form-control-steps onlynum"  id="n_documento" name="n_documento" placeholder="Número de documento" required {{#if parsed}}value="{{parsed.n_documento}}"{{/if}}>
+					<input type="text" class="form-control-steps onlynum"  id="n_documento" name="n_documento" placeholder="Número de documento" required {{#if parsed}}value="{{parsed.n_documento}}"{{/if}} maxlength="12">
 				</div>
 			</div><!-- .form-update-accound__item -->
 			<div class="form-update-account__item">
@@ -339,7 +379,7 @@ var cargarPagina = function(intPaginaP){
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-university"></i>
 					</div>
-					<input type="text" class="form-control-steps onlynum" id="cuenta" name="cuenta" placeholder="Número de Cuenta" {{#if parsed}} value="{{parsed.cuenta}}"{{/if}}>
+					<input type="text" class="form-control-steps onlynum" id="cuenta" name="cuenta" placeholder="Número de Cuenta" {{#if parsed}} value="{{parsed.cuenta}}"{{/if}} maxlength="20">
 				</div>
 			</div><!-- .form-update-accound__item -->
 		</div>
@@ -372,6 +412,7 @@ var cargarPagina = function(intPaginaP){
 		{{#if retirar_fondos}}	<div class="col-12" style="margin-top: 1.5rem;">
 			<form action="/retirar_fondos" method="post" class="p-to-btn" autocomplete="off" id="form_datos_wallet" enctype='multipart/form-data'>
 			<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{parsed.id}}" hidden />
+			<input type="text" class="form-control-steps" id="valida_fondo" name="valida_fondo"   hidden />
 		<div class="form-update-account">
 			<div class="form-update-account__item">
 				<label class="form-steps__title" for="text">Monto a Retirar</label>
@@ -442,6 +483,9 @@ var cargarPagina = function(intPaginaP){
 								<th class="text-xs-center">
 									Observación
 								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -450,28 +494,32 @@ var cargarPagina = function(intPaginaP){
 				<td>{{retiros.id}}</td>
 				<td>${{retiros.monto}}</td>
 				<td>{{#formatoFecha2 retiros.fecha_solicitud}}{{/formatoFecha2}}</td>
-				<td>{{retiros.status}}</td>
+				<td class="{{retiros.status}}">{{retiros.status}}</td>
 				<td>{{#if retiros.fecha_pago}}{{#formatoFecha2 retiros.fecha_pago}}{{/formatoFecha2}}{{/if}}</td>
 				<td><a href="{{#if retiros.comprobante_pago}}/assets/uploads/{{retiros.comprobante_pago}}{{/if}}">{{#if retiros.comprobante_pago}}Click Para ver{{/if}}</a>
 					</td>
 				<td>{{retiros.observacion}}</td>
+				<td><a class="item cancelar {{retiros.id}} {{retiros.status}} {{retiros.monto}}" href="#"
+                            id="delete_venta" data-toggle="tooltip" data-placement="top" title="Cancelar">
+                            <i class="fas fa-ban {{retiros.id}} {{retiros.status}} {{retiros.monto}}" style="color: red;"></i>
+                          </a></td>
 				</tr>		
 	{{/each}}
 					
 				</tbody>
 				<tfoot>
-	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
-	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
 	<td id="indicador_paginas"></td>
-	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
-	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
 </tfoot>
 			</table>
 		</div>{{/if}}
 
 	</div>
 
-	<a href="/dashboard" class="before-page">
+	<a href="/wallet" class="before-page">
 		<i class="fa fa-arrow-left"></i>
 	</a>
 </div><!-- .card-box -->

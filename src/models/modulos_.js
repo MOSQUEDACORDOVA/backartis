@@ -16,36 +16,38 @@ const Used_cupons = require("./Used_cupons");
 const Tipo_cambio = require("./Tipo_cambio");
 const Ayuda = require("./Ayuda");
 const Retiros = require("./Retiros");
+const Soporte = require("./Soporte");
+const Generos = require("./Generos");
+const Modal_land = require("./Modal_land");
 
 module.exports = {
-  actualizarUser(id, nombre, apellido, userN, mail, photo, tipo, membresia) {
+  actualizarUser(id, nombre, apellido, userN, mail, photo, tipo, membresia,fecha_final) {
     //Actualizar datos del usuario
-    let sql =
-      "UPDATE usuarios SET name ='" +
-      nombre +
-      "', lastName ='" +
-      apellido +
-      "',membership ='" +
-      membresia +
-      "',tipo ='" +
-      tipo +
-      "', userName ='" +
-      userN +
-      "', email ='" +
-      mail +
-      "', photo='" +
-      photo +
-      "' WHERE id ='" +
-      id +
-      "'";
+    
     return new Promise((resolve, reject) => {
-      db.query(sql, (err, result) => {
-        if (err) reject(err);
-        else resolve();
-      });
-      ////console.log("aquimira");
-      resolve();
-      //res.redirect("/dashboard");
+      Usuarios.update(
+        {
+          name: nombre,lastName: apellido, membership: membresia,
+          tipo: tipo,
+          userName: userN,
+          email: mail,
+          photo: photo,hasta: fecha_final
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      )
+        .then((plan) => {
+          let planes = JSON.stringify(plan);
+          resolve(planes);
+          //console.log(planes);
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
+        });
     });
   },
   actualizarpassW(id, password) {
@@ -90,6 +92,9 @@ module.exports = {
         //let gates= JSON.stringify(users)
         resolve("respuesta exitosa");
         //////console.log(JSON.stringify(users));
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -106,7 +111,8 @@ module.exports = {
           ////console.log(id_usuario);
         })
         .catch((err) => {
-          ////console.log(err);
+          //console.log(err);
+           reject(err)
         });
     });
   },
@@ -116,7 +122,10 @@ module.exports = {
         where: {
           tipo_create: parametro_buscar,
           id_usuario: id_usuario,
-        },
+        },order: [
+          // Will escape title and validate DESC against a list of valid direction parameters
+          ["createdAt", "DESC"],
+        ],
       })
         .then((users) => {
           let gates = JSON.stringify(users);
@@ -124,7 +133,53 @@ module.exports = {
           //////console.log(JSON.stringify(users));
         })
         .catch((err) => {
-          ////console.log(err);
+          //console.log(err);
+           reject(err)
+        });
+    });
+  },
+  obtenerGatesTop() {
+    return new Promise((resolve, reject) => {
+      Gates.findAll({attributes: ['id', 'tipo_create'],
+        where: {
+          [Op.or]: [{tipo_create: 'filegate'}, {tipo_create: 'bondgate'}]
+        },limit: 3,
+        order: [
+          // Will escape title and validate DESC against a list of valid direction parameters
+          ["descargas", "DESC"],
+        ],
+      })
+        .then((users) => {
+          let gates = JSON.stringify(users);
+          resolve(gates);
+          //////console.log(JSON.stringify(users));
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
+        });
+    });
+  },
+  obtenerbackTop() {
+    return new Promise((resolve, reject) => {
+      Gates.findAll({attributes: ['id', 'tipo_create'],
+        where: {
+          tipo_create: 'backstore'
+        
+        },limit: 3,
+        order: [
+          // Will escape title and validate DESC against a list of valid direction parameters
+          ["descargas", "DESC"],
+        ],
+      })
+        .then((users) => {
+          let gates = JSON.stringify(users);
+          resolve(gates);
+          //////console.log(JSON.stringify(users));
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
         });
     });
   },
@@ -133,7 +188,10 @@ module.exports = {
       Gates.findAll({
         where: {
           id_usuario: id_usuario,
-        },
+        },order: [
+          // Will escape title and validate DESC against a list of valid direction parameters
+          ["createdAt", "DESC"],
+        ],
       })
         .then((users) => {
           let gates = JSON.stringify(users);
@@ -142,6 +200,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -155,6 +214,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -168,6 +228,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -181,6 +242,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -199,6 +261,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -216,6 +279,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -230,17 +294,27 @@ module.exports = {
         //let gates= JSON.stringify(users)
         resolve("respuesta exitosa");
         ////console.log(JSON.stringify(users));
-      });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
     });
   },
   insertargates(arreglo) {
+
+    if (typeof arreglo.omitir_correo === "undefined") {
+      var omitir_correo = null;
+      //console.log(url_mixcloud);
+    } else {
+      omitir_correo = (arreglo.omitir_correo).toString();
+    }
     if (typeof arreglo.other_gender === "undefined") {
       var other_gender = "";
       //console.log(other_gender);
     } else {
       other_gender = arreglo.other_gender;
     }
-    if (typeof arreglo.fecha_programa === "undefined") {
+    if (typeof arreglo.fecha_programa === "undefined" || arreglo.fecha_programa =="") {
       var fecha_programa = null;
       //console.log(fecha_programa);
     } else {
@@ -319,7 +393,8 @@ module.exports = {
       var url_facebook = "";
       //console.log(url_facebook);
     } else {
-      url_facebook = arreglo.url_facebook;
+      url_facebook = (arreglo.url_facebook).toString();
+
     }
     if (typeof arreglo.seguir_twitter === "undefined") {
       var seguir_twitter = "";
@@ -343,7 +418,7 @@ module.exports = {
       var url_twitter = "";
       //console.log(url_twitter);
     } else {
-      url_twitter = arreglo.url_twitter;
+      url_twitter = (arreglo.url_twitter).toString();
     }
     if (typeof arreglo.seguir_soundcloud === "undefined") {
       var seguir_soundcloud = "";
@@ -373,7 +448,7 @@ module.exports = {
       var url_souncloud = "";
       //console.log(url_souncloud);
     } else {
-      url_souncloud = arreglo.url_souncloud;
+      url_souncloud = (arreglo.url_souncloud).toString();
     }
     if (typeof arreglo.seguir_instagram === "undefined") {
       var seguir_instagram = "";
@@ -391,7 +466,7 @@ module.exports = {
       var url_instagram = "";
       //console.log(url_instagram);
     } else {
-      url_instagram = arreglo.url_instagram;
+      url_instagram = (arreglo.url_instagram).toString();
     }
     if (typeof arreglo.seguir_spotify === "undefined") {
       var seguir_spotify = "";
@@ -409,7 +484,7 @@ module.exports = {
       var url_spotify = "";
       //console.log(url_spotify);
     } else {
-      url_spotify = arreglo.url_spotify;
+      url_spotify = (arreglo.url_spotify).toString();
     }
     if (typeof arreglo.seguir_deezer === "undefined") {
       var seguir_deezer = "";
@@ -434,7 +509,7 @@ module.exports = {
       var url_deezer = "";
       //console.log(url_deezer);
     } else {
-      url_deezer = arreglo.url_deezer;
+      url_deezer = (arreglo.url_deezer).toString();
     }
     if (typeof arreglo.seguir_tiktok === "undefined") {
       var seguir_tiktok = "";
@@ -452,7 +527,7 @@ module.exports = {
       var url_tiktok = "";
       //console.log(url_tiktok);
     } else {
-      url_tiktok = arreglo.url_tiktok;
+      url_tiktok = (arreglo.url_tiktok).toString();
     }
     if (typeof arreglo.seguir_mixcloud === "undefined") {
       var seguir_mixcloud = "";
@@ -482,26 +557,78 @@ module.exports = {
       var url_mixcloud = "";
       //console.log(url_mixcloud);
     } else {
-      url_mixcloud = arreglo.url_mixcloud;
+      url_mixcloud = (arreglo.url_mixcloud).toString();
+    }
+
+    if (typeof arreglo.titulo === "undefined") {
+      var titulo = "";
+      //console.log(url_mixcloud);
+    } else {
+      titulo = arreglo.titulo;
     }
 
     if (arreglo.color === "#000000") {
       var color = "";
       //console.log(color);
     } else {
-      color = arreglo.color;
+      var color = arreglo.color;
     }
     if (arreglo.color_titulo === "#000000") {
       var color_titulo = "";
       //console.log(color);
     } else {
-      color_titulo = arreglo.color_titulo;
+      var color_titulo = arreglo.color_titulo;
     }
     if (arreglo.color_descripcion === "#000000") {
       var color_descripcion = "";
       //console.log(color_descripcion);
     } else {
-      color_descripcion = arreglo.color_descripcion;
+      var color_descripcion = arreglo.color_descripcion;
+    }
+
+
+
+    if (typeof arreglo.seguir_twitch === "undefined") {
+      var seguir_twitch = "";
+      //console.log(url_mixcloud);
+    } else {
+      seguir_twitch = (arreglo.seguir_twitch).toString();
+    }
+
+
+    if (typeof arreglo.omitir_twitch === "undefined") {
+      var omitir_twitch = "";
+      //console.log(url_mixcloud);
+    } else {
+      omitir_twitch = (arreglo.omitir_twitch).toString();
+    }
+
+    if (typeof arreglo.url_twitch === "undefined") {
+      var url_twitch = "";
+      //console.log(url_mixcloud);
+    } else {
+      url_twitch = (arreglo.url_twitch).toString();
+    }
+
+    if (typeof arreglo.seguir_applemusic === "undefined") {
+      var seguir_applemusic = "";
+      //console.log(url_mixcloud);
+    } else {
+      seguir_applemusic = (arreglo.seguir_applemusic).toString();
+    }
+
+    if (typeof arreglo.omitir_applemusic === "undefined") {
+      var omitir_applemusic = "";
+      //console.log(url_mixcloud);
+    } else {
+      omitir_applemusic = (arreglo.omitir_applemusic).toString();
+    }
+
+    if (typeof arreglo.url_applemusic === "undefined") {
+      var url_applemusic = "";
+      //console.log(url_mixcloud);
+    } else {
+      url_applemusic = (arreglo.url_applemusic).toString();
     }
 
     let now = new Date();
@@ -527,7 +654,7 @@ module.exports = {
             nombre_artista: arreglo.artist_name,
             titulo: arreglo.music_title,
             descripcion: arreglo.music_desc,
-            tema: tema,
+            tema: titulo,
             imagen: arreglo.img_flyer,
             color: color,
             color_titulo: color_titulo,
@@ -574,8 +701,15 @@ module.exports = {
             like_mixcloud: like_mixcloud,
             omitir_mixcloud: omitir_mixcloud,
             url_mixcloud: url_mixcloud,
+             seguir_twitch: seguir_twitch,
+             omitir_twitch: omitir_twitch,
+            url_twitch: url_twitch,
+             seguir_applemusic: seguir_applemusic,
+              omitir_applemusic: omitir_applemusic,
+             url_applemusic: url_applemusic,
             enlace_perzonalizado: arreglo.gate_link,
-            fecha_registro: fecha,
+            fecha_registro: fecha,omitir_correo:omitir_correo
+            
           })
             .then((gate) => {
               let gatees = JSON.stringify(gate);
@@ -584,22 +718,27 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           resolve("0");
         }
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
 
   updategates(arreglo) {
+  
     if (typeof arreglo.other_gender === "undefined") {
       var other_gender = "";
       //console.log(other_gender);
     } else {
       other_gender = arreglo.other_gender;
     }
-    if (typeof arreglo.fecha_programa === "undefined") {
+    if (typeof arreglo.fecha_programa === "undefined" || arreglo.fecha_programa =="") {
       var fecha_programa = null;
       //console.log(fecha_programa);
     } else {
@@ -647,7 +786,8 @@ module.exports = {
       var url_youtube = "";
       //console.log(url_youtube);
     } else {
-      url_youtube = arreglo.url_youtube;
+      url_youtube = arreglo.url_youtube.toString();
+      //console.log(url_youtube);
     }
     if (typeof arreglo.nombre_youtube === "undefined") {
       var nombre_youtube = "";
@@ -677,7 +817,8 @@ module.exports = {
       var url_facebook = "";
       //console.log(url_facebook);
     } else {
-      url_facebook = arreglo.url_facebook;
+      url_facebook = (arreglo.url_facebook).toString();
+
     }
     if (typeof arreglo.seguir_twitter === "undefined") {
       var seguir_twitter = "";
@@ -701,7 +842,7 @@ module.exports = {
       var url_twitter = "";
       //console.log(url_twitter);
     } else {
-      url_twitter = arreglo.url_twitter;
+      url_twitter = (arreglo.url_twitter).toString();
     }
     if (typeof arreglo.seguir_soundcloud === "undefined") {
       var seguir_soundcloud = "";
@@ -731,7 +872,7 @@ module.exports = {
       var url_souncloud = "";
       //console.log(url_souncloud);
     } else {
-      url_souncloud = arreglo.url_souncloud;
+      url_souncloud = (arreglo.url_souncloud).toString();
     }
     if (typeof arreglo.seguir_instagram === "undefined") {
       var seguir_instagram = "";
@@ -749,7 +890,7 @@ module.exports = {
       var url_instagram = "";
       //console.log(url_instagram);
     } else {
-      url_instagram = arreglo.url_instagram;
+      url_instagram = (arreglo.url_instagram).toString();
     }
     if (typeof arreglo.seguir_spotify === "undefined") {
       var seguir_spotify = "";
@@ -767,7 +908,7 @@ module.exports = {
       var url_spotify = "";
       //console.log(url_spotify);
     } else {
-      url_spotify = arreglo.url_spotify;
+      url_spotify = (arreglo.url_spotify).toString();
     }
     if (typeof arreglo.seguir_deezer === "undefined") {
       var seguir_deezer = "";
@@ -792,7 +933,7 @@ module.exports = {
       var url_deezer = "";
       //console.log(url_deezer);
     } else {
-      url_deezer = arreglo.url_deezer;
+      url_deezer = (arreglo.url_deezer).toString();
     }
     if (typeof arreglo.seguir_tiktok === "undefined") {
       var seguir_tiktok = "";
@@ -810,7 +951,7 @@ module.exports = {
       var url_tiktok = "";
       //console.log(url_tiktok);
     } else {
-      url_tiktok = arreglo.url_tiktok;
+      url_tiktok = (arreglo.url_tiktok).toString();
     }
     if (typeof arreglo.seguir_mixcloud === "undefined") {
       var seguir_mixcloud = "";
@@ -840,33 +981,92 @@ module.exports = {
       var url_mixcloud = "";
       //console.log(url_mixcloud);
     } else {
-      url_mixcloud = arreglo.url_mixcloud;
+      url_mixcloud = (arreglo.url_mixcloud).toString();
+    }
+
+    if (typeof arreglo.titulo === "undefined") {
+      var titulo = "";
+      //console.log(url_mixcloud);
+    } else {
+      titulo = arreglo.titulo;
     }
 
     if (arreglo.color === "#000000") {
       var color = "";
       //console.log(color);
     } else {
-      color = arreglo.color;
+      var color = arreglo.color;
     }
     if (arreglo.color_titulo === "#000000") {
       var color_titulo = "";
       //console.log(color);
     } else {
-      color_titulo = arreglo.color_titulo;
+      var color_titulo = arreglo.color_titulo;
     }
     if (arreglo.color_descripcion === "#000000") {
       var color_descripcion = "";
       //console.log(color_descripcion);
     } else {
-      color_descripcion = arreglo.color_descripcion;
+      var color_descripcion = arreglo.color_descripcion;
     }
+
+
+
+    if (typeof arreglo.seguir_twitch === "undefined") {
+      var seguir_twitch = "";
+      //console.log(url_mixcloud);
+    } else {
+      seguir_twitch = (arreglo.seguir_twitch).toString();
+    }
+
+
+    if (typeof arreglo.omitir_twitch === "undefined") {
+      var omitir_twitch = "";
+      //console.log(url_mixcloud);
+    } else {
+      omitir_twitch = (arreglo.omitir_twitch).toString();
+    }
+
+    if (typeof arreglo.url_twitch === "undefined") {
+      var url_twitch = "";
+      //console.log(url_mixcloud);
+    } else {
+      url_twitch = (arreglo.url_twitch).toString();
+    }
+
+    if (typeof arreglo.seguir_applemusic === "undefined") {
+      var seguir_applemusic = "";
+      //console.log(url_mixcloud);
+    } else {
+      seguir_applemusic = (arreglo.seguir_applemusic).toString();
+    }
+
+    if (typeof arreglo.omitir_applemusic === "undefined") {
+      var omitir_applemusic = "";
+      //console.log(url_mixcloud);
+    } else {
+      omitir_applemusic = (arreglo.omitir_applemusic).toString();
+    }
+
+    if (typeof arreglo.url_applemusic === "undefined") {
+      var url_applemusic = "";
+      //console.log(url_mixcloud);
+    } else {
+      url_applemusic = (arreglo.url_applemusic).toString();
+    }
+ if (typeof arreglo.omitir_correo === "undefined") {
+      var omitir_correo = null;
+      //console.log(url_mixcloud);
+    } else {
+      omitir_correo = (arreglo.omitir_correo).toString();
+    }
+    
 
     let now = new Date();
     id_usuario = arreglo.id_user;
     fecha = now;
     tema = "Oscuro";
-
+console.log(arreglo.id_gate)
     return new Promise((resolve, reject) => {
       Gates.update(
         {
@@ -925,8 +1125,14 @@ module.exports = {
           like_mixcloud: like_mixcloud,
           omitir_mixcloud: omitir_mixcloud,
           url_mixcloud: url_mixcloud,
+          seguir_twitch: seguir_twitch,
+             omitir_twitch: omitir_twitch,
+            url_twitch: url_twitch,
+             seguir_applemusic: seguir_applemusic,
+              omitir_applemusic: omitir_applemusic,
+             url_applemusic: url_applemusic,
           enlace_perzonalizado: arreglo.gate_link,
-          fecha_registro: fecha,
+          fecha_registro: fecha,omitir_correo:omitir_correo
         },
         {
           where: {
@@ -941,6 +1147,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -960,7 +1167,8 @@ module.exports = {
     octava_linea,
     novena_linea,
     decima_linea,
-    descuento
+    descuento,
+    detalles
   ) {
     let now = new Date();
     fecha = now.toString();
@@ -990,7 +1198,7 @@ module.exports = {
             linea9: novena_linea,
             linea10: decima_linea,
             descuento: descuento,
-            fecha_registro: fecha,
+            detalles: detalles,
           })
             .then((plan) => {
               let planes = JSON.stringify(plan);
@@ -999,10 +1207,14 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           resolve("0");
         }
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1016,6 +1228,9 @@ module.exports = {
         //let gates= JSON.stringify(users)
         resolve("respuesta exitosa");
         ////console.log(JSON.stringify(users));
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1033,6 +1248,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1051,7 +1267,7 @@ module.exports = {
     octava_linea,
     novena_linea,
     decima_linea,
-    descuento
+    descuento, detalles
   ) {
     let now = new Date();
     fecha = now.toString();
@@ -1072,7 +1288,7 @@ module.exports = {
           linea9: novena_linea,
           linea10: decima_linea,
           descuento: descuento,
-          fecha_registro: fecha,
+          detalles: detalles,
         },
         {
           where: {
@@ -1087,6 +1303,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1102,6 +1319,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1117,7 +1335,9 @@ module.exports = {
     correo,
     twitter,
     spotify,
-    tiktok
+    tiktok,deezer,
+    twitch,
+    apple_music
   ) {
     let now = new Date();
     fecha = now.toString();
@@ -1144,6 +1364,9 @@ module.exports = {
             twitter: twitter,
             spotify: spotify,
             tiktok: tiktok,
+            deezer: deezer,
+twitch: twitch,
+apple_music: apple_music
           })
             .then((res) => {
               let about = JSON.stringify(res);
@@ -1152,10 +1375,14 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           resolve("0");
         }
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1173,6 +1400,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1188,7 +1416,10 @@ module.exports = {
     correo,
     twitter,
     spotify,
-    tiktok
+    tiktok,
+    deezer,
+twitch,
+apple_music
   ) {
     let now = new Date();
     fecha = now.toString();
@@ -1206,6 +1437,9 @@ module.exports = {
           twitter: twitter,
           spotify: spotify,
           tiktok: tiktok,
+          deezer: deezer,
+twitch: twitch,
+apple_music: apple_music
         },
         {
           where: {
@@ -1220,6 +1454,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1233,6 +1468,9 @@ module.exports = {
         //let gates= JSON.stringify(users)
         resolve("respuesta exitosa");
         ////console.log(JSON.stringify(users));
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1248,6 +1486,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1284,14 +1523,19 @@ module.exports = {
             .then((res) => {
               let about = JSON.stringify(res);
               resolve(about);
+             
               //console.log(about);
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           resolve("0");
         }
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1309,6 +1553,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1348,6 +1593,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1361,6 +1607,9 @@ module.exports = {
         //let gates= JSON.stringify(users)
         resolve("respuesta exitosa");
         ////console.log(JSON.stringify(users));
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1378,6 +1627,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1400,6 +1650,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1420,6 +1671,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1441,6 +1693,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1463,7 +1716,7 @@ module.exports = {
           metodo_pago: metodo,
         },
       }).then((res) => {
-        //console.log(res);
+        console.log(res);
         if (!res) {
           // Item not found, create a new one
           Pagos.create({
@@ -1482,11 +1735,47 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           resolve("0");
         }
-      });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
+    });
+  },
+  guardarPagoVenta(
+    id_usuario_comprador,
+    status,
+    numero_referencia,
+    monto,
+    tipo_compra,
+    metodo,id_usuario
+  ) {
+    let now = new Date();
+    fecha = now.toString();
+    return new Promise((resolve, reject) => {
+          // Item not found, create a new one
+          Pagos.create({
+            id_usuario: id_usuario_comprador,
+            status: status,
+            numero_referencia: numero_referencia,
+            monto: monto,
+            tipo_compra: tipo_compra,
+            metodo_pago: metodo,
+            usuarioId: id_usuario
+          })
+            .then((res) => {
+              let resultado = JSON.stringify(res);
+              resolve(resultado);
+              //console.log(resultado);
+            })
+            .catch((err) => {
+              //console.log(err);
+               reject(err)
+            });
     });
   },
 
@@ -1504,6 +1793,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1529,6 +1819,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1547,11 +1838,43 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
   actualizarGateDownload(id, descarga, mails) {
     return new Promise((resolve, reject) => {
+    if (mails =="No cuenta") {
+      Gates.update(
+        { descargas: descarga},
+        {
+          where: {
+            id: id,
+          },
+        }
+      )
+        .then((about) => {
+          let aboutes = JSON.stringify(about);
+          Gate_SoundC.update(
+            { descargas: descarga },
+            {
+              where: {
+                id_gate: id,
+              },
+            }
+          ).then(() => {
+            //console.log("aqui");
+          }).catch((err) => {
+            //console.log(err);
+             reject(err)
+          });
+          resolve(aboutes);
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
+        });
+    }else{
       Gates.update(
         { descargas: descarga, correos: mails },
         {
@@ -1571,12 +1894,39 @@ module.exports = {
             }
           ).then(() => {
             //console.log("aqui");
+          }).catch((err) => {
+            //console.log(err);
+             reject(err)
           });
           resolve(aboutes);
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
+    }
+    });
+  },
+  actualizaGateView(id, view) {
+    return new Promise((resolve, reject) => {
+      Gates.update(
+        { vista: view},
+        {
+          where: {
+            id: id,
+          },
+        }
+      )
+        .then((about) => {
+          let aboutes = JSON.stringify(about);
+         
+          resolve(aboutes);
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
+        });
+    
     });
   },
 
@@ -1606,11 +1956,15 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           resolve("0");
         }
-      });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
     });
   },
   obtenerBannerforedit(id) {
@@ -1627,6 +1981,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1649,13 +2004,40 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
+        });
+    });
+  },
+
+  saveEditedPublicidad(id, link, nombre) {
+    let now = new Date();
+    fecha = now.toString();
+    return new Promise((resolve, reject) => {
+      Banner.update(
+        { link: link, nombre: nombre },
+        {
+          where: {
+            id: id,
+          },
+        }
+      )
+        .then((res) => {
+          let reses = JSON.stringify(res);
+          resolve(reses);
+          //console.log(reses);
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
         });
     });
   },
 
   obtenerBanners() {
     return new Promise((resolve, reject) => {
-      Banner.findAll()
+      Banner.findAll({where:{
+        tipo: null
+      }})
         .then((res) => {
           let respuesta = JSON.stringify(res);
           resolve(respuesta);
@@ -1663,6 +2045,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1676,6 +2059,78 @@ module.exports = {
         //let gates= JSON.stringify(users)
         resolve("respuesta exitosa");
         ////console.log(JSON.stringify(users));
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });
+    });
+  },
+
+  obtenerPublicidad() {
+    return new Promise((resolve, reject) => {
+      Banner.findAll({where:{
+        tipo: 'Publicidad'
+      }})
+        .then((res) => {
+          let respuesta = JSON.stringify(res);
+          resolve(respuesta);
+          ////console.log(JSON.stringify(users));
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
+        });
+    });
+  },
+  guardarPublicidad(id_usuario, link, nombre) {
+    return new Promise((resolve, reject) => {
+      Banner.findOne({
+        where: {
+          nombre: nombre,
+          link: link,
+          tipo: 'Publicidad'
+        },
+      }).then((res) => {
+        //console.log(res);
+        if (!res) {
+          // Item not found, create a new one
+          Banner.create({
+            id_usuario: id_usuario,
+            link: link,
+            tipo: 'Publicidad',
+            nombre: nombre,
+          })
+            .then((res) => {
+              let respuesta = JSON.stringify(res);
+              resolve(respuesta);
+              //console.log(respuesta);
+            })
+            .catch((err) => {
+              //console.log(err);
+               reject(err)
+            });
+        } else {
+          resolve("0");
+        }
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
+    });
+  },
+  deletePublicidad(parametro_buscar) {
+    return new Promise((resolve, reject) => {
+      Banner.destroy({
+        where: {
+          id: parametro_buscar,
+        },
+      }).then(() => {
+        //let gates= JSON.stringify(users)
+        resolve("respuesta exitosa");
+        ////console.log(JSON.stringify(users));
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1701,10 +2156,14 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           resolve("0");
         }
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1716,6 +2175,7 @@ module.exports = {
         where: {
           tipo: tipo,
           correo: correo,
+          id_usuario: id_usuario,
         },
       }).then((res) => {
         //console.log(res);
@@ -1734,10 +2194,14 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           resolve("0");
         }
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
@@ -1755,10 +2219,45 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
+        });
+    });
+  },
+  obtenerSuscripAdmin(id) {
+    return new Promise((resolve, reject) => {
+      Suscripciones.findAll({
+        where: {
+          tipo: 'suscripcion_landing',
+        },
+      })
+        .then((res) => {
+          let ress = JSON.stringify(res);
+          resolve(ress);
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
         });
     });
   },
 
+  deleteFan(id) {
+    return new Promise((resolve, reject) => {
+      Suscripciones.destroy({
+        where: {
+          id: id,
+        },
+      })
+        .then((res) => {
+          let ress = JSON.stringify(res);
+          resolve(ress);
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
+        });
+    });
+  },
   //BACKCOIN
   obtenerBackcoinDataPay(id_user) {
     return new Promise((resolve, reject) => {
@@ -1773,6 +2272,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1812,6 +2312,7 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           Backcoin.update(
@@ -1838,6 +2339,7 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         }
       });
@@ -1845,15 +2347,17 @@ module.exports = {
   },
 
   recargaBackcoin(id_user, monto) {
+    console.log(id_user)
+    console.log(monto)
     return new Promise((resolve, reject) => {
       Backcoin.findOne({
         where: {
           id_usuario: id_user,
         },
-      }).then((res) => {
-        //console.log(res.dataValues.monto);
-        //console.log("aja");
-        var monto_nuevo = parseInt(res.dataValues.monto) + parseInt(monto);
+      }).then((restt) => {
+        console.log(restt);
+       console.log("aja");
+        var monto_nuevo = parseInt(restt.dataValues.monto) + parseInt(monto);
         //console.log(monto_nuevo);
         //console.log(id_user + "usuario");
         // Item not found, create a new one
@@ -1882,10 +2386,12 @@ module.exports = {
               })
               .catch((err) => {
                 //console.log(err);
+                 reject(err)
               });
           })
           .catch((err) => {
             //console.log(err);
+             reject(err)
           });
       });
     });
@@ -1926,12 +2432,68 @@ module.exports = {
               })
               .catch((err) => {
                 //console.log(err);
+                 reject(err)
               });
           })
           .catch((err) => {
             //console.log(err);
+             reject(err)
           });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
+    });
+  },
+
+  devolverBackcoin(id_user, monto) {
+    console.log(monto)
+    return new Promise((resolve, reject) => {
+      Backcoin.findOne({
+        where: {
+          id_usuario: id_user,
+        },
+      }).then((res) => {
+        //console.log(res);
+        console.log(res.dataValues.monto);
+        var monto_nuevo = parseInt(res.dataValues.monto) + parseInt(monto);
+        console.log(monto_nuevo);
+        // Item not found, create a new one
+        Backcoin.update(
+          { monto: monto_nuevo },
+          {
+            where: {
+              id_usuario: id_user,
+            },
+          }
+        )
+          .then((resp) => {
+            Usuarios.update(
+              { backcoins: monto_nuevo },
+              {
+                where: {
+                  id: id_user,
+                },
+              }
+            )
+              .then((respf) => {
+                let res = JSON.stringify(respf);
+                resolve(monto_nuevo);
+                // //console.log(res);
+              })
+              .catch((err) => {
+                //console.log(err);
+                 reject(err)
+              });
+          })
+          .catch((err) => {
+            //console.log(err);
+             reject(err)
+          });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
     });
   },
 
@@ -1951,6 +2513,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1971,6 +2534,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -1980,8 +2544,8 @@ module.exports = {
     nombre,
     estado,
     descripcion,
-    fecha_publicacion,
-    destino
+    fecha_inicio, fecha_final,
+    destino,id_notificacion
   ) {
     return new Promise((resolve, reject) => {
       Notificaciones.findOne({
@@ -1997,7 +2561,7 @@ module.exports = {
             nombre: nombre,
             estado: estado,
             descripcion: descripcion,
-            fecha_publicacion: fecha_publicacion,
+            fecha_inicio: fecha_inicio, fecha_final: fecha_final,
             destino: destino,
           })
             .then((res) => {
@@ -2007,6 +2571,7 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           Notificaciones.update(
@@ -2014,13 +2579,12 @@ module.exports = {
               nombre: nombre,
               estado: estado,
               descripcion: descripcion,
-              fecha_publicacion: fecha_publicacion,
+              fecha_inicio: fecha_inicio, fecha_final: fecha_final,
               destino: destino,
             },
             {
               where: {
-                id_usuario: id_usuario,
-                nombre: nombre,
+                id: id_notificacion,
               },
             }
           )
@@ -2031,6 +2595,7 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         }
       });
@@ -2051,6 +2616,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2073,6 +2639,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2087,9 +2654,138 @@ module.exports = {
         //let gates= JSON.stringify(users)
         resolve("respuesta exitosa");
         ////console.log(JSON.stringify(users));
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
       });
     });
   },
+
+    //Modal_land
+    obtenerModalLand() {
+      return new Promise((resolve, reject) => {
+        Modal_land.findAll({
+          order: [
+            // Will escape title and validate DESC against a list of valid direction parameters
+            ["createdAt", "DESC"],
+          ],
+        })
+          .then((res) => {
+            let respuesta = JSON.stringify(res);
+            resolve(respuesta);
+            ////console.log(JSON.stringify(users));
+          })
+          .catch((err) => {
+            //console.log(err);
+             reject(err)
+          });
+      });
+    },
+    obtenerModalLandAct() {
+      return new Promise((resolve, reject) => {
+        Modal_land.findOne({where:{estado: 'Activa'}},{
+          order: [
+            // Will escape title and validate DESC against a list of valid direction parameters
+            ["createdAt", "DESC"],
+          ],
+        })
+          .then((res) => {
+            let respuesta = JSON.stringify(res);
+            resolve(respuesta);
+            ////console.log(JSON.stringify(users));
+          })
+          .catch((err) => {
+            //console.log(err);
+             reject(err)
+          });
+      });
+    },
+  
+    saveDatosModal_land(id_user, titulo, estado, descripcion,img,link) {
+      return new Promise((resolve, reject) => {
+            // Item not found, create a new one
+            Modal_land.create({
+              id_usuario: id_user,
+              titulo: titulo,
+              estado: estado,
+              descripcion: descripcion,
+              img: img,link: link
+            })
+              .then((res) => {
+                let respuesta = JSON.stringify(res);
+                resolve(respuesta);
+                ////console.log(respuesta);
+              })
+              .catch((err) => {
+                //console.log(err);
+                 reject(err)
+              });
+          
+      });
+    },
+  
+    obtenerModalforedit(id) {
+      return new Promise((resolve, reject) => {
+        Modal_land.findAll({
+          where: {
+            id: id,
+          },
+        })
+          .then((res) => {
+            let ress = JSON.stringify(res);
+            resolve(ress);
+            //console.log(id);
+          })
+          .catch((err) => {
+            //console.log(err);
+             reject(err)
+          });
+      });
+    },
+    saveEditedmodal(id_, titulo, estado, descripcion,img,link  ) {
+      let now = new Date();
+      fecha = now.toString();
+      return new Promise((resolve, reject) => {
+        Modal_land.update(
+          { titulo: titulo,
+            estado: estado,
+            descripcion: descripcion,
+            img: img,
+          link: link},
+          {
+            where: {
+              id: id_,
+            },
+          }
+        )
+          .then((res) => {
+            let reses = JSON.stringify(res);
+            resolve(reses);
+            //console.log(reses);
+          })
+          .catch((err) => {
+            //console.log(err);
+             reject(err)
+          });
+      });
+    },
+  
+    deleteNotificaciones(parametro_buscar) {
+      return new Promise((resolve, reject) => {
+        Modal_land.destroy({
+          where: {
+            id: parametro_buscar,
+          },
+        }).then(() => {
+          //let gates= JSON.stringify(users)
+          resolve("respuesta exitosa");
+          ////console.log(JSON.stringify(users));
+        }).catch((err) => {
+          //console.log(err);
+           reject(err)
+        });
+      });
+    },
 
   guardarPlan_user(userid, producto, modo, metodo_pago) {
     Fecha_inicial = new Date(); //Fecha actual del sistema
@@ -2129,8 +2825,12 @@ module.exports = {
           })
           .catch((err) => {
             //console.log(err);
+             reject(err)
           });
-      });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
     });
   },
 
@@ -2151,6 +2851,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2245,6 +2946,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2258,8 +2960,6 @@ module.exports = {
     respuesta,
     id_tipo
   ) {
-    pregunta = pregunta.toString();
-    respuesta = respuesta.toString();
     return new Promise((resolve, reject) => {
       Ayuda.findOne({
         where: {
@@ -2284,6 +2984,7 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           Ayuda.update(
@@ -2308,9 +3009,13 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         }
-      });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
     });
   },
 
@@ -2328,6 +3033,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2342,7 +3048,10 @@ module.exports = {
         //let gates= JSON.stringify(users)
         resolve("respuesta exitosa");
         ////console.log(JSON.stringify(users));
-      });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
     });
   },
 
@@ -2371,6 +3080,7 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         } else {
           Gate_SoundC.update(
@@ -2394,9 +3104,13 @@ module.exports = {
             })
             .catch((err) => {
               //console.log(err);
+               reject(err)
             });
         }
-      });
+      }).catch((err) => {
+        //console.log(err);
+         reject(err)
+      });;
     });
   },
   UpdateRelationGate(id_save, id_gate) {
@@ -2416,6 +3130,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2430,12 +3145,12 @@ module.exports = {
           {
             association: Gates.Gate_SoundC,
           },
-        ],
+        ],limit: 100 ,
         order: [
           // Will escape title and validate DESC against a list of valid direction parameters
           ["descargas", "DESC"],
         ],
-      })
+      },)
         .then((res) => {
           let respuesta = JSON.stringify(res);
           resolve(respuesta);
@@ -2443,6 +3158,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2469,6 +3185,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2490,6 +3207,7 @@ module.exports = {
         })
         .catch((err) => {
           //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2504,8 +3222,8 @@ module.exports = {
         ],
         order: [
           // Will escape title and validate DESC against a list of valid direction parameters
-          ["status", "ASC"],
-          ["fecha_solicitud", "ASC"],
+          ["status", "DESC"],
+          ["fecha_solicitud", "DESC"],
         ],
       })
         .then((res) => {
@@ -2514,7 +3232,8 @@ module.exports = {
           //////console.log(JSON.stringify(users));
         })
         .catch((err) => {
-          ////console.log(err);
+          //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2537,7 +3256,8 @@ module.exports = {
           //////console.log(JSON.stringify(users));
         })
         .catch((err) => {
-          ////console.log(err);
+          //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2550,7 +3270,7 @@ module.exports = {
         },
         order: [
           // Will escape title and validate DESC against a list of valid direction parameters
-          ["fecha_pago", "DESC"],
+          ["fecha_solicitud", "DESC"],
         ],
         include: [
           {
@@ -2564,7 +3284,35 @@ module.exports = {
           //////console.log(JSON.stringify(users));
         })
         .catch((err) => {
-          ////console.log(err);
+          //console.log(err);
+           reject(err)
+        });
+    });
+  },
+  obtenerRetirosbyID(id) {
+    return new Promise((resolve, reject) => {
+      Retiros.findAll({
+        where: {
+          id: id,
+        },
+        order: [
+          // Will escape title and validate DESC against a list of valid direction parameters
+          ["fecha_solicitud", "DESC"],
+        ],
+        include: [
+          {
+            association: Retiros.Backcoin,
+          },
+        ],
+      })
+        .then((res) => {
+          let respuesta = JSON.stringify(res);
+          resolve(respuesta);
+          //////console.log(JSON.stringify(users));
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
         });
     });
   },
@@ -2591,8 +3339,259 @@ module.exports = {
           // ////console.log(res);
         })
         .catch((err) => {
-          ////console.log(err);
+          //console.log(err);
+           reject(err)
         });
     });
   },
+  RetiroscancelarSave_update(id, monto, status) {
+    return new Promise((resolve, reject) => {
+      Retiros.update(
+        {
+          id: id,
+          status: status,
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      )
+        .then((resp) => {
+          let rest = JSON.stringify(resp);
+          resolve(rest);
+          // ////console.log(res);
+        })
+        .catch((err) => {
+          //console.log(err);
+           reject(err)
+        });
+    });
+  },
+
+    // SOPORTE
+
+    obtenerSoporte() {
+      return new Promise((resolve, reject) => {
+        Soporte.findAll({
+          order: [
+            // Will escape title and validate DESC against a list of valid direction parameters
+            ["createdAt", "DESC"],
+          ],
+        })
+          .then((res) => {
+            let respuesta = JSON.stringify(res);
+            resolve(respuesta);
+            ////console.log(JSON.stringify(users));
+          })
+          .catch((err) => {
+            //console.log(err);
+             reject(err)
+          });
+      });
+    },
+  
+    saveSoporte(correo,nombre,telefono,descripcion,adjunto,respuestas, userid, id_soporte) {
+      return new Promise((resolve, reject) => {
+        Soporte.findOne({
+          where: {
+            id: id_soporte,
+          },
+        }).then((res) => {
+          //console.log(res);
+          if (!res) {
+            // Item not found, create a new one
+            Soporte.create({
+              correo: correo,
+              nombre: nombre,
+              telefono: telefono,
+              descripcion: descripcion,
+              adjunto: adjunto,
+              respuestas: respuestas,
+              usuarioId: userid
+            })
+              .then((res) => {
+                let respuesta = JSON.stringify(res);
+                resolve(respuesta);
+                ////console.log(respuesta);
+              })
+              .catch((err) => {
+                //console.log(err);
+                 reject(err)
+              });
+          } else {
+            Soporte.update(
+              {
+                correo: correo,
+                nombre: nombre,
+                telefono: telefono,
+                descripcion: descripcion,
+                adjunto: adjunto,
+                respuestas: respuestas,
+                usuarioId: userid
+              },
+              {
+                where: {
+                  id: id_soporte,
+                },
+              }
+            )
+              .then((resp) => {
+                let res = JSON.stringify(resp);
+                resolve("0");
+                // //console.log(res);
+              })
+              .catch((err) => {
+                //console.log(err);
+                 reject(err)
+              });
+          }
+        }).catch((err) => {
+          //console.log(err);
+           reject(err)
+        });;
+      });
+    },
+  
+    obtenerSoporteById(id) {
+      return new Promise((resolve, reject) => {
+        Soporte.findAll({
+          where: {
+            id: id,
+          },
+        })
+          .then((res) => {
+            let ress = JSON.stringify(res);
+            resolve(ress);
+            //console.log(id);
+          })
+          .catch((err) => {
+            //console.log(err);
+             reject(err)
+          });
+      });
+    },
+  
+    deleteSoporte(parametro_buscar) {
+      return new Promise((resolve, reject) => {
+        Soporte.destroy({
+          where: {
+            id: parametro_buscar,
+          },
+        }).then(() => {
+          //let gates= JSON.stringify(users)
+          resolve("respuesta exitosa");
+          ////console.log(JSON.stringify(users));
+        }).catch((err) => {
+          //console.log(err);
+           reject(err)
+        });;
+      });
+    },
+      // GENEROS
+
+      obtenerGeneros() {
+        return new Promise((resolve, reject) => {
+          Generos.findAll({
+            order: [
+              // Will escape title and validate DESC against a list of valid direction parameters
+              ["genero", "ASC"],
+            ],
+          })
+            .then((res) => {
+              let respuesta = JSON.stringify(res);
+              resolve(respuesta);
+              ////console.log(JSON.stringify(users));
+            })
+            .catch((err) => {
+              //console.log(err);
+               reject(err)
+            });
+        });
+      },
+    
+      saveGeneros(nombre, id, user) {
+        return new Promise((resolve, reject) => {
+          Generos.findOne({
+            where: {
+              id: id,
+            },
+          }).then((res) => {
+            //console.log(res);
+            if (!res) {
+              // Item not found, create a new one
+              Generos.create({genero: nombre,id_usuario:user
+              })
+                .then((res) => {
+                  let respuesta = JSON.stringify(res);
+                  resolve(respuesta);
+                  ////console.log(respuesta);
+                })
+                .catch((err) => {
+                  //console.log(err);
+                   reject(err)
+                });
+            } else {
+              Generos.update(
+                {
+                  genero: nombre,id_usuario:user
+                },
+                {
+                  where: {
+                    id: id,
+                  },
+                }
+              )
+                .then((resp) => {
+                  let res = JSON.stringify(resp);
+                  resolve("0");
+                  // //console.log(res);
+                })
+                .catch((err) => {
+                  //console.log(err);
+                   reject(err)
+                });
+            }
+          }).catch((err) => {
+            //console.log(err);
+             reject(err)
+          });;
+        });
+      },
+    
+      obtenerGenerosById(id) {
+        return new Promise((resolve, reject) => {
+          Generos.findOne({
+            where: {
+              id: id,
+            },
+          })
+            .then((res) => {
+              let ress = JSON.stringify(res);
+              resolve(ress);
+              //console.log(id);
+            })
+            .catch((err) => {
+              //console.log(err);
+               reject(err)
+            });
+        });
+      },
+    
+      deleteGeneros(parametro_buscar) {
+        return new Promise((resolve, reject) => {
+          Generos.destroy({
+            where: {
+              id: parametro_buscar,
+            },
+          }).then(() => {
+            //let gates= JSON.stringify(users)
+            resolve("respuesta exitosa");
+            ////console.log(JSON.stringify(users));
+          }).catch((err) => {
+            //console.log(err);
+             reject(err)
+          });;
+        });
+      },
 };

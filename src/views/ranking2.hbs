@@ -1,0 +1,426 @@
+{{> header }}
+{{#if archivo}}
+	<!-- Sweet Alert -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+	$( document ).ready(function() {
+
+    Swal.fire({
+  title: 'Gracias por preferirnos su descarga comenzará en unos segundos',
+  timer: 2000,
+  timerProgressBar: true,
+  width: 600,
+  padding: '3em',
+  showConfirmButton: false,
+  background: '#fff url(/images/trees.png)',
+  backdrop: `
+  
+    rgba(227, 197, 104,0.4)
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat
+  `
+}).then((result) =>{
+    console.log(result)
+    console.log(Swal.DismissReason)
+    
+    if (result.isConfirmed) {
+    window.location.href = '/downgate/{{archivo}}/{{parametro_buscar}}/{{id_usuario}}/{{correo}}/pasarela'
+  }
+    if (result.isDismissed) {
+        {{#if bond}}
+        window.location.href ='/bond_link/URL/{{parametro_buscar}}/{{id_usuario}}/{{correo}}';
+        {{else}}
+        window.location.href = '/downgate/{{archivo}}/{{parametro_buscar}}/{{id_usuario}}/{{correo}}/pasarela'
+        {{/if}}
+    
+  }
+})
+   
+	
+}); 
+</script>
+{{/if}}
+<link rel="stylesheet" href="/assets/css/style_play_wave.css">
+<script src="https://unpkg.com/wavesurfer.js@4.6.0/dist/wavesurfer.js"></script>
+ <style>
+     .boton-play{
+         display: flex;
+         align-items: center;
+         width: 42px;
+     }
+.music-track {
+    padding: 10px;
+    background: #f7f8f9;
+    border: 1px solid #dce1e6;
+    border-radius: 3px;
+    min-height: 100px;
+    overflow: hidden;
+    padding: 18px;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 2rem;
+    height: 245px;
+}.caja-sound {
+    margin-bottom: 1rem;
+    position: relative;
+    padding: 10px;
+    min-height: 150px;
+    background-size: cover;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}.music-track-share {
+    display: block;
+}.track-point {
+    float: left;
+}.track-get-social {
+    float: right;
+}.boton-social {
+    background: #D9AD26;
+    color: white;
+    font-weight: bold;
+    border-radius: 20px;
+}.play--titulo {
+    width: 100%;
+}
+
+.play--titulo i {
+    background: #ff3300;
+    color: white;
+    padding: 1rem;
+    clip-path: circle(50% at 50% 50%);
+    margin-right: 10px;
+}.titulo-ranking-play span {
+    background: transparent;
+    font-size: 14px;
+    padding: 2px 4px;
+    color: black;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.titulo-ranking-play{
+        width: calc(80% - 42px);
+        overflow: hidden;
+}
+.sin-musica h3{
+    color: #D9AD26;
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+}
+
+
+
+.caja-sound-dos {
+    margin-bottom: 1rem;
+    position: relative;
+    min-height: 150px;
+    width: 100%;
+    border: 1px solid #dce1e6;
+    padding: .4rem;
+}
+.caja-img {
+    float: left;
+    width: 21%;
+    min-height: 100px;
+    background-color: #D9AD26;
+    background-size: cover;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+.caja-cont {
+    float: right;
+    width: 76%;
+    height: 100px;
+    background-color: #f3f4f9;
+    padding: .5rem;
+    border-radius: 5px;
+}
+
+div#timeline {
+    position: relative;
+    width: 100%;
+}
+div#timeline span#current-time {
+    left: 0;
+}
+div#timeline span {
+    color: black;
+    font-size: 12px;
+    position: absolute;
+    top: 8%;
+    left: 0;
+}
+div#timeline span#total-time {
+    right: 0;
+}
+
+div#timeline div.slider {
+    background-color: #D9AD26;
+    border-radius: 2px;
+    cursor: pointer;
+    height: 2px;
+    position: relative;
+    width: 100%;
+}
+div#timeline div.slider div.progress div.pin {
+    background-color: white;
+    border-radius: 8px;
+    height: 8px;
+    position: absolute;
+    pointer-events: all;
+    right: -5px;
+    top: -3px;
+    width: 8px;
+    -webkit-box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 32%);
+    -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.32);
+    box-shadow: 0px 1px 1px 0px rgb(0 0 0 / 32%);
+    -webkit-transition: transform 0.25s ease;
+    -moz-transition: transform 0.25s ease;
+    -ms-transition: transform 0.25s ease;
+    -o-transition: transform 0.25s ease;
+    transition: transform 0.25s ease;
+}
+div#timeline div.slider div.progress {
+    background-color: #D9AD26;
+    height: 100%;
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+}
+progress::-webkit-progress-bar {
+  /* style rules */
+  background-color: #f3f3f3;
+}
+  .play--titulo svg{
+      height: 42px;
+  }
+  .play--gate{
+color: #d9ad26;
+    width: calc(20% - 42px);
+    text-align: right;
+    font-weight: bold;
+    font-size: .9rem;
+  }
+@media(max-width:700px){
+    .caja-img{
+        width: 100px;
+    }
+    .caja-cont{
+        width: calc(100% - 100px);
+    }
+}
+#timeline .waveform canvas{
+    width: 290px !important;
+    height: 50% !important;
+    left: 60px !important;
+}
+@media (max-width:1199px){
+    #timeline .waveform canvas{
+        width: 220px !important;
+        height: 50% !important;
+    }
+}
+@media(max-width:480px){
+    .row{
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .caja-cont{
+        width: 100% ;
+    }
+    .caja-img{
+        display: none;
+    }
+    .play--gate{
+        font-size: .7rem;
+    }
+}
+    </style>
+<div class="container" style="margin-top: 150px;">
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-item active">
+                        <div class="music-track">
+                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{id_track}}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+               <!-- <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>-->
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row" style="width: 100%;">
+        <div class="col-md-12 col-lg-6">
+
+            <div class="d-flex justify-content-between mb-4">
+                <div class="lanzamiento d-flex align-items-center">
+                    <h5>
+                        Top BondGate
+                    </h5>
+                </div>
+                <div class="top-dies d-flex">
+                    <!--<button class="btn boton-social">Ver Todo</button>-->
+                </div>
+            </div>
+
+            {{#each array_bond as |sound i|}}
+                  <div class="music-track" id="music_new" {{#mathpositioncolorborder i}} {{/mathpositioncolorborder}}>
+                <div class="caja-sound-dos">
+                    <div class="caja-img" style="background-image: url('/assets/uploads/{{sound.imagen}}');"></div>
+                    <div class="caja-cont">
+                        <div class="play--titulo d-flex">
+                           <div class="boton-play">
+                                <a onclick="nohaymusica();">
+                                    <!-- <i class="fas fa-play"></i> -->
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 43 43">
+                                        <defs>
+                                            <linearGradient id="playButton__gradient17" x1="0%" y1="0%" x2="0%" y2="100%" spreadMethod="pad">
+                                            <stop offset="0%" stop-color="#ff5500" stop-opacity="1"></stop>
+                                            <stop offset="100%" stop-color="#ff2200" stop-opacity="1"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                        <circle fill="url(#playButton__gradient17)" stroke="#cc4400" cx="21.5" cy="21.5" r="21"></circle>
+                                        <circle class="playButton__overlay" fill="#000" fill-opacity="0.08" stroke="#cc4400" cx="21.5" cy="21.5" r="21"></circle>
+                                        <path class="playButton__play" fill="#fff" d="M31,21.5L17,33l2.5-11.5L17,10L31,21.5z"></path>
+                                        <g fill="#fff" class="playButton__pause" style="display: none;">
+                                            <rect x="15" y="12" width="5" height="19"></rect>
+                                            <rect x="23" y="12" width="5" height="19"></rect>
+                                        </g>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="titulo-ranking-play d-flex align-items-center">
+                              <div>
+                                <div>
+                                   <span style="text-decoration: underline;">{{nombre_artista}}</span> 
+                                </div>
+                                <div>
+                                   <span>{{titulo}}</span> 
+                                </div>
+                                </div>
+                            </div>
+                                                        <div class="play--gate">
+                                Bondgate
+                            </div>
+                        </div>
+                        <div class="sin-musica">
+                            <h3></h3>
+                        </div>
+                        <img src="{{#if archivo}}{{else}}..{{/if}}/assets/img/barra-sound.png" alt="" class="img-barra-sound">
+
+                    </div>
+                </div>
+                <div class="music-track-share">
+                    <div class="track-point">
+                         <h3 {{#mathpositioncolor i}} {{/mathpositioncolor}}><b>#</b>{{#mathposition i}} {{/mathposition}}</h3>
+                    </div>
+                    <div class="track-get-social d-flex align-items-center">   
+                         {{#if sound.like_facebook}}
+									<a href="{{sound.url_facebook}}" target="_blank">
+										<i class="fab fa-facebook-square"></i>
+									</a>
+									{{/if}}
+									{{#if sound.seguir_twitter}}
+									<a href="{{sound.url_twitter}}" target="_blank">
+										<i class="fab fa-twitter-square hvr-icon"></i>
+									</a>
+									{{/if}}
+									{{#if sound.suscribir_youtube}}<a href="{{sound.url_youtube}}" target="_blank">
+										<i class="fab fa-youtube-square hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_soundcloud}}<a href="{{sound.url_souncloud}}" target="_blank">
+										<i class="fab fa-soundcloud hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_instagram}}<a href="{{sound.url_facebook}}" target="_blank">
+										<i class="fab fa-instagram-square hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_spotify}}<a href="{{sound.url_instagram}}" target="_blank">
+										<i class="fab fa-spotify hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_deezer}}<a href="{{sound.url_deezer}}" target="_blank">
+										<i class="fab fa-deezer hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_tiktok}}<a href="{{sound.url_tiktok}}" target="_blank">
+										<i class="fab fa-tiktok hvr-icon"></i>
+									</a>{{/if}}             
+                        <a class="btn boton-social" href="/track/{{sound.enlace_perzonalizado}}" target="_blank">Obtener</a>
+                    </div>
+                </div>
+            </div>
+               {{/each}}             
+        </div>
+
+
+        <div class="col-md-12 col-lg-6">
+
+            <div class="d-flex justify-content-between mb-4">
+                <div class="lanzamiento d-flex align-items-center">
+                    <h5>
+                        Top Filegate
+                    </h5>
+                </div>
+               <!-- <div class="top-dies d-flex">
+                    <button class="btn boton-social">Ver Todo</button>
+                </div>-->
+            </div>
+
+           {{#each array_file as |sound i|}}
+            <div class="music-track" {{#mathpositioncolorborder i}} {{/mathpositioncolorborder}}>
+                <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{sound.gate_soundc.track_id}}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+                <div class="music-track-share">
+                    <div class="track-point">
+                        <h3 {{#mathpositioncolor i}} {{/mathpositioncolor}}><b>#</b>{{#mathposition i}} {{/mathposition}}</h3>
+                    </div>
+                    <div class="track-get-social d-flex align-items-center">
+                               
+                                    {{#if sound.like_facebook}}
+									<a href="{{#URLRSS sound.url_facebook}}{{/URLRSS}}" target="_blank">
+										<i class="fab fa-facebook-square"></i>
+									</a>
+									{{/if}}
+									{{#if sound.seguir_twitter}}
+									<a href="{{#URLRSS sound.url_twitter}}{{/URLRSS}}" target="_blank">
+										<i class="fab fa-twitter-square hvr-icon"></i>
+									</a>
+									{{/if}}
+									{{#if sound.suscribir_youtube}}<a href="{{#URLRSS sound.url_youtube}}{{/URLRSS}}" target="_blank">
+										<i class="fab fa-youtube-square hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_soundcloud}}<a href="{{#URLRSS sound.url_souncloud}}{{/URLRSS}}" target="_blank">
+										<i class="fab fa-soundcloud hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_instagram}}<a href="{{#URLRSS sound.url_instagram}}{{/URLRSS}}" target="_blank">
+										<i class="fab fa-instagram-square hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_spotify}}<a href="{{#URLRSS sound.url_spotify}}{{/URLRSS}}" target="_blank">
+										<i class="fab fa-spotify hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_deezer}}<a href="{{#URLRSS sound.url_deezer}}{{/URLRSS}}" target="_blank">
+										<i class="fab fa-deezer hvr-icon"></i>
+									</a>{{/if}}
+									{{#if sound.seguir_tiktok}}<a href="{{#URLRSS sound.url_tiktok}}{{/URLRSS}}" target="_blank">
+										<i class="fab fa-tiktok hvr-icon"></i>
+									</a>{{/if}}
+                        <a class="btn boton-social" href="/track/{{sound.enlace_perzonalizado}}" target="_blank">Obtener</a>
+                    </div>
+                </div>
+            </div> 
+                {{/each}}
+        </div>
+
+
+    </div>
+</div>
+</div>
+{{> footer }}

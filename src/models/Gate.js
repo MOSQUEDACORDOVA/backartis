@@ -2,7 +2,13 @@ const { DataTypes } = require('sequelize');
 const db = require('../config/db');
 const bcrypt = require('bcrypt-nodejs');
 const Gate_SoundC = require('../models/Gate_SoundC');
-
+// make sure db/client/connection can support emoji
+db.query("SET NAMES utf8mb4;");
+// confirm settings
+db.query("SHOW VARIABLES LIKE 'character_set_%'").then(function(data) {
+    //console.log("entro aqui");
+	//console.log(data);
+});
 const Gates = db.define('gates', {
 	id: {
 		type: DataTypes.INTEGER,
@@ -12,29 +18,14 @@ const Gates = db.define('gates', {
 	tipo_create: {
 		type: DataTypes.TEXT,
 		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El id_usuario es obligatorio'
-			}
-		}
 	},
 	id_usuario: {
 		type: DataTypes.INTEGER,
 		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El id_usuario es obligatorio'
-			}
-		}
 	},
 	url_fuente: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		validate: {
-			notEmpty: {
-				msg: 'La URL fuente es obligatorio'
-			}
-		}
 	},
 	genero: {
 		type: DataTypes.TEXT,
@@ -49,38 +40,18 @@ const Gates = db.define('gates', {
 	nombre_artista: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		validate: {
-			notEmpty: {
-				msg: 'El nombre de artista es obligatorio'
-			}
-		}
 	},
 	titulo: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		validate: {
-			notEmpty: {
-				msg: 'El titulo es obligatorio'
-			}
-		}
 	},
 	descripcion: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		validate: {
-			notEmpty: {
-				msg: 'La descripcion es obligatoria'
-			}
-		}
 	},
 	tema: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		validate: {
-			notEmpty: {
-				msg: 'El tema es obligatorio'
-			}
-		}
 	},
 	imagen: {
 		type: DataTypes.TEXT,
@@ -100,22 +71,12 @@ const Gates = db.define('gates', {
 	},
 	privacidad: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'La privacidad es obligatorio'
-			}
-		}
+		allowNull: true,
 	},
 
 	enlace_perzonalizado: {
 		type: DataTypes.TEXT,
 		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El enlace es obligatorio'
-			}
-		}
 	},	
 	fecha_registro: {
 		type: DataTypes.DATE
@@ -128,7 +89,10 @@ const Gates = db.define('gates', {
 		type: DataTypes.DATE,
 		allowNull: true,
 	},
-	
+	omitir_correo: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},
 	url_track: {
 		type: DataTypes.TEXT,
 		allowNull: true,
@@ -248,7 +212,32 @@ const Gates = db.define('gates', {
 	},	url_mixcloud: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-	},descargas: {
+	},
+
+	seguir_twitch: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},
+	
+	omitir_twitch: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},
+	url_twitch: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},seguir_applemusic: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},omitir_applemusic: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},url_applemusic: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+	},
+	
+	descargas: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: 0
@@ -258,9 +247,16 @@ const Gates = db.define('gates', {
 		allowNull: true,
 		defaultValue: 0
 	},
+	vista: {
+		type: DataTypes.INTEGER,
+		allowNull: true,
+		defaultValue: 0
+	},
 	
 	
-});
+},  {
+	charset: 'utf8mb4', /* i add this two ligne here for generate the table with collation  = 'utf8_general_ci' test it and tell me ? */
+collate: 'utf8mb4_unicode_ci'});
 
 // El trabajador pertenece a una oficina
 Gates.Gate_SoundC= Gates.belongsTo(Gate_SoundC);

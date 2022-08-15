@@ -47,63 +47,51 @@ const Planes = db.define('planes', {
 	},
 	linea1: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea2: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea3: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea4: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea5: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea6: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea7: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea8: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea9: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	linea10: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	descuento: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
-	fecha_registro: {
+	detalles: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	
 	

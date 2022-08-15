@@ -1,4 +1,90 @@
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" ></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.min.js"></script>
 <script>
+	$(document).ready(() => {
+				$('#music-price').on('keyup',function() {
+
+let igv = parseFloat($('#music-price').val()) * parseFloat(0.18);
+let igv_r = igv.toFixed(2)
+$('#igv').text(igv_r)
+let total = (parseFloat($('#music-price').val()) + parseFloat(igv_r)).toFixed(2)
+$('#total').text(total)
+$('#total_').val(total)
+
+})
+		let hoy = moment()
+				let fecha_h = moment($('#fecha_programa_hidden').val()).format('yyyy-MM-DDThh:mm')
+				console.log(fecha_h)
+				$('#fecha_programa').val(fecha_h)	
+$('#fecha_programa').on('change',(e)=>{
+fecha_h = e.target.value
+console.log(fecha_h)
+	let fecha_anterior = moment(hoy).isAfter(fecha_h); // true
+				console.log(fecha_anterior)
+				if (fecha_anterior == true){
+					swal.fire('Debe seleccionar una fecha u hora superior a la actual.')		
+								$('#fecha_programa').val('')
+					return
+				}
+})
+				
+
+
+$('#limpiar_programa').on('click', (e)=>{
+	$('#fecha_programa').val('')
+})
+
+					$('#leermas').on('click',()=>{
+						console.log("Entro en este")
+						$('#resltadoleer').hide();
+            $('#restoleer').show();
+
+					});
+          $('#leermenos').click(function(){
+			  console.log("Entro en este2")
+            $('#resltadoleer').show();
+            $('#restoleer').hide();
+
+					});
+					$('#gate-link').keypress(function(tecla){
+      if(tecla.charCode == 47){
+         return false;
+      }
+
+   });
+
+	var texto = document.getElementById('chek_gate-link').value,
+    textoseparado = texto.split(",");
+	var gate_link = document.querySelector("input[name=gate_link]");
+
+			$('#btn_per').on('click', () =>{
+			let pos = textoseparado.indexOf(gate_link.value) // (pos) es la posición para abreviar
+			if (pos >= 1){
+				Swal.fire("El nombre del link ya se encuentra registrado, elija otro por favor")
+				gate_link.value = "";
+				$('#btn_per').attr('disabled', true)
+			}else{
+				console.log("Todo Fino: "+ pos)
+			}
+		})
+
+
+		$('#gate-link').on('change', () => {
+			
+			console.log(gate_link.value)
+			let pos = textoseparado.indexOf(gate_link.value) // (pos) es la posición para abreviar
+			if (pos >= 1){
+				Swal.fire("El nombre del link ya se encuentra registrado, elija otro por favor")
+				gate_link.value = "";
+				$('#btn_per').attr('disabled', true)
+			}else{
+				console.log("Todo Fino")
+			}
+
+
+		});
+				});
 function show(id_mostar, id_ocultar){
 	var div_activo = document.getElementById(id_mostar)
 
@@ -11,6 +97,21 @@ function show(id_mostar, id_ocultar){
 		$("#"+id_mostar).show();
 		$("#"+id_ocultar).hide();	
 	}
+	let descripcion = document.getElementById("descripcion_val").value
+			
+			const desc = descripcion.length;
+			const MaxDesc = 100;
+			var text = descripcion.replace(/(\r\n|\n|\r)/gm, '<br>');
+			var out = "";
+			console.log(desc)
+			if (desc > MaxDesc) {
+				out += `<div id="resltadoleer">${text.substring(0,100)} <a id="leermas">Leer Mas</a></div>
+				<div id="restoleer">${text} <a id="leermenos">Leer Menos</a></div>`
+			}else{
+				out += `${text}`
+			}
+		document.getElementById("color_descrip").innerHTML =out+ `<label class="input-color-label" for="input-color_descripcion">
+  <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label>`
 }
 	function copyToClipboard(elemento) {
 		var $temp = $("<input>")
@@ -21,10 +122,18 @@ function show(id_mostar, id_ocultar){
 		Swal.fire('Enlace copiado en el portapapeles')
 	  }
 	  function color_maingate(id_1, id_2){
-		let colorInput = document.getElementById(id_2);
+	let colorInput = document.getElementById(id_2);
 		let pintar = document.getElementById(id_1);
-		pintar.setAttribute('style','color:' +colorInput.value);
-		console.log(id_1 +id_2)
+		let paint2 = document.getElementById('gate-name-dj');
+		let paint3 = document.getElementById('gate-name-dj2');
+		if (id_1 == "color_title"){
+			pintar.setAttribute('style','color:' +colorInput.value);
+			paint2.setAttribute('style','color:' +colorInput.value);
+			paint3.setAttribute('style','color:' +colorInput.value);
+			$('.main-gate__footer .social-nav__link').attr('style','color:' +colorInput.value)
+		}else{
+			pintar.setAttribute('style','color:' +colorInput.value);
+		}
 	}
 	function color_back(id_1, id_2){
 		let colorInput = document.getElementById(id_2);
@@ -33,23 +142,64 @@ function show(id_mostar, id_ocultar){
 		console.log(id_1 +id_2)
 	}
 </script>
-
+<style>
+.btn-edit-c{
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: .5em 1.5em;
+	}
+#restoleer{
+  display: none;
+}
+#leermas,#leermenos{
+  color:#D9AD26;
+  cursor: pointer;
+}
+#leermas,#leermenos:hover{
+  color:#D9AD26;
+  cursor: pointer;
+}
+#restoleer{
+    height: 50px;
+    overflow: auto;
+}
+#restoleer::-webkit-scrollbar{
+  width: 5px;
+  border: 5px;
+}
+#restoleer::-webkit-scrollbar-thumb{
+  background: #D9AD26;
+}
+@media(max-width:414px){
+.btn-edit-c{
+	width: auto;
+	}
+}
+</style>
 <div class="card-box shadow position-relative calculate-height">
 
 	
-						<form id="" action="/guardar_gate_edit" method="post">
+						<form  action="/guardar_gate_edit" method="post" class="form-steps_edit">
 						{{#if backstore}}<input type="text"  name="tipo_create" value="backstore" hidden>{{/if}}
 						{{#if fileGate}}<input type="text"  name="tipo_create" value="filegate" hidden>{{/if}}
 						{{#if bondGate}}<input type="text"  name="tipo_create" value="bondgate" hidden>{{/if}}
 						<input type="text"  name="id_gate" value="{{gate.id}}" hidden>
-<!-- One "tab" for each step in the form: -->
-
-<div class="tab">
+<!-- One "" for each step in the form: -->
+<div class="">
 	<div class="form-row">
-		{{#if backstore}}{{else}}
+		{{#if backstore}}			<div class="d-none">
+				<h2 class="form-steps__title">Ingresa la URL de tu track</h2>
+				<div class="form-control-steps__container">
+					<div class="form-control-steps__placeholder">
+						<i class="fa fa-globe"></i>
+					</div>
+					<input type="text" class="form-control-steps" id="url-track" name="url_track" placeholder="https://"  value="{{gate.url_track}}">
+				</div>
+			</div> {{else}}
 		<div class="col-12 col-md-6 mb-3">
 			<div class="input-and-title">
-				<h2 class="form-steps__title">URL de MixCloud</h2>
+				<h2 class="form-steps__title">URL</h2>
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-globe"></i>
@@ -69,68 +219,21 @@ function show(id_mostar, id_ocultar){
 				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 				<select name="gender" id="gender" class="form-control-steps">
 					<option value="{{gate.genero}}" selected>{{gate.genero}}</option>
-					<option value="bachata">Bachata</option>
-					<option value="baladas">Baladas</option>
-					<option value="bolero">Bolero</option>
-					<option value="criollo">Criollo</option>
-					<option value="cumbia">Cumbia</option>
-					<option value="disco">Disco</option>
-					<option value="electronica">Electrónica</option>
-					<option value="fiesta">Fiesta</option>
-					<option value="hip-hop">Hip Hop</option>
-					<option value="hauyno">Huayno</option>
-					<option value="infantil">Infantil</option>
-					<option value="latin">Latin</option>
-					<option value="lambada">Lambada</option>
-					<option value="mambo">Mambo</option>
-					<option value="merengue">Merengue</option>
-					<option value="moombahton">Moombahton</option>
-					<option value="reggae">Reggae</option>
-					<option value="reggaeton">Reggaeton</option>
-					<option value="rock">Rock</option>
-					<option value="salsa">Salsa</option>
-					<option value="saya">Saya</option>
-					<option value="techno">Techno</option>
-					<option value="tematicos">Temáticos</option>
-					<option value="trap">Trap</option>
-					<option value="tribal">Tribal</option>
-					<option value="vallenato">Vallenato</option>
-					<option value="villera">Villera</option>
-					<option value="pop">Pop</option>
-					<option value="transiciones">Transiciones</option>
-					<option value="other">Otros</option>
+{{#each par_generos as |generos i|}}
+<option>{{genero}}</option>
+{{/each}}
 				</select>
 			</div>
 		</div>
-
-
 		</div>
 
-
-
-
-
-
-	</div>				
+</div>				
 </div>
 
 
-{{#if bondGate}}<div class="tab">
-		
-		
-			<div class="input-and-title">
-				<h2 class="form-steps__title">Ingresa la URL de tu track</h2>
-				<div class="form-control-steps__container">
-					<div class="form-control-steps__placeholder">
-						<i class="fa fa-globe"></i>
-					</div>
-					<input type="url" class="form-control-steps" id="url-track" name="url_track" placeholder="https://" required>
-				</div>
-			</div>
-		
-</div>{{/if}}	
+{{#if bondGate}}{{/if}}	
 
-<div class="tab" style="margin-bottom: 10px;">
+<div class="" style="margin-bottom: 10px;">
 	<div class="form-row">
 			<div class="col-12 col-md-6 mb-3">
 				<label class="form-steps__title" for="artist-name">Ingresa el nombre del artista</label>
@@ -156,7 +259,7 @@ function show(id_mostar, id_ocultar){
 			<div class="form-control-steps__placeholder">
 				<i class="fa fa-user"></i>
 			</div>
-			<input type="text" class="form-control-steps" id="music-desc" name="music_desc" placeholder="Descripción de la pista" required value="{{gate.descripcion}}">
+			<textarea type="text" class="form-control-steps" id="music-desc" name="music_desc" placeholder="Descripción de la pista">{{gate.descripcion}}</textarea>
 		</div>
 		{{#if backstore}}
 		<label class="form-steps__title" for="music-price">Precio</label>
@@ -164,16 +267,54 @@ function show(id_mostar, id_ocultar){
 			<div class="form-control-steps__placeholder">
 				<i class="fa fa-coins"></i>
 			</div>
-			<input type="number" class="form-control-steps" id="music-price" name="music_price" placeholder="Precio de la pista" required value="{{gate.music_price}}">
+			<input type="number" class="form-control-steps" id="music-price" name="music_price_sinigv" placeholder="Precio de la pista" required value="{{gate.music_price}}" step="0.01">
 		</div>
+		<br><label>IGV (18%) = $<span id="igv"></span></label><br>
+			<label>Total = $<span id="total"></span></label>
+			<input type="text" class="form-control-steps" id="total_" name="music_price" hidden value="{{gate.music_price}}>
+			<br>
 		{{/if}}
+		<label class="form-steps__title" for="gate-link">Personaliza el enlace hacia el gate</label>
+		<div class="form-control-steps__container">
+			<div class="form-control-steps__placeholder">
+				<i class="fa fa-link"></i>
+			</div>
+			<input type="text" class="form-control-steps" id="gate-link" name="gate_link" placeholder="Enlace" required value="{{gate.enlace_perzonalizado}}">
+			<input type="hidden" class="form-control-steps" id="chek_gate-link" name="gate_link2" placeholder="Enlace" required value="{{array}}">
+
+		</div>
+		<label class="form-steps__title" for="gate-link">Programar</label>
+<div class="form-row">
+	<div class="col-12 col-md-9 mb-3">
+<div class="form-control-steps__placeholder">
+				<i class="fa fa-link"></i>
+			</div>
+			<input type="hidden" value="{{gate.fecha_programa}}" id="fecha_programa_hidden">
+			<input type="datetime-local" class="form-control-steps" id="fecha_programa" name="fecha_programa" style="padding-left: 3.5rem;" autocomplete="off" >
+</div>
+<div class="col-12 col-md-3 mb-3 d-flex align-items-center justify-content-center">
+	<button type="button" id="limpiar_programa" class="btn btn-primary">Quitar programado</button>
+</div>
+			
+			
+		</div>
+						<div class="col-12 col-md-6 mb-3 {{#if user.basic}}sb-disabled{{/if}}">
+					<label class="checkbox-style">
+						<input type="checkbox" name="omitir_correo" value="omitir_correo" class="optional"  {{#if gate.omitir_correo}}checked{{/if}} {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+						<span class="checkbox-style__circle {{#if user.basic}}sb-disabled{{/if}}"></span>
+						Omitir el correo
+					</label>
+				</div><!-- .col -->
+		
 			
 </div>
-<div class="tab"  id="diseño" style="display: none;">
+
+
+<div class=""  id="diseño" style="display: none;">
 	<div class="row">
 			<div class="col-md-7">
 				<div class="desing-preview">
-					<div class="desing-preview__content" style="background-image: url({{#if gate.imagen}}/assets/uploads/{{gate.imagen}}{{else}}/assets/img/concierto-2.jpg{{/if}}); background-size: cover;">
+					<div class="desing-preview__content" style="background-image: url('{{#if gate.imagen}}/assets/uploads/{{gate.imagen}}{{else}}/assets/img/concierto-2.jpg{{/if}}'); background-size: cover;">
 						<div class="before"></div>
 						<div class="watermark">
 							<div class="watermark__img">
@@ -184,17 +325,15 @@ function show(id_mostar, id_ocultar){
 							</div>
 						</div>
 
-						<div class="drop-area" id="drop-upload-flyer">
+						<div class="drop-area" id="drop-upload-flyer" style="border: none;background-color: transparent;">
 							<input type="file" id="upload-flyer" accept="image/*" class="d-none">
 							<input type="text" id="img_flyer"  class="form-control-steps" name='img_flyer' value="{{gate.imagen}}" hidden>
 							<input type="text" id="logo_flyer"  class="form-control-steps" name='user_logo' value="{{gate.user_logo}}" hidden>
 							<div class="drop-content">
-								<div class="drop-icon" id="drop-icon">
-									<i class="fa fa-upload"></i>
-								</div>
-								<div class="info-drop">
-									<label for="upload-flyer">Elije un archivo</label>
-									<div id="resultado_imagen"></div>
+								<div class="">
+						<img src="/assets/uploads/{{gate.imagen}}" alt="BackArtist Logo" id="img_flyer2"
+          style="border-radius: 20px;width: 400px; height: 240px;">
+
 								</div>
 							</div>
 							
@@ -213,64 +352,73 @@ function show(id_mostar, id_ocultar){
 					<div class="desing-preview__aside bg-gradient" id="color_bg" {{#if gate.color}}style="background: {{gate.color}};"{{/if}}>
 						<div class="main-gate__user">
 							<div class="main-gate__user-img">
-								<img src="https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg" alt="DJ Homero">
+								<img src="{{#if user.photo}}/assets/uploads/{{user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="">
 							</div>
 							<div class="main-gate__user-body text-white">
-								<h2 class="main-gate__name">{{gate.nombre_artista}}</h2>
-								<p class="main-gate__user-name">{{user.userName}}</p>
+								<h2 class="main-gate__name" id ="gate-name-dj" {{#if gate.color_titulo}}style="color: {{gate.color_titulo}};"{{/if}}>{{gate.nombre_artista}}</h2>
+								<p class="main-gate__user-name" id ="gate-name-dj2">{{user.userName}}</p>
 							</div>
 						</div>
-						
-						<p class="main-gate__title" id="color_title">{{gate.titulo}} <label class="input-color-label" for="input-color_titulo" >
-  			<i class="fas fa-brush" style="margin-left: 15px; color: {{gate.color_titulo}};cursor: pointer;" ></i></label>				 </p>
+						<input type="hidden" value="{{gate.descripcion}}" id="descripcion_val">
+						<p class="main-gate__title" id="color_title" {{#if gate.color_titulo}}style="color: {{gate.color_titulo}};"{{/if}}>{{gate.titulo}} <label class="input-color-label" for="input-color_titulo" >
+  			<i class="fas fa-brush" style="margin-left: 15px; color: {{gate.color_titulo}};cursor: pointer;" ></i></label></p>
 								
-						<p class="main-gate__desc"  id="color_descrip">{{gate.descripcion}} <label class="input-color-label" for="input-color_descripcion">
+						<p class="main-gate__desc"  id="color_descrip" {{#if gate.color_descrip}}style="color: {{gate.color_descrip}};"{{/if}}><label class="input-color-label" for="input-color_descripcion">
   		<i class="fas fa-brush" style="margin-left: 15px; color: {{gate.color_descrip}};cursor: pointer;" ></i></label></p>
-						<input type="color" name="color_titulo" id="input-color_titulo" style="opacity:0" onchange="color_maingate('color_title','input-color_titulo')">
-						<input type="color" name="color_descripcion" id="input-color_descripcion" style="opacity:0" onchange="color_maingate('color_descrip','input-color_descripcion')">
+						
 						<footer class="main-gate__footer">
 							<div class="row align-items-center">
 								<div class="col-12">
 									<nav class="social-nav text-center">
-										<a href="" class="social-nav__link">
-											<i class="fab fa-facebook-square"></i>
-										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-twitter-square"></i>
-										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-youtube-square"></i>
-										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-soundcloud"></i>
-										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-instagram-square"></i>
-										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-spotify"></i>
-										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-deezer"></i>
-										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-tiktok"></i>
-										</a>
+ {{#if gate.like_facebook}}
+                  <a href="{{#URLRSS gate.url_facebook}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-facebook-square hvr-icon"></i>
+                  </a>
+                  {{/if}}
+                  {{#if gate.seguir_twitter}}
+                  <a href="{{#URLRSS gate.url_twitter}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-twitter-square hvr-icon"></i>
+                  </a>
+                  {{/if}}
+                  {{#if gate.suscribir_youtube}}<a href="{{#URLRSS gate.url_youtube}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-youtube-square hvr-icon"></i>
+                  </a>{{/if}}
+                  {{#if gate.seguir_soundcloud}}<a href="{{#URLRSS gate.url_souncloud}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-soundcloud hvr-icon"></i>
+                  </a>{{/if}}
+                  {{#if gate.seguir_instagram}}<a href="{{#URLRSS gate.url_instagram}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-instagram-square hvr-icon"></i>
+                  </a>{{/if}}
+                  {{#if gate.seguir_spotify}}<a href="{{#URLRSS gate.url_spotify}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-spotify hvr-icon"></i>
+                  </a>{{/if}}
+                  {{#if gate.seguir_deezer}}<a href="{{#URLRSS gate.url_deezer}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-deezer hvr-icon"></i>
+                  </a>{{/if}}
+                  {{#if gate.seguir_tiktok}}<a href="{{#URLRSS gate.url_tiktok}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-tiktok hvr-icon"></i>
+                  </a>{{/if}}
+                  {{#if gate.seguir_twitch}}<a href="{{#URLRSS gate.url_twitch}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-twitch hvr-icon"></i>
+                  </a>{{/if}}
+                  {{#if gate.seguir_applemusic}}<a href="{{#URLRSS gate.url_applemusic}}{{/URLRSS}}" class="social-nav__link" target="_blank" {{#if gate.color_titulo}} style="color: {{gate.color_titulo}};" {{/if}}>
+                    <i class="fab fa-apple hvr-icon"></i>
+                  </a>{{/if}}
 									</nav>
 								</div>
 								<div class="col-12 my-1">
 									<ul class="nav site-footer__nav justify-content-center">
-										<li class="nav-item">
-											<a class="nav-link" href="#">Enlace</a>
+																				<li class="nav-item">
+											<a class="nav-link" href="#">Términos y condiciones</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" href="#">Enlace</a>
+											<a class="nav-link" href="#">Políticas de Privacidad</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" href="#">Enlace</a>
+											<a class="nav-link" href="#">Ayuda</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" href="#">Enlace</a>
+											<a class="nav-link" href="#">Preguntas frecuente</a>
 										</li>
 									</ul>
 								</div>
@@ -281,21 +429,25 @@ function show(id_mostar, id_ocultar){
 			</div><!-- .col-md-6 -->
 			<div class="col-md-5">
 				<div class="form-row mb-4">
-					<div class="col-7">
+					<!--<div class="col-7">
 						<div class="label" style="margin-bottom: calc(1em + 25px);">Tema:</div>
 						<div class="select-plan select-plan--theme" id="select-plan" style="transform: translateY(-50%);">
 							<span id="opt-1" class="select-plan__option" data-plan="claro">Claro</span>
 							<span id="opt-2" class="select-plan__option active" data-plan="obscuro">Obscuro</span>
 						</div>
-					</div><!-- .col-7 -->
+					</div> .col-7 -->
 					<div class="col-5">
 						<label class="label" for="color">Color:</label>
 						<div class="input-color-wrapper">
-							<input type="color" name="color" id="color" onchange="color_back('color_bg','color')">
+							<input type="color" name="color" id="color" onchange="color_back('color_bg','color')" value="{{gate.color}}">
+							
 						</div>
+						<input type="color" name="color_titulo" id="input-color_titulo" style="opacity:0" onchange="color_maingate('color_title','input-color_titulo')" value="{{gate.color_titulo}}">
+						
 					</div><!-- .col-7 -->
+				<input type="color" name="color_descripcion" id="input-color_descripcion" style="opacity:0" onchange="color_maingate('color_descrip','input-color_descripcion')" value="{{gate.color_descrip}}">
 				</div><!-- .form-row -->
-
+				
 				<label class="checkbox-style mb-4 {{#if user.gold}}{{else}}sb-disabled{{/if}}" {{#if user.gold}}{{else}}data-swal-title="Solo disponible para usuarios Gold"{{/if}}>
 					<input type="checkbox" name="show_watermarker" id="show-watermarker" {{#if user.gold}}{{else}}disabled{{/if}}>
 					<span class="checkbox-style__circle"></span>
@@ -314,6 +466,18 @@ function show(id_mostar, id_ocultar){
 					Usar mi logo
 				</label>
 				<div id="output-user-logo"></div>
+					<div class="info-drop">
+									<div style="width: 100%; display: flex; justify-content: center; margin-top:2rem;">
+										<label for="upload-flyer" class="btn btn-primary" id="text_btn_flyer">Elije un archivo</label>
+									</div>
+									<div id="resultado_imagen"></div>
+									<div id="loadingflyer">
+<div id='progressBarflyer' class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%; border-radius: 10px;'>0%
+
+				</div>
+</div>
+
+								</div>
 			</div><!-- col-md-6 -->
 		</div><!-- .row -->
 		<div id="output-upload-flyer"></div>
@@ -321,22 +485,91 @@ function show(id_mostar, id_ocultar){
 	
 			
 </div>
-<div class="tab" id="steps_redes" style="display: none;">
+<div class="section-step {{#if user.basic}}basic{{/if}} {{#if user.gold}}gold{{/if}}" data-step-desc="Pasos" id="steps_redes" style="display: none;">
 	{{> section-steps-edit }}
 			
 </div>
 
 
 <div style="overflow:auto; display: grid;  grid-template-columns: 1fr 1fr 1fr;margin-top: 15px">
-	{{#if backstore}}{{else}}<button type="button" class="btn btn-primary btn-x-lg" style="width: 50%;margin-left: auto;margin-right: auto;padding: .5em 1.5em;" onclick="show('steps_redes','diseño')">Redes </button>{{/if}}
-  <button type="submit" class="btn btn-primary btn-x-lg " style="width: 50%;margin-left: auto;margin-right: auto;padding: .5em 1.5em;">Guardar <i class="fa fa-angle-right"></i></button>
-  <button type="button" class="btn btn-primary btn-x-lg " style="width: 50%;margin-left: auto;margin-right: auto;padding: .5em 1.5em;" onclick="show('diseño','steps_redes')">Diseño </i></button>
+	{{#if backstore}}{{else}}<button type="button" class="btn btn-primary btn-edit-c"  onclick="show('steps_redes','diseño')">Redes </button>{{/if}}
+  <button type="submit" class="btn btn-primary btn-edit-c " >Guardar <i class="fa fa-angle-right"></i></button>
+  <button type="button" class="btn btn-primary btn-edit-c "  onclick="show('diseño','steps_redes')">Diseño </i></button>
 </div>
 
 <!-- Circles which indicates the steps of the form: -->
 
 </form>
+<script>
+	 $('#steps_edit').on("submit", (e) => {
+      e.preventDefault();
+	  
+
+	   if (!validateSupport(e.target)) {
+		   console.log('eeee')
+            return;
+          }
+		  e.currentTarget.submit();
+    });
+
+		    function validateSupport(button) {
+      const itemsActive = Array.from(
+        document.querySelectorAll(".support-nav__item.active")
+      );
+      const sectionsActive = itemsActive.map((item) =>
+        document.querySelector(item.getAttribute("href"))
+      );
+      
+
+      const arrResultG = sectionsActive.map((section) => {
+        if (section) {
+          if (
+            section.querySelector('[type="checkbox"]:not(.optional):checked')
+          ) {
+            const inputs = section.querySelectorAll(
+              'input:not([type="checkbox"])'
+            );
+            if (inputs.length > 0) {
+              const arrayResult = [];
+              inputs.forEach((input) => {
+                if (input.value !== "" && input.validity.valid) {
+                  arrayResult.push(true);
+                } else {
+                  arrayResult.push(false);
+                }
+              });
+              if (arrayResult.includes(false)) {
+                Swal.fire({
+                  icon: "warning",
+                  text: "Llena los campos correctamente para continuar",
+                  button: false,
+                });
+              }
+              return arrayResult.includes(false) ? false : true;
+            }
+            return true;
+          }
+          Swal.fire({
+            icon: "warning",
+            text: "Configurar primero para poder continuar",
+            button: false,
+          });
+          return false;
+        }
+      });
+
+      return arrResultG.includes(false) ? false : true;
+    }
+	</script>
 	<a href="/dashboard" class="before-page">
 		<i class="fa fa-arrow-left"></i>
 	</a>
 </div><!-- .card-box -->
+
+<section class="section-step" data-step-desc="Confirma" style="display: none;">
+		<h2 class="title-darken">Confirmación</h2>
+		<div class="confirmation-card">
+			<div class="confirmation-card__banner">
+				<img src="https://previews.123rf.com/images/paulcarft/paulcarft1707/paulcarft170700057/81966316-folleto-del-festival-de-m%C3%BAsica-rock-ilustracion-vectorial-p%C3%B3ster.jpg" alt="Título de la música">
+			</div>
+	</section>

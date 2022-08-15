@@ -11,30 +11,18 @@ const Sobre_nosotros = db.define('sobre_nosotros', {
 	
 	id_usuario: {
 		type: DataTypes.INTEGER,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El id_usuario es obligatorio'
-			}
-		}
+		allowNull: true,
+		defaultValue: ""
 	},
 	telefono: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El telefono es obligatorio'
-			}
-		}
+		allowNull: true,
+		defaultValue: ""
 	},
 	ws: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El ws es obligatorio'
-			}
-		}
+		allowNull: true,
+		defaultValue: ""
 	},
 	facebook: {
 		type: DataTypes.TEXT,
@@ -81,6 +69,22 @@ const Sobre_nosotros = db.define('sobre_nosotros', {
 		allowNull: true,
 		defaultValue: ""
 	},
+	deezer: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
+	twitch: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
+	apple_music: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
+	
 	
 	
 });

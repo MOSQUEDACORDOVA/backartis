@@ -13,6 +13,56 @@ function valideKey(evt){
     }
 }
 </script> 
+<style>
+	.texto-gris{
+    color: #CCC;
+	margin-left: 10px;
+}
+.contenedor_usuarios {
+ 
+    width:120%;
+}
+/* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
+/* Ponemos un color de fondo y redondeamos las esquinas del track */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+table>thead>tr{font-weight: bolder;}
+.linea-oculta{display: none;}
+
+.Activo{
+	color: green;
+}
+.Caducado{
+	color: orange;
+}
+.Agotado{
+	color: red;
+}
+@media(max-width:414px){
+	.box_admin{
+		width: 100%;
+	}
+	.card-box__nav .nav-link{
+		font-size: 14px !important;
+	}
+	.data-user{
+		margin-bottom: 3rem;
+    	margin-top: 15rem;
+	}
+	.card-box--icon{
+		margin-bottom: 2rem;
+	}
+}
+</style>
 <div class="card-box shadow position-relative calculate-height">
 	<div class="row">
 		<div class="col-xl-7">
@@ -27,8 +77,9 @@ function valideKey(evt){
 		</div><!-- .col-xl-7 -->
 	</div><!-- .row -->
 
-	<form action="/notificaciones_save" method="post" class="p-to-btn" autocomplete="off" id="form-create-plan" enctype='multipart/form-data'>
+	<form action="/notificaciones_save" method="post" class="p-to-btn" autocomplete="off" id="form_notificaciones" enctype='multipart/form-data'>
 	<input type="text" class="form-control-steps" id="id" name="id_user" placeholder="id"  value="{{userID}}" hidden />
+	{{#if parsed_notificacion}}<input type="text" class="form-control-steps" id="id" name="id_notificacion" placeholder="id"  value="{{parsed_notificacion.id}}" hidden />{{/if}}
 		<div class="form-update-account">
 			<div class="form-update-account__item">
 				<label class="form-steps__title" for="text">Nombre</label>
@@ -61,17 +112,30 @@ function valideKey(evt){
 				<label class="form-steps__title" for="ws">Descripción</label>
 				<div class="form-control-steps__container">
 					
-					<textarea type="text" class="form-control-steps"  id="descripcion" name="descripcion" placeholder="Descripción" required >
-						{{#if parsed_notificacion}}{{parsed_notificacion.descripcion}}{{/if}}</textarea>
+					<textarea type="text" class="form-control-steps"  id="descripcion" name="descripcion" placeholder="Descripción" required >{{#if parsed_notificacion}}{{parsed_notificacion.descripcion}}{{/if}}</textarea>
 				</div>
 			</div><!-- .form-update-accound__item -->
 
 		<div class="form-update-account__item">
-				<label class="form-steps__title" for="text">Fecha publicación</label>
-				<div class="form-control-steps__container">
-					
-					<input type="date" class="form-control-steps" id="fecha_publicacion" name="fecha_publicacion" placeholder="Fecha publicación" {{#if parsed_notificacion}} value="{{parsed_notificacion.fecha_publicacion}}" {{/if}} >
-				</div>
+								 
+        <label class="form-steps__title" for="confirm-text">Fecha inicio</label>
+        <div class="form-control-steps__container">
+          <div class="form-control-steps__placeholder">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <input type="datetime-local" class="form-control-steps" id="fecha_inicio" name="fecha_inicio"
+            placeholder="Inicio de validez del cupon" autocomplete="off" {{#if parsed_notificacion}}value="{{parsed_notificacion.fecha_inicio}}"{{/if}} required/>
+        </div>
+      </div><!-- .form-update-accound__item -->
+      <div class="form-update-account__item">
+        <label class="form-steps__title" for="text">Fecha final</label>
+        <div class="form-control-steps__container">
+          <div class="form-control-steps__placeholder">
+            <i class="fas fa-calendar-alt"></i>
+          </div>
+          <input type="datetime-local" class="form-control-steps" id="fecha_final" name="fecha_final"
+            placeholder="Fecha finalización" autocomplete="off" {{#if parsed_notificacion}}value="{{parsed_notificacion.fecha_final}}"{{/if}} required/>
+        </div>
 				
 			</div><!-- .form-update-accound__item -->
 			<div class="form-update-account__item" hidden>
@@ -86,7 +150,7 @@ function valideKey(evt){
 				<option value="Todos" selected>Todos</option>				
 				{{#each usuarios_parsed as |usuario i|}}					
 					<option value="{{usuario.userName}}" >{{usuario.name}} / {{usuario.userName}}</option>
-					{{/each}}
+					{{/each}}-->
 				</select>
 			</div>
 			</div><!-- .form-update-accound__item -->
@@ -95,7 +159,7 @@ function valideKey(evt){
 			
 			
 		</div><!-- .form-update-account -->
-		<button type="submit" disabled class="btn btn-primary btn-x-lg form-steps__btn">Guardar <i class="fa fa-angle-right"></i></button>
+		<button type="submit" class="btn btn-primary btn-x-lg form-steps__btn">Guardar <i class="fa fa-angle-right"></i></button>
 	</form>
 
 	<a href="/admin_dash" class="before-page">

@@ -29,20 +29,14 @@ const Banner = db.define('banner', {
 	photo: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		validate: {
-			notEmpty: {
-				msg: 'La photo es obligatorio'
-			}
-		}
 	},
 	nombre: {
 		type: DataTypes.TEXT,
 		allowNull: true,
-		validate: {
-			notEmpty: {
-				msg: 'La photo es obligatorio'
-			}
-		}
+	},
+	tipo: {
+		type: DataTypes.TEXT,
+		allowNull: true,
 	},
 
 	

@@ -19,6 +19,9 @@ $( document ).ready(function() {
 		if($('#status').val() == "En proceso de pago"){
 			$('#btn_').removeAttr('disabled')
 		}
+		if($('#status').val() == "Error"){
+			$('#btn_').removeAttr('disabled')
+		}
 		if($('#status').val() == "Pagado" && $('#fecha_pago').val() != "" && $('#profile_img_').val() != "" ){
 			$('#btn_').removeAttr('disabled')
 		}
@@ -164,6 +167,8 @@ $( document ).ready(function() {
 
 	<form action="/retiros_save" method="post" class="p-to-btn" autocomplete="off" id="form-update-profile" enctype='multipart/form-data'>
 	<input type="text" class="form-control-steps" id="id" name="id" placeholder="id"  value="{{parsed_retiros.id}}" hidden />
+	<input type="text" class="form-control-steps" id="id" name="monto" placeholder="id"  value="{{parsed_retiros.monto}}" hidden />
+	<input type="text" class="form-control-steps" id="id" name="id_usuario" placeholder="id"  value="{{parsed_retiros.id_usuario}}" hidden />
 			<div class="form-update-account">
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">

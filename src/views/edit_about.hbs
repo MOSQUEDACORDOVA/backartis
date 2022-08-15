@@ -1,15 +1,18 @@
 <script type="text/javascript">
-  function valideKey(evt){ // code is the decimal ASCII representation of the
-  pressed key. var code = (evt.which) ? evt.which : evt.keyCode; if(code==8) {
-  // backspace. return true; } else if(code>=48 && code<=57) { // is a number.
-  return true; } else{ // other keys. return false; } }
+  function valideKey(evt) { // code is the decimal ASCII representation of thepressed
+   
+  key.var code = (evt.which) ? evt.which : evt.keyCode; if (code == 8) {
+      // backspace. 
+      return true; } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else { // other 
+    keys. return false; } }
 </script>
 <div class="card-box shadow position-relative calculate-height">
   <div class="row">
     <div class="col-xl-7">
       <div
-        class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center"
-      >
+        class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
         <div class="card-box__icon card-box__icon--celeste">
           <i class="fa fa-money-check" style="transform: translateX(.1em);"></i>
         </div>
@@ -20,23 +23,9 @@
     </div><!-- .col-xl-7 -->
   </div><!-- .row -->
 
-  <form
-    action="/save_edit_aboutus"
-    method="post"
-    class="p-to-btn"
-    autocomplete="off"
-    id="form-create-plan"
-    enctype="multipart/form-data"
-  >
-    <input
-      type="text"
-      class="form-control-steps"
-      id="id"
-      name="id"
-      placeholder="id"
-      value="{{parsed_about.id}}"
-      hidden
-    />
+  <form action="/save_edit_aboutus" method="post" class="p-to-btn" autocomplete="off" enctype="multipart/form-data">
+    <input type="text" class="form-control-steps" id="id" name="id" placeholder="id" value="{{parsed_about.id}}"
+      hidden />
     <div class="form-update-account">
       <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Teléfono (s)</label>
@@ -45,14 +34,8 @@
             <i class="fa fa-phone"></i>
           </div>
 
-          <input
-            type="text"
-            class="form-control-steps"
-            id="telefono"
-            name="telefono"
-            placeholder="Teléfono (s)"
-            value="{{parsed_about.telefono}}"
-          />
+          <input type="text" class="form-control-steps" id="telefono" name="telefono" placeholder="Teléfono (s)"
+            value="{{parsed_about.telefono}}" />
         </div>
       </div><!-- .form-update-accound__item -->
 
@@ -62,14 +45,8 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-whatsapp"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="ws"
-            name="ws"
-            placeholder="Whatsapp"
-            value="{{parsed_about.ws}}"
-          />
+          <input type="text" class="form-control-steps" id="ws" name="ws" placeholder="Whatsapp"
+            value="{{parsed_about.ws}}" />
         </div>
       </div><!-- .form-update-accound__item -->
       <div class="form-update-account__item">
@@ -78,34 +55,19 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-facebook"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="facebook"
-            name="facebook"
-            placeholder="Facebook"
-            autocomplete="off"
-            value="{{parsed_about.facebook}}"
-          />
+          <input type="text" class="form-control-steps" id="facebook" name="facebook" placeholder="Facebook"
+            autocomplete="off" value="{{parsed_about.facebook}}" />
         </div>
 
-      </div><!-- .form-update-accound__item --><div
-        class="form-update-account__item"
-      >
+      </div><!-- .form-update-accound__item -->
+      <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Instagram</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-instagram"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="instagram"
-            name="instagram"
-            placeholder="Instagram"
-            autocomplete="off"
-            value="{{parsed_about.instagram}}"
-          />
+          <input type="text" class="form-control-steps" id="instagram" name="instagram" placeholder="Instagram"
+            autocomplete="off" value="{{parsed_about.instagram}}" />
         </div>
 
       </div><!-- .form-update-accound__item -->
@@ -116,15 +78,8 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-soundcloud"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="soundcloud"
-            name="soundcloud"
-            placeholder="SoundCloud"
-            autocomplete="off"
-            value="{{parsed_about.soundcloud}}"
-          />
+          <input type="text" class="form-control-steps" id="soundcloud" name="soundcloud" placeholder="SoundCloud"
+            autocomplete="off" value="{{parsed_about.soundcloud}}" />
         </div>
 
       </div><!-- .form-update-accound__item -->
@@ -134,15 +89,8 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-mixcloud"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="mixcloud"
-            name="mixcloud"
-            placeholder="MixCloud"
-            autocomplete="off"
-            value="{{parsed_about.mixcloud}}"
-          />
+          <input type="text" class="form-control-steps" id="mixcloud" name="mixcloud" placeholder="MixCloud"
+            autocomplete="off" value="{{parsed_about.mixcloud}}" />
         </div>
       </div><!-- .form-update-accound__item -->
       <div class="form-update-account__item">
@@ -151,15 +99,8 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-youtube"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="youtube"
-            name="youtube"
-            placeholder="Youtube"
-            autocomplete="off"
-            value="{{parsed_about.youtube}}"
-          />
+          <input type="text" class="form-control-steps" id="youtube" name="youtube" placeholder="Youtube"
+            autocomplete="off" value="{{parsed_about.youtube}}" />
         </div>
       </div><!-- .form-update-accound__item -->
       <div class="form-update-account__item">
@@ -168,15 +109,8 @@
           <div class="form-control-steps__placeholder">
             <i class="fa fa-envelope-open-text"></i>
           </div>
-          <input
-            type="email"
-            class="form-control-steps"
-            id="correo"
-            name="correo"
-            placeholder="Correo"
-            autocomplete="off"
-            value="{{parsed_about.correo}}"
-          />
+          <input type="email" class="form-control-steps" id="correo" name="correo" placeholder="Correo"
+            autocomplete="off" value="{{parsed_about.correo}}" />
         </div>
       </div><!-- .form-update-accound__item -->
       <div class="form-update-account__item">
@@ -185,15 +119,8 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-twitter"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="twitter"
-            name="twitter"
-            placeholder="Twitter"
-            autocomplete="off"
-            value="{{parsed_about.twitter}}"
-          />
+          <input type="text" class="form-control-steps" id="twitter" name="twitter" placeholder="Twitter"
+            autocomplete="off" value="{{parsed_about.twitter}}" />
         </div>
       </div><!-- .form-update-accound__item -->
       <div class="form-update-account__item">
@@ -202,42 +129,56 @@
           <div class="form-control-steps__placeholder">
             <i class="fab fa-spotify"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="spotify"
-            name="spotify"
-            placeholder="Spotify"
-            autocomplete="off"
-            value="{{parsed_about.spotify}}"
-          />
+          <input type="text" class="form-control-steps" id="spotify" name="spotify" placeholder="Spotify"
+            autocomplete="off" value="{{parsed_about.spotify}}" />
         </div>
-      </div><!-- .form-update-accound__item --><div
-        class="form-update-account__item"
-      >
+      </div><!-- .form-update-accound__item -->
+      <div class="form-update-account__item">
         <label class="form-steps__title" for="text">Tiktok</label>
         <div class="form-control-steps__container">
           <div class="form-control-steps__placeholder">
             <i class="fab fa-tiktok"></i>
           </div>
-          <input
-            type="text"
-            class="form-control-steps"
-            id="tiktok"
-            name="tiktok"
-            placeholder="Tiktok"
-            autocomplete="off"
-            value="{{parsed_about.tiktok}}"
-          />
+          <input type="text" class="form-control-steps" id="tiktok" name="tiktok" placeholder="Tiktok"
+            autocomplete="off" value="{{parsed_about.tiktok}}" />
+        </div>
+      </div><!-- .form-update-accound__item -->
+      <div class="form-update-account__item">
+        <label class="form-steps__title" for="confirm-text">Deezer</label>
+        <div class="form-control-steps__container">
+          <div class="form-control-steps__placeholder">
+            <i class="fab fa-deezer"></i>
+          </div>
+          <input type="text" class="form-control-steps" id="deezer" name="deezer" placeholder="Deezer"
+            autocomplete="off" value="{{parsed_about.deezer}}" />
+        </div>
+      </div><!-- .form-update-accound__item -->
+      <!-- .form-update-accound__item -->
+      <div class="form-update-account__item">
+        <label class="form-steps__title" for="confirm-text">Twitch</label>
+        <div class="form-control-steps__container">
+          <div class="form-control-steps__placeholder">
+            <i class="fab fa-twitch"></i>
+          </div>
+          <input type="text" class="form-control-steps" id="twitch" name="twitch" placeholder="Twitch"
+            autocomplete="off" value="{{parsed_about.twitch}}" />
+        </div>
+      </div><!-- .form-update-accound__item -->
+      <!-- .form-update-accound__item -->
+      <div class="form-update-account__item">
+        <label class="form-steps__title" for="confirm-text">Apple Music</label>
+        <div class="form-control-steps__container">
+          <div class="form-control-steps__placeholder">
+            <i class="fab fa-apple"></i>
+          </div>
+          <input type="text" class="form-control-steps" id="apple-music" name="apple_music" placeholder="Apple Music"
+            autocomplete="off" value="{{parsed_about.apple_music}}" />
         </div>
       </div><!-- .form-update-accound__item -->
 
     </div><!-- .form-update-account -->
-    <button
-      type="submit"
-      disabled
-      class="btn btn-primary btn-x-lg form-steps__btn"
-    >Guardar <i class="fa fa-angle-right"></i></button>
+    <button type="submit" class="btn btn-primary btn-x-lg form-steps__btn">Guardar <i
+        class="fa fa-angle-right"></i></button>
   </form>
 
   <a href="/admin_dash" class="before-page">

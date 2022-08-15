@@ -4,7 +4,9 @@ const FacebookStrategy = require('passport-facebook');
 //var GoogleStrategy = require('passport-google-oauth20').Strategy;
 var MixCloudStrategy = require('passport-mixcloud').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-
+let fs = require("fs");
+const moment = require('moment-timezone');
+var hoy = moment();
 // Modelo a auntenticar
 const Usuarios = require('../models/Usuarios');
 
@@ -23,9 +25,15 @@ passport.use(
 				});
 				if(!usuario.verifyPassword(password)) {
 					return done(null, false, {
-						message: 'Contraseña incorrecta'
+						message: 'Contrase帽a incorrecta'
 					});
 				}
+				// if(usuario.validado == "" || usuario.validado == null) {
+				// 	console.log(usuario.validado)
+				// 	return done(null, false, {
+				// 		message: 'Usuario no validado, favor verique token en su correo'
+				// 	});
+				// }
 				return done(null, usuario);
 			}catch(err) {
 				return done(null, false, {
@@ -36,25 +44,43 @@ passport.use(
 	)
 );
 
-/* Código 100% funcional */
+/* C贸digo 100% funcional */
 passport.use('facebook',
 	new FacebookStrategy({
-		clientID: 217632516619360,
- 		clientSecret: '182fa6d95a67dcd3545f447b48dbd85e',
- 		callbackURL: "http://localhost:3000/auth/facebook/callback"
+		clientID: 1059585144777269,
+ 		clientSecret: '8e6e18b612b0371a27724e5c6fd60fe2',
+ 		callbackURL: "https://www.backartist.com/auth/facebook/callback",
+ 		profileFields: ['id', 'displayName', 'photos', 'email']
  },
  	async (accessToken, refreshToken, profile, done) => {
  console.log(profile._json);
- const {id, name}=profile._json
- 	const usuario = await Usuarios.findOne({where: {email: profile.id+"@algo.com"}});
+ const {id, name, email}=profile._json
+ if (typeof email == "undefined"){
+	let fecha = new Date()
+	fs.writeFile('./error'+Number(fecha)+'.txt', 'Error en facebook no trajo el correo de: ' +name, error => {
+	  if (error)
+		console.log(error);
+	  else
+		console.log('El archivo fue creado');
+	});
+	return done(null);
+ }
+ 	 usuario = await Usuarios.findOne({where: {email: email}});
 		if (!usuario) {
 			console.log("No hay:"+ usuario);
-			await Usuarios.create({
+			usuario = await Usuarios.create({
 				name: name,
 				lastName: name,
-				email: id+"@algo.com",
+				email: email,
 				password: id,
+				validado: "ok",
+				desde:hoy,
+				hasta:hoy
 			});	
+			usuario.save(function(err) {
+				if (err) console.log(err);
+				return done(null, usuario);
+			});
 		}
  	return done(null, usuario);
  	}
@@ -65,21 +91,30 @@ passport.use('facebook',
  passport.use('google',new GoogleStrategy({
     clientID: '425427803550-5hcacf2hmbmj1k2nm1o1a5c6cg5kgk8j.apps.googleusercontent.com',
     clientSecret: 'RPmihfCgf5iuIugPX-pe_xSH',
-    callbackURL: "https://backartis.herokuapp.com/auth/google/callback"
+    callbackURL: "https://www.backartist.com/auth/g/call"
   },
   async (token, tokenSecret, profile, done) =>{
 	  console.log(profile._json);
 	  console.log(token);
 	  const {sub, email, name, given_name, family_name}=profile._json
-	  const usuario = await Usuarios.findOne({where: {email: email}});
+	   usuario = await Usuarios.findOne({where: {email: email}});
 	  if (!usuario) {
 		  console.log("No hay:"+ usuario);
-		  await Usuarios.create({
+		 usuario=  await Usuarios.create({
 			  name: given_name,
 			  lastName: family_name,
 			  email: email,
 			  password: sub,
-		  });	
+			  validado: "ok",
+			  desde:hoy,
+			  hasta:hoy
+		  })
+		  
+		  usuario.save(function(err) {
+			if (err) console.log(err);
+			return done(null, usuario);
+		});
+		  //return done(null, newuser);
 	  }
    return done(null, usuario);
   }
@@ -87,11 +122,10 @@ passport.use('facebook',
 
 
 
-
 passport.use('mixcloud',new MixCloudStrategy({
     clientID: 'KEwRCR3zB6jE9fGKgK',
     clientSecret: 'm5YKEAFC4sB5wNehuCrTYcYhCWTbm2NG',
-	callbackURL: "http://localhost:3000/auth/mixcloud/callback"
+	callbackURL: "https://www.backartist.com/auth/mixcloud/callback"
   },
  async function(accessToken, refreshToken, profile, done) {
 	console.log(profile._json);
@@ -105,8 +139,13 @@ passport.use('mixcloud',new MixCloudStrategy({
 			lastName: key,
 			email: username+"@algo.com",
 			password: username,
-			photo: pictures.medium
+			validado: "ok",
+			desde:hoy,
+			hasta:hoy
+			//photo: pictures.medium
+			
 		});	
+		return done(null, usuario);
 	}
 
      return done(null, usuario);

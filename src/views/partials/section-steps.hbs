@@ -1,29 +1,44 @@
 <script>
 	$( document ).ready(function() {
-
-$('#url_youtube').on('keyup',function() {
-
-	this.value = this.value.toLowerCase();
-      input = $(this).val();
-	//const btna = $('.form-steps__btn--support');
-	console.log("hola")
-	let link = $('#url_youtube').val();
-		console.log(input)
-		link_ = link.split('/')
-		console.log(link_)
-		console.log(link_.length)
-	/*	if(link_[0] == "https:" && link_[2] == "soundcloud.com" && link_.length > 4){
-			console.log("correcto")
-			btna.removeAttribute('disabled');
-		}else if(link_[0] == "https:" && link_[2] == "soundcloud.es" && link_.length > 4){
-			console.log("correcto1")
-			btna.removeAttribute('disabled');
-		}else{
-			console.log("malo")
-			btna.setAttribute('disabled', true);
-		}*/
+	 	 $('#AbrirMenuResponsive').on('click',()=>{
+$('.MenuResponcive').attr('style', 'display:block;')
+})
 	})
-	}); 
+/*$('[type="url"]').on('change',function(e) {
+	console.log(e)
+     const sectionActive = document.querySelector(".s-show");
+let red = e.target.classList[1]
+console.log(red)
+    if (sectionActive) {
+     
+        const inputs = sectionActive.querySelectorAll(
+          'input:not([type="checkbox"])'
+        );
+        if (inputs.length > 0) {
+          const arrayResult = [];
+          inputs.forEach((input) => {
+            if (input.value !== "" && input.validity.valid) {
+              arrayResult.push(true);
+            } else {
+              arrayResult.push(false);
+            }
+          });
+          if (arrayResult.includes(false)) {
+            Swal.fire({
+              icon: "warning",
+              text: "Llena los campos correctamente para continuar",
+              button: false,
+            });
+          }
+          
+          return arrayResult.includes(false) ? false : true;
+        }
+        return true;
+    }
+    return true;
+	});
+	});  */
+	
 </script>
 
 <section class="section-step {{#if user.basic}}basic{{/if}} {{#if user.gold}}gold{{/if}}" data-step-page="{{#if backstore}}5{{else}}6{{/if}}" data-step-desc="Pasos">
@@ -31,31 +46,10 @@ $('#url_youtube').on('keyup',function() {
 
 	<!-- Nav Support Nav -->
 	<nav class="support-nav">
-		<a href="#support-youtube" class="support-nav__item">
-			<i class="fab fa-youtube-square"></i>
-			<div>
-				<span>Youtube</span>
-				<i class="fa fa-trash deselect-icon"></i>
-			</div>
-		</a>
 		<a href="#support-facebook" class="support-nav__item">
 			<i class="fab fa-facebook-square"></i>
 			<div>
 				<span>Facebook</span>
-				<i class="fa fa-trash deselect-icon"></i>
-			</div>
-		</a>
-		<a href="#support-twitter" class="support-nav__item">
-			<i class="fab fa-twitter-square"></i>
-			<div>
-				<span>Twitter</span>
-				<i class="fa fa-trash deselect-icon"></i>
-			</div>
-		</a>
-		<a href="#support-soundcloud" class="support-nav__item">
-			<i class="fab fa-soundcloud"></i>
-			<div>
-				<span>Soundcloud</span>
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
@@ -66,31 +60,66 @@ $('#url_youtube').on('keyup',function() {
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
-		<a href="#support-spotify" class="support-nav__item">
+		<a {{#if user.basic}}{{else}}href="#support-youtube"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-youtube-square"></i>
+			<div>
+				<span>Youtube</span>
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-twitter"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-twitter-square"></i>
+			<div>
+				<span>Twitter</span>
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-soundcloud"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-soundcloud"></i>
+			<div>
+				<span>Soundcloud</span>
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-spotify"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
 			<i class="fab fa-spotify"></i>
 			<div>
 				<span>Spotify</span>
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
-		<a href="#support-deezer" class="support-nav__item">
+		<a {{#if user.basic}}{{else}}href="#support-deezer"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
 			<i class="fab fa-deezer"></i>
 			<div>
 				<span>Deezer</span>
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
-		<a href="#support-tiktok" class="support-nav__item">
+		<a {{#if user.basic}}{{else}}href="#support-tiktok"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
 			<i class="fab fa-tiktok"></i>
 			<div>
 				TikTok
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
-		<a href="#support-mixcloud" class="support-nav__item">
+		<a {{#if user.basic}}{{else}}href="#support-mixcloud"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
 			<i class="fab fa-mixcloud"></i>
 			<div>
 				MixCloud
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-twitch"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-twitch"></i>
+			<div>
+				Twitch
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-applemusic"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-apple"></i>
+			<div>
+				Apple Music 
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
@@ -121,9 +150,9 @@ $('#url_youtube').on('keyup',function() {
 			<div class="form-row">
 				<div class="col">
 					<label class="form-steps__title">Ingresa la URL del canal</label>
-					<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps " name="url_youtube" placeholder="URL de la canal" id='url_youtube'>
+					<div class="other-container cont_yt">
+				<div class="add-other ">
+					<input type="url" class="form-control-steps url_youtube" name="url_youtube" placeholder="URL de la canal" id='url_youtube' onchange="validar(this)">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
@@ -137,7 +166,7 @@ $('#url_youtube').on('keyup',function() {
 			</div><!-- .form-row -->
 		</section>
 
-		<section id="support-facebook" class="support-section">
+		<section id="support-facebook" class="support-section {{#if user.basic}}basic{{/if}}">
 			<h3 class="form-steps__title text-left">Apoyar con Facebook</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -161,9 +190,9 @@ $('#url_youtube').on('keyup',function() {
 				Hacer que los fanáticos puedan omitir los pasos
 			</label>
 			<label class="form-steps__title">Ingresa la URL de la página</label>
-			<div class="other-container">
+			<div class="other-container cont_fb">
 				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_facebook" placeholder="URL de la página">
+					<input type="url" class="form-control-steps url_facebook" name="url_facebook" placeholder="URL de la página" onchange="validar(this)">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
@@ -171,7 +200,7 @@ $('#url_youtube').on('keyup',function() {
 			</div>
 		</section>
 
-		<section id="support-twitter" class="support-section">
+		<section id="support-twitter" class="support-section ">
 			<h3 class="form-steps__title text-left">Apoyar con Twitter</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -197,9 +226,9 @@ $('#url_youtube').on('keyup',function() {
 			</label>
 
 			<label class="form-steps__title">Ingresa la URL de la cuenta</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_twitter" placeholder="URL de la cuenta">
+			<div class="other-container cont_tw">
+				<div class="add-other ">
+					<input type="url" class="form-control-steps url_twitter" name="url_twitter" placeholder="URL de la cuenta" onchange="validar(this)">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
@@ -219,34 +248,20 @@ $('#url_youtube').on('keyup',function() {
 				</div><!-- .col -->
 				<div class="col-12 col-md-6 mb-3">
 					<label class="checkbox-style">
-						<input type="checkbox" name="compartir_soundcloud" value="compartir_soundcloud">
-						<span class="checkbox-style__circle"></span>
-						Comentar el track
-					</label>
-				</div><!-- .col -->
-			</div><!-- .form-row -->
-
-			<div class="form-row">
-				<div class="col-12 col-md-6 mb-3">
-					<label class="checkbox-style">
-						<input type="checkbox" name="repost_souncloud" value="repost_souncloud">
-						<span class="checkbox-style__circle"></span>
-						Repost el track
-					</label>
-				</div><!-- .col -->
-				<div class="col-12 col-md-6 mb-3">
-					<label class="checkbox-style">
 						<input type="checkbox" name="omitir_souncloud" value="omitir_souncloud" class="optional">
 						<span class="checkbox-style__circle"></span>
 						Hacer que los fanáticos puedan omitir los pasos
 					</label>
-				</div><!-- .col -->
+				</div>
+			</div><!-- .form-row -->
+
+			<div class="form-row">
 			</div><!-- .form-row -->
 
 			<label class="form-steps__title">Ingresa la URL del perfil</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_souncloud" placeholder="URL del perfil">
+			<div class="other-container cont_so">
+				<div class="add-other ">
+					<input type="url" class="form-control-steps url_souncloud" name="url_souncloud" placeholder="URL del perfil" onchange="validar(this)">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
@@ -254,7 +269,7 @@ $('#url_youtube').on('keyup',function() {
 			</div>
 		</section>
 
-		<section id="support-instagram" class="support-section">
+		<section id="support-instagram" class="support-section {{#if user.basic}}basic{{/if}}">
 			<h3 class="form-steps__title text-left">Apoyar con Instagram</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -274,9 +289,9 @@ $('#url_youtube').on('keyup',function() {
 			</div><!-- .form-row -->
 
 			<label class="form-steps__title">Ingresa la URL de la cuenta</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_instagram" placeholder="URL de la cuenta">
+			<div class="other-container cont_ins">
+				<div class="add-other ">
+					<input type="url" class="form-control-steps url_instagram" name="url_instagram" placeholder="URL de la cuenta" onchange="validar(this)">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
@@ -304,7 +319,14 @@ $('#url_youtube').on('keyup',function() {
 			</div><!-- .form-row -->
 
 			<label class="form-steps__title">Ingresa la URL del playlist</label>
-			<input type="text" class="form-control-steps" name="url_spotify" placeholder="URL del playlist">
+			<div class="other-container cont_spt">
+				<div class="add-other ">
+			<input type="text" class="form-control-steps url_spotify" name="url_spotify" placeholder="URL del playlist" onchange="validar(this)">
+				<button type="button" class="add-other__btn">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+			</div>
 		</section>
 
 		<section id="support-deezer" class="support-section">
@@ -316,14 +338,14 @@ $('#url_youtube').on('keyup',function() {
 						<span class="checkbox-style__circle"></span>
 						Seguir perfil
 					</label>
-				</div><!-- .col -->
+				</div><!-- .col
 				<div class="col-12 col-md-6 mb-3">
 					<label class="checkbox-style">
 						<input type="checkbox" name="guardar_deezer" value="guardar_deezer">
 						<span class="checkbox-style__circle"></span>
 						Guardar el track en la biblioteca del fan
 					</label>
-				</div><!-- .col -->
+				</div> --><!-- .col -->
 			</div><!-- .form-row -->
 
 			<label class="checkbox-style mb-3">
@@ -333,9 +355,9 @@ $('#url_youtube').on('keyup',function() {
 			</label>
 
 			<label class="form-steps__title">Ingresa la URL del perfil</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_deezer" placeholder="URL del perfil">
+			<div class="other-container cont_dee">
+				<div class="add-other ">
+					<input type="url" class="form-control-steps url_deezer" name="url_deezer" placeholder="URL del perfil" onchange="validar(this)">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
@@ -362,9 +384,9 @@ $('#url_youtube').on('keyup',function() {
 				</div><!-- .col -->
 			</div><!-- .form-row -->
 			<label class="form-steps__title">Ingresa la URL del perfil</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_tiktok" placeholder="URL del perfil" >
+			<div class="other-container cont_tik">
+				<div class="add-other ">
+					<input type="url" class="form-control-steps url_tiktok" name="url_tiktok" placeholder="URL del perfil" onchange="validar(this)">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
@@ -384,33 +406,113 @@ $('#url_youtube').on('keyup',function() {
 				</div><!-- .col -->
 				<div class="col-12 col-md-6 mb-3">
 					<label class="checkbox-style">
-						<input type="checkbox" name="repost_mixcloud" value="repost_mixcloud">
-						<span class="checkbox-style__circle"></span>
-						Repost track
-					</label>
-				</div><!-- .col -->
-			</div><!-- .form-row -->
-			<div class="form-row">
-				<div class="col-12 col-md-6 mb-3">
-					<label class="checkbox-style">
-						<input type="checkbox" name="like_mixcloud" value="like_mixcloud">
-						<span class="checkbox-style__circle"></span>
-						Like al track
-					</label>
-				</div><!-- .col -->
-				<div class="col-12 col-md-6 mb-3">
-					<label class="checkbox-style">
 						<input type="checkbox" name="omitir_mixcloud" value="omitir_mixcloud" class="optional">
 						<span class="checkbox-style__circle"></span>
 						Hacer que los fanáticos puedan omitir los pasos
 					</label>
-				</div><!-- .col -->
+				</div>
+			</div><!-- .form-row -->
+			<div class="form-row">
 			</div><!-- .form-row -->
 
 			<label class="form-steps__title">Ingresa la URL del perfil</label>
-			<div class="other-container">
+			<div class="other-container cont_mix">
+				<div class="add-other ">
+					<input type="url" class="form-control-steps url_mixcloud" name="url_mixcloud" placeholder="URL del perfil" onchange="validar(this)">
+					<button type="button" class="add-other__btn">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<section id="support-twitch" class="support-section">
+			<h3 class="form-steps__title text-left">Apoyar con Twitch</h3>
+			<div class="form-row">
+				<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="seguir_twitch" value="seguir_twitch">
+						<span class="checkbox-style__circle"></span>
+						Seguir perfil
+					</label>
+				</div><!-- .col -->
+				<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="omitir_twitch" value="omitir_twitch" class="optional">
+						<span class="checkbox-style__circle"></span>
+						Hacer que los fanáticos puedan omitir los pasos
+					</label>
+				</div>
+				<!--<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="repost_twitch" value="repost_twitch">
+						<span class="checkbox-style__circle"></span>
+						Repost track
+					</label>
+				</div>--><!-- .col -->
+			</div><!-- .form-row -->
+			<div class="form-row">
+				<!--<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="like_twitch" value="like_twitch">
+						<span class="checkbox-style__circle"></span>
+						Like al track
+					</label>
+				</div>--><!-- .col -->
+				<!-- .col -->
+			</div><!-- .form-row -->
+
+			<label class="form-steps__title">Ingresa la URL del perfil</label>
+			<div class="other-container cont_twic">
+				<div class="add-other ">
+					<input type="url" class="form-control-steps url_twitch" name="url_twitch" placeholder="URL del perfil" onchange="validar(this)">
+					<button type="button" class="add-other__btn">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+			</div>
+		</section>
+
+		<section id="support-applemusic" class="support-section">
+			<h3 class="form-steps__title text-left">Apoyar con Apple Music</h3>
+			<div class="form-row">
+				<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="seguir_applemusic" value="seguir_applemusic">
+						<span class="checkbox-style__circle"></span>
+						Seguir perfil
+					</label>
+				</div><!-- .col -->
+				<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="omitir_applemusic" value="omitir_applemusic" class="optional">
+						<span class="checkbox-style__circle"></span>
+						Hacer que los fanáticos puedan omitir los pasos
+					</label>
+				</div>
+				<!--<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="repost_applemusic" value="repost_applemusic">
+						<span class="checkbox-style__circle"></span>
+						Repost track
+					</label>
+				</div>--><!-- .col -->
+			</div><!-- .form-row -->
+			<div class="form-row">
+				<!--<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="like_applemusic" value="like_applemusic">
+						<span class="checkbox-style__circle"></span>
+						Like al track
+					</label>
+				</div>--><!-- .col -->
+				<!-- .col -->
+			</div><!-- .form-row -->
+
+			<label class="form-steps__title">Ingresa la URL del perfil</label>
+			<div class="other-container cont_appl">
 				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_mixcloud" placeholder="URL del perfil">
+					<input type="url" class="form-control-steps url_applemusic" name="url_applemusic" placeholder="URL del perfil" onchange="validar(this)">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
 					</button>
@@ -420,5 +522,11 @@ $('#url_youtube').on('keyup',function() {
 	</div>
 	<!-- End Support Sections -->
 
-	<button type="button" class="btn btn-primary btn-x-lg form-steps__btn form-steps__btn--support">Siguiente <i class="fa fa-angle-right"></i></button>
+	<button type="button" class="btn btn-primary btn-x-lg form-steps__btn form-steps__btn--support"  id="btn_step_redes">Siguiente <i class="fa fa-angle-right"></i></button>
+
 </section>
+<script>
+	$('#btn_step_redes').on('click', (e)=>{
+			e.preventDefault()
+	})
+</script>

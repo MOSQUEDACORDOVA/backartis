@@ -1,8 +1,29 @@
-<script type="text/javascript">
-  function valideKey(evt){ // code is the decimal ASCII representation of the
-  pressed key. var code = (evt.which) ? evt.which : evt.keyCode; if(code==8) {
-  // backspace. return true; } else if(code>=48 && code<=57) { // is a number.
-  return true; } else{ // other keys. return false; } }
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"
+></script>
+<script>
+  $( document ).ready(function() { 
+    $( ".onlynum" ).keypress(function(evt) {
+   
+    // code is the decimal ASCII representation of the pressed key.
+    var code = (evt.which) ? evt.which : evt.keyCode;
+    
+    if(code==8) { // backspace.
+      return true;
+    } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else{ // other keys.
+      return false;
+    }
+});	
+$( "#detalles" ).keypress(function(evt) {
+  let btn = $('.form-steps__btn')
+  btn.removeAttr('disabled')
+});	
+
+});
 </script>
 <div class="card-box shadow position-relative calculate-height">
   <div class="row">
@@ -65,12 +86,11 @@
           </div>
           <input
             type="text"
-            class="form-control-steps"
+            class="form-control-steps onlynum"
             id="costo_plan"
             name="costo_plan"
             placeholder="Costo"
             required
-            onkeypress="return valideKey(event);"
             value="{{parsed_plan.costo}}"
           />
         </div>
@@ -277,14 +297,28 @@
           </div>
           <input
             type="text"
-            class="form-control-steps"
+            class="form-control-steps onlynum"
             id="descuento"
             name="descuento"
             placeholder="Indicar porcentaje de descuento"
-            required
-            onkeypress="return valideKey(event);"
             maxlength="2"
             value="{{parsed_plan.descuento}}"
+          />
+        </div>
+      </div><!-- .form-update-accound__item -->
+      <div class="form-update-account__item total-cols">
+        <label class="form-steps__title" for="descuento">Detalles del plan</label>
+        <div class="form-control-steps__container">
+          <div class="form-control-steps__placeholder">
+            <i class="fa fa-percent"></i>
+          </div>
+          <input
+            type="text"
+            class="form-control-steps"
+            id="detalles"
+            name="detalles"
+            placeholder="Indicar detalles del plan"
+            value="{{parsed_plan.detalles}}"
           />
         </div>
       </div><!-- .form-update-accound__item -->

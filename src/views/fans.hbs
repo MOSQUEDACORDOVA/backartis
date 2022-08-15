@@ -4,6 +4,7 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script>
+	
 	$( document ).ready(function() {
     if ( $("#msgs").length ) {
      let mensaje = `{{msg}}`;
@@ -11,11 +12,35 @@
 	 Swal.fire(mensaje)
 	}
 	
+	
 }); 
+
 </script>
 <label id="msgs"></label>
 {{/if}}
-
+<script>
+	function Askdelete(id, tipo, link){
+	Swal.fire({
+  title: 'Eliminar',
+  text: "Seguro desea eliminar el fan indicado!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  cancelButtonText: 'Cancelar',
+  confirmButtonText: 'Eliminar'
+}).then((result) => {
+  if (result.isConfirmed) {
+	  window.location.href = '/'+ link +'/'+id;
+    Swal.fire(
+      'Eliminado!',
+      '',
+      'success'
+    )
+  }
+})
+}
+</script>
 <style>
 table>thead>tr{font-weight: bolder;}
 .linea-oculta{display: none;}
@@ -30,9 +55,25 @@ var pagina_actual = 1;
 var pagina_ultima = 0;
 	$( document ).ready(function() {
 		$('#seleccionar-todos').change(function() {
-			console.log("h")
-          $('input[type=checkbox]').prop('checked', $(this).is(':checked'));
+			console.log($('input[type=checkbox]').length)	
+
+  	
+Swal.fire({
+  title: 'Selección máxima',
+  text: "De momento solo se puede enviar un máximo de 40 correos simultaneos",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  cancelButtonText: 'Cancelar',
+  confirmButtonText: 'Aceptar'
+}).then((result) => {
+  if (result.isConfirmed) {
+	  $('.desde').prop('checked', $(this).is(':checked'))
+  }
+})
         });
+
    jQuery("#buscador").keyup(function(){
 	console.log("hola mundo")
     if( jQuery(this).val() != ""){
@@ -136,27 +177,25 @@ var cargarPagina = function(intPaginaP){
 				<p class="text-center font-weight-bold h3" style="margin-bottom: 1.5rem;">Lista de Fans</p>
 				<thead class="thead-dark">
 					<tr>
-						<th>Id</th>
+						<th>Eliminar</th>
+						<th>Nº</th>
 						<th>Correo</th>
-						<th><input type="checkbox" id="seleccionar-todos"> Seleccionar todos</th>
+						<th><input type="checkbox" id="seleccionar-todos" style="    width: auto;"> Seleccionar todos</th>
 					</tr>
 				</thead>
 				<tbody id="listado">
 					{{#each parsed_s as |susc i|}}
-					<tr>
-						<td>{{susc.id}}</td>
-						<td>{{susc.correo}}</td>
-						<td><input type="checkbox" value="{{susc.correo}}" name="correo[]" class="form-check-input"/></td>
-					</tr>
+					{{#fans id correo i}}{{/fans}}
+					
 					{{/each}}
 					
 				</tbody>
 				<tfoot>
-	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/>
-	<input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
 	<td id="indicador_paginas"></td>
-	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/>
-	<input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
 </tfoot>
 			</table>
 		</div>

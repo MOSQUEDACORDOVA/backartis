@@ -1,5 +1,13 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.alphanum/1.0.24/jquery.alphanum.js"></script>
+
+	<script src="https://unpkg.com/@popperjs/core@2"></script>
+ <link href="/assets/summernote/summernote-bs4.min.css" rel="stylesheet">
+    <script src="/assets/summernote/summernote-bs4.min.js"></script>
+
+<style>
+
+</style>
 <script>
 	function copyToClipboard(elemento) {
 		var $temp = $("<input>")
@@ -12,23 +20,99 @@
 	  function color_maingate(id_1, id_2){
 		let colorInput = document.getElementById(id_2);
 		let pintar = document.getElementById(id_1);
-		pintar.setAttribute('style','color:' +colorInput.value);
-		console.log(id_1 +id_2)
+		let paint2 = document.getElementById('gate-name-dj');
+		let paint3 = document.getElementById('gate-name-dj2');
+		if (id_1 == "color_title"){
+			pintar.setAttribute('style','color:' +colorInput.value);
+			paint2.setAttribute('style','color:' +colorInput.value);
+			paint3.setAttribute('style','color:' +colorInput.value);
+			$('.main-gate__footer .social-nav__link').attr('style','color:' +colorInput.value)
+		}else{
+			pintar.setAttribute('style','color:' +colorInput.value);
+		}
+		
+
+		
 	}
 	function color_back(id_1, id_2){
 		let colorInput = document.getElementById(id_2);
 		let pintar = document.getElementById(id_1);
 		pintar.setAttribute('style','background:' +colorInput.value);
-		console.log(id_1 +id_2)
+	
 	}
 	 
 </script>
 <script>
 	$( document ).ready(function() {
+		let hoy = moment()
+$('#fecha_programa').on('change',(e)=>{
+fecha_h = e.target.value
 
+	let fecha_anterior = moment(hoy).isAfter(fecha_h); // true
+			
+				if (fecha_anterior == true){
+					swal.fire('Debe seleccionar una fecha u hora superior a la actual.')		
+								$('#fecha_programa').val('')
+					return
+				}
+})
+
+$('#gate-link').keypress(function(tecla){
+      if(tecla.charCode == 47){
+         return false;
+      }
+
+   });
+$('#gate-link').on('paste',function(e){
+	 e.preventDefault();
+    swal.fire('Debes teclear el nombre de tu link personalizado');
+
+   });
+
+	var texto = document.getElementById('chek_gate-link').value,
+    textoseparado = texto.split(",");
+	var gate_link = document.querySelector("input[name=gate_link]");
+
+			$('#btn_per').on('click', () =>{
+			let pos = textoseparado.indexOf(gate_link.value) // (pos) es la posición para abreviar
+			if (pos >= 1){
+				Swal.fire("El nombre del link ya se encuentra registrado, elija otro por favor")
+				gate_link.value = "";
+				$('#btn_per').attr('disabled', true)
+			}else{
+				console.log("Todo Fino: "+ pos)
+			}
+		})
+
+
+		$('#gate-link').on('change', () => {
+			
+			let pos = textoseparado.indexOf(gate_link.value) // (pos) es la posición para abreviar
+			if (pos >= 1){
+				Swal.fire("El nombre del link ya se encuentra registrado, elija otro por favor")
+				gate_link.value = "";
+				$('#btn_per').attr('disabled', true)
+			}else{
+				console.log("Todo Fino")
+			}
+
+
+		});
+
+
+
+$('#leermas').click(function(){
+						$('#resltadoleer').hide();
+            $('#restoleer').show();
+
+					});
+          $('#leermenos').click(function(){
+            $('#resltadoleer').show();
+            $('#restoleer').hide();
+
+					});
 		$('#music-price').on('keyup',function() {
 
-console.log("hola")
 let igv = parseFloat($('#music-price').val()) * parseFloat(0.18);
 let igv_r = igv.toFixed(2)
 $('#igv').text(igv_r)
@@ -39,144 +123,188 @@ $('#total_').val(total)
 })
 
 		$('#programado').on('change', function(){
-			console.log("hello")
+			
 			$('#fecha_programa').removeAttr('disabled')
 			$('#fecha_programa').removeAttr('hidden')
 		})
 		
 		$('#publico_').on('change', function(){
-			console.log("hello2")
+			
 			$('#fecha_programa').prop('disabled', true)
 			$('#fecha_programa').prop('hidden', true)
 		})
 
 
 
-		document.getElementById("music-title").addEventListener('change', () => {
+		$("#music-title").on('change', () => {
 		document.getElementById("color_title").innerHTML = document.getElementById("music-title").value + `<label class="input-color-label" for="input-color_titulo" >
   <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label> `
 		});
 	
-		document.getElementById("music-desc").addEventListener('change', () => {
-		document.getElementById("color_descrip").innerHTML = document.getElementById("music-desc").value + `<label class="input-color-label" for="input-color_descripcion">
+		$("#music-desc").on('change', () => {
+			let descripcion = document.getElementById("music-desc").value
+			
+			const desc = descripcion.length;
+			const MaxDesc = 100;
+			var text = descripcion.replace(/(\r\n|\n|\r)/gm, '<br>');
+			var out = "";
+			if (desc > MaxDesc) {
+				out += `<div id="resltadoleer">${text.substring(0,100)} <a id="leermas">Leer Mas</a></div>
+				<div id="restoleer">${text} <a id="leermenos">Leer Menos</a></div>`
+			}else{
+				out += `${text}`
+			}
+		document.getElementById("color_descrip").innerHTML =out+ `<label class="input-color-label" for="input-color_descripcion">
   <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label>`
 		});
 	
-		document.getElementById("artist-name").addEventListener('change', () => {
+		$("#artist-name").on('change', () => {
 		document.getElementById("gate-name-dj").innerHTML = document.getElementById("artist-name").value
 		});
-		var checkboxYT = document.querySelector("input[name=suscribir_youtube]");
-		var like_facebook = document.querySelector("input[name=like_facebook]");
-		var seguir_twitter = document.querySelector("input[name=seguir_twitter]");
-		var seguir_soundcloud = document.querySelector("input[name=seguir_soundcloud]");
-		var seguir_instagram = document.querySelector("input[name=seguir_instagram]");
-		var seguir_spotify = document.querySelector("input[name=seguir_spotify]");
-		var seguir_deezer = document.querySelector("input[name=seguir_deezer]");
-		var seguir_tiktok = document.querySelector("input[name=seguir_tiktok]");
-		var seguir_mixcloud = document.querySelector("input[name=seguir_mixcloud]");
-	
-		
-		checkboxYT.addEventListener('change', () => {
-				if ($('#youtube-square').is(':visible') ) {
-	$('#youtube-square').hide();
-	}else{
-	$('#youtube-square').show();
-	}
-		});
-	
-		like_facebook.addEventListener('change', () => {
-				if ($('#facebook-square').is(':visible') ) {
-	$('#facebook-square').hide();
-	}else{
-	$('#facebook-square').show();
-	}
-		});
-		seguir_twitter.addEventListener('change', () => {
-				if ($('#twitter-square').is(':visible') ) {
-	$('#twitter-square').hide();
-	}else{
-	$('#twitter-square').show();
-	}
-		});
-		seguir_soundcloud.addEventListener('change', () => {
-				if ($('#soundcloud-square').is(':visible') ) {
-	$('#soundcloud-square').hide();
-	}else{
-	$('#soundcloud-square').show();
-	}
-		});
-		seguir_instagram.addEventListener('change', () => {
-				if ($('#instagram-square').is(':visible') ) {
-	$('#instagram-square').hide();
-	}else{
-	$('#instagram-square').show();
-	}
-		});
-		seguir_spotify.addEventListener('change', () => {
-				if ($('#spotify-square').is(':visible') ) {
-	$('#spotify-square').hide();
-	}else{
-	$('#spotify-square').show();
-	}
-		});
-		seguir_deezer.addEventListener('change', () => {
-				if ($('#deezer-square').is(':visible') ) {
-	$('#deezer-square').hide();
-	}else{
-	$('#deezer-square').show();
-	}
-		});
-		seguir_tiktok.addEventListener('change', () => {
-				if ($('#tiktok-square').is(':visible') ) {
-	$('#tiktok-square').hide();
-	}else{
-	$('#tiktok-square').show();
-	}
-		});
-	seguir_mixcloud.addEventListener('change', () => {
-				if ($('#mixcloud-square').is(':visible') ) {
-	$('#mixcloud-square').hide();
-	}else{
-	$('#mixcloud-square').show();
-	}
-		});
-	
 
-		var texto = document.getElementById('chek_gate-link').value,
-    textoseparado = texto.split(",");
-	var gate_link = document.querySelector("input[name=gate_link]");
+$('a[href=#support-youtube]').on('click',(e)=>{
 
-		
-		gate_link.addEventListener('change', () => {
-			
-			console.log(gate_link.value)
-			let pos = textoseparado.indexOf(gate_link.value) // (pos) es la posición para abreviar
-			if (pos >= 1){
-				Swal.fire("El nombre del link ya se encuentra registrado, elija otro por favor")
-				gate_link.value = "";
-			}else{
-				console.log("Todo Fino")
-			}
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#youtube-square').removeClass('social-nav__link');
+	$('#youtube-square').addClass('d-none');
+}else{
+	$('#youtube-square').removeClass('d-none');
+	$('#youtube-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-facebook]').on('click',(e)=>{
 
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#facebook-square').removeClass('social-nav__link');
+	$('#facebook-square').addClass('d-none');
+}else{
+	$('#facebook-square').removeClass('d-none');
+	$('#facebook-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-instagram]').on('click',(e)=>{
 
-		});
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#instagram-square').removeClass('social-nav__link');
+	$('#instagram-square').addClass('d-none');
+}else{
+	$('#instagram-square').removeClass('d-none');
+	$('#instagram-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-twitter]').on('click',(e)=>{
+
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#twitter-square').removeClass('social-nav__link');
+	$('#twitter-square').addClass('d-none');
+}else{
+	$('#twitter-square').removeClass('d-none');
+	$('#twitter-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-soundcloud]').on('click',(e)=>{
+
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#soundcloud-square').removeClass('social-nav__link');
+	$('#soundcloud-square').addClass('d-none');
+}else{
+	$('#soundcloud-square').removeClass('d-none');
+	$('#soundcloud-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-spotify]').on('click',(e)=>{
+
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#spotify-square').removeClass('social-nav__link');
+	$('#spotify-square').addClass('d-none');
+}else{
+	$('#spotify-square').removeClass('d-none');
+	$('#spotify-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-deezer]').on('click',(e)=>{
+
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#deezer-square').removeClass('social-nav__link');
+	$('#deezer-square').addClass('d-none');
+}else{
+	$('#deezer-square').removeClass('d-none');
+	$('#deezer-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-tiktok]').on('click',(e)=>{
+
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#tiktok-squar').removeClass('social-nav__link');
+	$('#tiktok-squar').addClass('d-none');
+}else{
+	$('#tiktok-squar').removeClass('d-none');
+	$('#tiktok-squar').addClass('social-nav__link');
+}
+})
+$('a[href=#support-mixcloud]').on('click',(e)=>{
+
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#mixcloud-square').removeClass('social-nav__link');
+	$('#mixcloud-square').addClass('d-none');
+}else{
+	$('#mixcloud-square').removeClass('d-none');
+	$('#mixcloud-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-twitch]').on('click',(e)=>{
+
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#twitch-square').removeClass('social-nav__link');
+	$('#twitch-square').addClass('d-none');
+}else{
+	$('#twitch-square').removeClass('d-none');
+	$('#twitch-square').addClass('social-nav__link');
+}
+})
+$('a[href=#support-applemusic]').on('click',(e)=>{
+
+	let va_ = e.currentTarget.attributes['1']['nodeValue']
+if (va_ =="support-nav__item active"){
+	$('#apple-square').removeClass('social-nav__link');
+	$('#apple-square').addClass('d-none');
+}else{
+	$('#apple-square').removeClass('d-none');
+	$('#apple-square').addClass('social-nav__link');
+}
+})
+
 
 $('#url-demo').on('keyup',function() {
 const btna = document.getElementById('btn_url');
-console.log("hola")
 let link         = document.getElementById('url-demo').value,
     link_ = link.split('/')
-	console.log(link_.length)
+	
+	if ($('.bondgate_link').length || $('.backstore_link').length){
+		
+	}else{
 	if(link_[0] == "https:" && link_[2] == "soundcloud.com" && link_.length > 4){
-		console.log("correcto")
+		
 		btna.removeAttribute('disabled');
 	}else if(link_[0] == "https:" && link_[2] == "soundcloud.es" && link_.length > 4){
-		console.log("correcto1")
+		
 		btna.removeAttribute('disabled');
 	}else{
-		console.log("malo")
+		
 		btna.setAttribute('disabled', true);
+	}	
 	}
+	
 })
 
 
@@ -184,14 +312,14 @@ let link         = document.getElementById('url-demo').value,
 </script>
 <nav class="steps-nav">
 	<!-- Step Nav Items -->
-	{{#if backstore}}{{/if}}{{#if fileGate}}
+	{{#if fileGate}}
 		<div class="steps-nav__item">
 			<div class="steps-nav__number active">1</div>
-		</div>
+		</div>{{/if}}
 		<div class="steps-nav__item">
 			<div class="steps-nav__number">2</div>
 		</div>
-	{{/if}}
+	
 	<div class="steps-nav__item">
 		<div class="steps-nav__number">3</div>
 	</div>
@@ -207,9 +335,11 @@ let link         = document.getElementById('url-demo').value,
 	<div class="steps-nav__item">
 		<div class="steps-nav__number">7</div>
 	</div>
+
 	<div class="steps-nav__item not-after-line">
 		<div class="steps-nav__number">8</div>
 		<div class="steps-nav__line"></div>
+		
 		<div class="steps-nav__number">9</div>
 	</div>
 	<!-- End Steps Nav Items -->
@@ -227,26 +357,52 @@ let link         = document.getElementById('url-demo').value,
 						{{#if fileGate}}<input type="text"  name="tipo_create" value="filegate" hidden>{{/if}}
 						{{#if bondGate}}<input type="text"  name="tipo_create" value="bondgate" hidden>{{/if}}
 	<!-- Section Step -->
-	{{#if backstore}}{{else}}
+	
 		<section class="section-step show" data-step-desc="Fuente">
 			<div class="input-and-title">
-				<h2 class="form-steps__title">Ingresa la URL de {{#if fileGate}}SounCloud{{/if}}{{#if bondGate}} enlace secreto{{/if}}</h2>
+				<h2 class="form-steps__title">Ingresa la URL de {{#if fileGate}}tu pista SounCloud{{/if}}{{#if bondGate}} enlace secreto{{/if}}{{#if backstore}} enlace secreto{{/if}}</h2>
 				<div class="form-control-steps__container">
 					<div class="form-control-steps__placeholder">
 						<i class="fa fa-globe"></i>
 					</div>
-					<input type="url" class="form-control-steps" id="url-demo" name="url_demo" placeholder="https://" required>
+					<input type="url" class="form-control-steps {{#if bondGate}}bondgate_link{{/if}}{{#if backstore}}backstore_link{{/if}}" id="url-demo" name="url_demo" placeholder="https://" required >
 				</div>
 			</div>
+			{{#if backstore}}
+		<h2 class="form-steps__title">
+				O <br>
+				Subir el archivo de que te gustaría vender<br>con los fans ({{#acceptFiles user.membership false}}{{/acceptFiles}})</h2>
+		
+			<div id="upload-audio2" class="drop-area">
+				<input type="file" id="music-fileback" accept="{{#acceptFiles user.membership true}}{{/acceptFiles}}" class="d-none" 
+				data-max-size-file="{{#if user.basic}}10{{/if}}{{#if user.vip}}1000{{/if}}{{#if user.gold}}unlimited{{/if}}">
+				<input type="text" id="archivo_back"  class="d-none" name='url_track' value="" >
+				<div class="drop-content2">
+					<div class="drop-icon" id="drop-icon2">
+						<i class="fa fa-upload"></i>
+					</div>
+					<div class="info-drop">
+						<label for="music-fileback">Elije un archivo</label>
+					</div>
+				</div>
+				<div id="loading3" style="width: 200px;border-radius: 10px;">
+				<div id='progressBar3' class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%; border-radius: 10px;'>0%
+
+				</div>
+
+				</div>
+				<div id="resultado_back"></div>
+			</div>
+			{{/if}}
+
 			<button type="button" disabled class="btn btn-primary btn-x-lg form-steps__btn" id="btn_url">Siguiente <i class="fa fa-angle-right"></i></button>
 		</section>
-	{{/if}}
 	
 	
 	<!-- End Section Step -->
 
 	<!-- Section Step -->
-	<section class="section-step {{#if backstore}}show{{/if}}" data-step-desc="Género">
+	<section class="section-step " data-step-desc="Género">
 		<div class="input-and-title">
 			<h2 class="form-steps__title">Selecciona el género de tu título</h2>
 			<div class="form-control-steps__container mb-3">
@@ -256,39 +412,12 @@ let link         = document.getElementById('url-demo').value,
 				<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
 				<select name="gender" id="gender" class="form-control-steps">
 					<option value="default" selected>Selecciona el género</option>
-					<option value="bachata">Bachata</option>
-					<option value="baladas">Baladas</option>
-					<option value="bolero">Bolero</option>
-					<option value="criollo">Criollo</option>
-					<option value="cumbia">Cumbia</option>
-					<option value="disco">Disco</option>
-					<option value="electronica">Electrónica</option>
-					<option value="fiesta">Fiesta</option>
-					<option value="hip-hop">Hip Hop</option>
-					<option value="hauyno">Huayno</option>
-					<option value="infantil">Infantil</option>
-					<option value="latin">Latin</option>
-					<option value="lambada">Lambada</option>
-					<option value="mambo">Mambo</option>
-					<option value="merengue">Merengue</option>
-					<option value="moombahton">Moombahton</option>
-					<option value="reggae">Reggae</option>
-					<option value="reggaeton">Reggaeton</option>
-					<option value="rock">Rock</option>
-					<option value="salsa">Salsa</option>
-					<option value="saya">Saya</option>
-					<option value="techno">Techno</option>
-					<option value="tematicos">Temáticos</option>
-					<option value="trap">Trap</option>
-					<option value="tribal">Tribal</option>
-					<option value="vallenato">Vallenato</option>
-					<option value="villera">Villera</option>
-					<option value="pop">Pop</option>
-					<option value="transiciones">Transiciones</option>
-					<option value="other">Otros</option>
+{{#each par_generos as |generos i|}}
+<option>{{genero}}</option>
+{{/each}}
 				</select>
 			</div>
-			<input type="text" class="form-control-steps" id="other-gender" name="other_gender" placeholder="Otro género" disabled>
+			<input type="text" class="d-none" id="other-gender" name="other_gender" placeholder="Otro género" disabled>
 		</div>
 
 		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn" disabled>Siguiente <i class="fa fa-angle-right"></i></button>
@@ -301,7 +430,7 @@ let link         = document.getElementById('url-demo').value,
 		
 		{{else}}
 		<section class="section-step" data-step-desc="Subir">
-			<h2 class="form-steps__title">Sube el archivo de audio que te gustaría {{#if backstore}}vender{{else}}compartir{{/if}}<br>con los fans ({{#acceptFiles user.membership false}}{{/acceptFiles}})</h2>
+			<h2 class="form-steps__title">Sube el {{#if backstore}}demo del audio{{else}}archivo de audio{{/if}} que te gustaría {{#if backstore}}vender{{else}}compartir{{/if}}<br>con los fans ({{#acceptFiles user.membership false}}{{/acceptFiles}})</h2>
 		
 			<div id="upload-audio" class="drop-area">
 				<input type="file" id="music-file" accept="{{#acceptFiles user.membership true}}{{/acceptFiles}}" class="d-none" 
@@ -314,6 +443,12 @@ let link         = document.getElementById('url-demo').value,
 					<div class="info-drop">
 						<label for="music-file">Elije un archivo</label>
 					</div>
+				</div>
+				<div id="loading" style="width: 200px;border-radius: 10px;">
+				<div id='progressBar1' class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%; border-radius: 10px;'>0%
+
+				</div>
+
 				</div>
 				<div id="resultado_zip"></div>
 			</div>
@@ -350,7 +485,8 @@ let link         = document.getElementById('url-demo').value,
 			<div class="form-control-steps__placeholder">
 				<i class="fa fa-user"></i>
 			</div>
-			<input type="text" class="form-control-steps" id="music-desc" name="music_desc" placeholder="Descripción de la pista" required>
+			<textarea type="text" class="form-control-steps" id="music-desc" name="music_desc" placeholder="Descripción de la pista" required></textarea>
+
 		</div>
 		{{#if backstore}}
 		<label class="form-steps__title" for="music-price">Precio</label>
@@ -391,18 +527,17 @@ let link         = document.getElementById('url-demo').value,
 							</div>
 						</div>
 
-						<div class="drop-area" id="drop-upload-flyer">
+						<div class="drop-area" id="drop-upload-flyer" style="border: none;background-color: transparent;">
 							<input type="file" id="upload-flyer" accept="image/*" class="d-none">
 							<input type="text" id="img_flyer"  class="form-control-steps" name='img_flyer' value="" hidden>
 							<input type="text" id="logo_flyer"  class="form-control-steps" name='user_logo' value="" hidden>
 							<div class="drop-content">
-								<div class="drop-icon" id="drop-icon">
-									<i class="fa fa-upload"></i>
+									<div class="">
+						<img src="/assets/img/concierto-2.jpg" alt="BackArtist Logo" id="img_flyer2"
+          style="border-radius: 20px;width: 400px; height: 240px;">
+
 								</div>
-								<div class="info-drop">
-									<label for="upload-flyer">Elije un archivo</label>
-									<div id="resultado_imagen"></div>
-								</div>
+							
 							</div>
 							
 						</div>
@@ -420,11 +555,11 @@ let link         = document.getElementById('url-demo').value,
 					<div class="desing-preview__aside bg-gradient" id="color_bg">
 						<div class="main-gate__user">
 							<div class="main-gate__user-img">
-								<img src="https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg" alt="DJ Homero">
+								<img src="{{#if user.photo}}/assets/uploads/{{user.photo}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="">
 							</div>
-							<div class="main-gate__user-body text-white">
+							<div class="main-gate__user-body text-white" >
 								<h2 class="main-gate__name" id ="gate-name-dj">Nombre DJ</h2>
-								<p class="main-gate__user-name">@nombreDJ</p>
+								<p class="main-gate__user-name"  id ="gate-name-dj2">@nombreDJ</p>
 							</div>
 						</div>
 						<scrip>
@@ -435,57 +570,56 @@ let link         = document.getElementById('url-demo').value,
 								
 						<p class="main-gate__desc"  id="color_descrip">Descripción de la pista <label class="input-color-label" for="input-color_descripcion">
   <i class="fas fa-brush" style="margin-left: 15px; color: white;cursor: pointer;" ></i></label></p>
-						<input type="color" name="color_titulo" id="input-color_titulo" style="opacity:0" onchange="color_maingate('color_title','input-color_titulo')">
-						<input type="color" name="color_descripcion" id="input-color_descripcion" style="opacity:0" onchange="color_maingate('color_descrip','input-color_descripcion')">
+						
 						<footer class="main-gate__footer">
 							<div class="row align-items-center">
 								<div class="col-12">
 									<nav class="social-nav text-center">
-										<a href="" class="social-nav__link">
-											<i class="fab fa-facebook-square" style="display: none;" id="facebook-square"></i>
+										<a href="#" class="d-none"  id="facebook-square">
+											<i class="fab fa-facebook-square hvr-icon" ></i>
 										</a>
-										<a href="" class="social-nav__link" >
-											<i class="fab fa-twitter-square" style="display: none;" id="twitter-square"></i>
+										<a href="#" class="d-none"  id="twitter-square">
+											<i class="fab fa-twitter-square hvr-icon" ></i>
 										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-youtube-square" style="display: none;" id="youtube-square"></i>
+										<a href="#" class="d-none"  id="youtube-square">
+											<i class="fab fa-youtube-square hvr-icon" ></i>
 										</a>
-										<a href="" class="social-nav__link" >
-											<i class="fab fa-soundcloud" style="display: none;" id="soundcloud-square"></i>
+										<a href="#" class="d-none"  id="soundcloud-square">
+											<i class="fab fa-soundcloud hvr-icon" ></i>
 										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-instagram-square" style="display: none;" id="instagram-square"></i>
+										<a href="#" class="d-none" id="instagram-square">
+											<i class="fab fa-instagram-square hvr-icon" ></i>
 										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-spotify" style="display: none;" id="spotify-square"></i>
+										<a href="#" class="d-none"  id="spotify-square">
+											<i class="fab fa-spotify hvr-icon" ></i>
 										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-deezer" style="display: none;" id="deezer-square"></i>
+										<a href="#" class="d-none"  id="deezer-square">
+											<i class="fab fa-deezer hvr-icon" ></i>
 										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-tiktok" style="display: none;" id="tiktok-square"></i>
+										<a href="#" class="d-none"  id="tiktok-square">
+											<i class="fab fa-tiktok hvr-icon" ></i>
 										</a>
-										<a href="" class="social-nav__link">
-											<i class="fab fa-mixcloud" style="display: none;" id="mixcloud-square"></i>
+										<a href="#" class="d-none"  id="mixcloud-square">
+											<i class="fab fa-mixcloud hvr-icon" ></i>
 										</a>
 									</nav>
 								</div>
-							<!--	<div class="col-12 my-1">
+							<div class="col-12 my-1">
 									<ul class="nav site-footer__nav justify-content-center">
 										<li class="nav-item">
-											<a class="nav-link" href="#">Enlace</a>
+											<a class="nav-link" href="#">Términos y condiciones</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" href="#">Enlace</a>
+											<a class="nav-link" href="#">Políticas de Privacidad</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" href="#">Enlace</a>
+											<a class="nav-link" href="#">Ayuda</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" href="#">Enlace</a>
+											<a class="nav-link" href="#">Preguntas frecuente</a>
 										</li>
 									</ul>
-								</div>-->
+								</div>
 							</div>
 						</footer>
 					</div>
@@ -504,8 +638,12 @@ let link         = document.getElementById('url-demo').value,
 						<label class="label" for="color">Color:</label>
 						<div class="input-color-wrapper">
 							<input type="color" name="color" id="color" onchange="color_back('color_bg','color')">
+							
 						</div>
+						<input type="color" name="color_titulo" id="input-color_titulo" style="opacity:0" onchange="color_maingate('color_title','input-color_titulo')">
+						
 					</div><!-- .col-7 -->
+					<input type="color" name="color_descripcion" id="input-color_descripcion" style="opacity:0" onchange="color_maingate('color_descrip','input-color_descripcion')">
 				</div><!-- .form-row -->
 
 				<label class="checkbox-style mb-4 {{#if user.gold}}{{else}}sb-disabled{{/if}}" {{#if user.gold}}{{else}}data-swal-title="Solo disponible para usuarios Gold"{{/if}}>
@@ -526,6 +664,18 @@ let link         = document.getElementById('url-demo').value,
 					Usar mi logo
 				</label>
 				<div id="output-user-logo"></div>
+					<div class="info-drop">
+									<div style="width: 100%; display: flex; justify-content: center;">
+										<label for="upload-flyer" class="btn btn-primary mt-4" id="text_btn_flyer">Elije un archivo</label>
+									</div>
+									<div id="resultado_imagen"></div>
+									<div id="loadingflyer">
+<div id='progressBarflyer' class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%; border-radius: 10px;'>0%
+
+				</div>
+</div>
+
+								</div>
 			</div><!-- col-md-6 -->
 		</div><!-- .row -->
 		<div id="output-upload-flyer"></div>
@@ -544,13 +694,20 @@ let link         = document.getElementById('url-demo').value,
 					Público
 				</label>
 			</div><!-- .col -->
-			<div class="col mb-3">
-				<label class="checkbox-style">
-					<input type="radio" name="privacity" value="programado" id="programado">
-					<span class="checkbox-style__circle"></span>
+			<div class="col mb-3 {{#if user.basic}}sb-disabled{{/if}}">
+				<label class="checkbox-style {{#if user.basic}}sb-disabled{{/if}}">
+					<input type="radio" name="privacity" value="programado" id="programado" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+					<span class="checkbox-style__circle {{#if user.basic}}sb-disabled{{/if}}"></span>
 					Programado
 				</label>
 			</div><!-- .col -->
+									<div class="col mb-3 {{#if user.basic}}sb-disabled{{/if}}" >
+					<label class="checkbox-style">
+						<input type="checkbox" name="omitir_correo" value="omitir_correo" class="optional" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+						<span class="checkbox-style__circle {{#if user.basic}}sb-disabled{{/if}}" ></span>
+						Omitir el correo
+					</label>
+				</div><!-- .col -->
 		</div><!-- .form-row -->
 		<input type="datetime-local" class="form-control-steps" id="fecha_programa" name="fecha_programa" placeholder="Inicio de validez del cupon"  autocomplete="off" disabled hidden>
 		
@@ -560,15 +717,15 @@ let link         = document.getElementById('url-demo').value,
 			<div class="form-control-steps__placeholder">
 				<i class="fa fa-link"></i>
 			</div>
-			<input type="text" class="form-control-steps" id="gate-link" name="gate_link" placeholder="Enlace" required value="mitrack123">
+			<input type="text" class="form-control-steps" id="gate-link" name="gate_link" placeholder="Enlace" required >
 			<input type="hidden" class="form-control-steps" id="chek_gate-link" name="gate_link2" placeholder="Enlace" required value="{{array}}">
 
 		</div>
 		<div id="gate-link-output" class="mt-3 text-muted text-center">
-			https://josea.mosquedacordova.com/track/<span>mitrack123</span>
+			https://www.backartist.com/track/<span>mitrack123</span>
 		</div>
 
-		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn">Siguiente <i class="fa fa-angle-right"></i></button>
+		<button type="button" class="btn btn-primary btn-x-lg form-steps__btn" id="btn_per" disabled>Siguiente <i class="fa fa-angle-right"></i></button>
 	</section>
 	<!-- End Section Step -->
 
@@ -607,3 +764,20 @@ let link         = document.getElementById('url-demo').value,
 	</section>
 	<!-- End Section Step -->
 </form>
+<script>
+				$(document).ready(() => {
+					
+					$('#leermas').on('click',()=>{
+						
+						$('#resltadoleer').hide();
+            $('#restoleer').show();
+
+					});
+          $('#leermenos').click(function(){
+			  
+            $('#resltadoleer').show();
+            $('#restoleer').hide();
+
+					});
+				});
+</script>

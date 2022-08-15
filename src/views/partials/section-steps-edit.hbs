@@ -3,31 +3,10 @@
 
 	<!-- Nav Support Nav -->
 	<nav class="support-nav">
-		<a href="#support-youtube" class="support-nav__item {{#if gate.url_youtube}}active{{/if}}">
-			<i class="fab fa-youtube-square"></i>
-			<div>
-				<span>Youtube</span>
-				<i class="fa fa-trash deselect-icon"></i>
-			</div>
-		</a>
-		<a href="#support-facebook" class="support-nav__item {{#if gate.url_facebook}}active{{/if}}">
+		<a href="#support-facebook" class="support-nav__item {{#if gate.url_facebook}}active{{/if}}" >
 			<i class="fab fa-facebook-square"></i>
 			<div>
 				<span>Facebook</span>
-				<i class="fa fa-trash deselect-icon"></i>
-			</div>
-		</a>
-		<a href="#support-twitter" class="support-nav__item {{#if gate.url_twitter}}active{{/if}}">
-			<i class="fab fa-twitter-square"></i>
-			<div>
-				<span>Twitter</span>
-				<i class="fa fa-trash deselect-icon"></i>
-			</div>
-		</a>
-		<a href="#support-soundcloud" class="support-nav__item {{#if gate.url_souncloud}}active{{/if}}">
-			<i class="fab fa-soundcloud"></i>
-			<div>
-				<span>Soundcloud</span>
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
@@ -38,31 +17,66 @@
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
-		<a href="#support-spotify" class="support-nav__item {{#if gate.url_spotify}}active{{/if}}">
+		<a {{#if user.basic}}{{else}}href="#support-youtube"{{/if}} class="support-nav__item {{#if user.basic}}sb-disabled{{/if}} {{#if gate.url_youtube}}active{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}} >
+			<i class="fab fa-youtube-square"></i>
+			<div>
+				<span>Youtube</span>
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-twitter"{{/if}} class="{{#if gate.url_twitter}}active{{/if}} support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-twitter-square"></i>
+			<div>
+				<span>Twitter</span>
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-soundcloud"{{/if}} class="{{#if gate.url_souncloud}}active{{/if}} support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-soundcloud"></i>
+			<div>
+				<span>Soundcloud</span>
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-spotify"{{/if}} class=" {{#if gate.url_spotify}}active{{/if}} support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
 			<i class="fab fa-spotify"></i>
 			<div>
 				<span>Spotify</span>
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
-		<a href="#support-deezer" class="support-nav__item {{#if gate.url_deezer}}active{{/if}}">
+		<a {{#if user.basic}}{{else}}href="#support-deezer"{{/if}} class=" {{#if gate.url_deezer}}active{{/if}} support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
 			<i class="fab fa-deezer"></i>
 			<div>
 				<span>Deezer</span>
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
-		<a href="#support-tiktok" class="support-nav__item {{#if gate.url_tiktok}}active{{/if}}">
+		<a {{#if user.basic}}{{else}}href="#support-tiktok"{{/if}} class=" {{#if gate.url_tiktok}}active{{/if}} support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
 			<i class="fab fa-tiktok"></i>
 			<div>
 				TikTok
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
-		<a href="#support-mixcloud" class="support-nav__item {{#if gate.url_mixcloud}}active{{/if}}">
+		<a {{#if user.basic}}{{else}}href="#support-mixcloud"{{/if}} class="{{#if gate.url_mixcloud}}active{{/if}} support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
 			<i class="fab fa-mixcloud"></i>
 			<div>
 				MixCloud
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-twitch"{{/if}} class="{{#if gate.url_twitch}}active{{/if}} support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-twitch"></i>
+			<div>
+				Twitch
+				<i class="fa fa-trash deselect-icon"></i>
+			</div>
+		</a>
+		<a {{#if user.basic}}{{else}}href="#support-applemusic"{{/if}} class="{{#if gate.url_applemusic}}active{{/if}} support-nav__item {{#if user.basic}}sb-disabled{{/if}}" {{#if user.basic}}data-swal-title="Solo disponible para usuarios VIP y Gold"{{/if}}>
+			<i class="fab fa-apple"></i>
+			<div>
+				Apple Music 
 				<i class="fa fa-trash deselect-icon"></i>
 			</div>
 		</a>
@@ -71,7 +85,7 @@
 
 	<!-- Support Sections -->
 	<div class="support-sections">
-		<section id="support-youtube" class="support-section {{#if gate.url_youtube}}s-show{{/if}}">
+		<section id="support-youtube" class="support-section ">
 			<h3 class="form-steps__title text-left">Apoyar con Youtube</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -93,13 +107,14 @@
 			<div class="form-row">
 				<div class="col">
 					<label class="form-steps__title">Ingresa la URL del canal</label>
-					<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_youtube" placeholder="URL de la canal" value="{{gate.url_youtube}}">
+					<div class="other-container cont_yt">
+				
+					{{#URLRSS33 gate.url_youtube 'url_youtube'}}{{/URLRSS33}}
+					<!--<input type="url" class="form-control-steps" name="url_youtube" placeholder="URL de la canal" value="{{gate.url_youtube}}">
 					<button type="button" class="add-other__btn">
 						<i class="fa fa-plus"></i>
-					</button>
-				</div>
+					</button>-->
+				
 			</div>
 				</div><!-- .col -->
 				<!--<div class="col">
@@ -109,7 +124,7 @@
 			</div><!-- .form-row -->
 		</section>
 
-		<section id="support-facebook" class="support-section  {{#if gate.url_facebook}}s-show{{/if}}">
+		<section id="support-facebook" class="support-section  ">
 			<h3 class="form-steps__title text-left">Apoyar con Facebook</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -133,17 +148,13 @@
 				Hacer que los fanáticos puedan omitir los pasos
 			</label>
 			<label class="form-steps__title">Ingresa la URL de la página</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_facebook" placeholder="URL de la página" value="{{gate.url_facebook}}">
-					<button type="button" class="add-other__btn">
-						<i class="fa fa-plus"></i>
-					</button>
-				</div>
+			<div class="other-container cont_fb">
+				{{#URLRSS33 gate.url_facebook 'url_facebook'}}{{/URLRSS33}}
+
 			</div>
 		</section>
 
-		<section id="support-twitter" class="support-section {{#if gate.url_twitter}}s-show{{/if}}">
+		<section id="support-twitter" class="support-section ">
 			<h3 class="form-steps__title text-left">Apoyar con Twitter</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -169,17 +180,13 @@
 			</label>
 
 			<label class="form-steps__title">Ingresa la URL de la cuenta</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_twitter" placeholder="URL de la cuenta" value="{{gate.url_twitter}}">
-					<button type="button" class="add-other__btn">
-						<i class="fa fa-plus"></i>
-					</button>
-				</div>
+			<div class="other-container cont_tw">
+					{{#URLRSS33 gate.url_twitter 'url_twitter'}}{{/URLRSS33}}
+
 			</div>
 		</section>
 
-		<section id="support-soundcloud" class="support-section {{#if gate.url_souncloud}}s-show{{/if}}">
+		<section id="support-soundcloud" class="support-section">
 			<h3 class="form-steps__title text-left">Apoyar con SoundCloud</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -216,17 +223,13 @@
 			</div><!-- .form-row -->
 
 			<label class="form-steps__title">Ingresa la URL del perfil</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_souncloud" placeholder="URL del perfil" value="{{gate.url_souncloud}}">
-					<button type="button" class="add-other__btn">
-						<i class="fa fa-plus"></i>
-					</button>
-				</div>
+			<div class="other-container cont_so">
+				{{#URLRSS33 gate.url_souncloud 'url_souncloud'}}{{/URLRSS33}}
+
 			</div>
 		</section>
 
-		<section id="support-instagram" class="support-section {{#if gate.url_instagram}}s-show{{/if}}">
+		<section id="support-instagram" class="support-section ">
 			<h3 class="form-steps__title text-left">Apoyar con Instagram</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -246,17 +249,13 @@
 			</div><!-- .form-row -->
 
 			<label class="form-steps__title">Ingresa la URL de la cuenta</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_instagram" placeholder="URL de la cuenta" value="{{gate.url_instagram}}">
-					<button type="button" class="add-other__btn">
-						<i class="fa fa-plus"></i>
-					</button>
-				</div>
+			<div class="other-container cont_ins">
+				{{#URLRSS33 gate.url_instagram 'url_instagram'}}{{/URLRSS33}}
+				
 			</div>
 		</section>
 
-		<section id="support-spotify" class="support-section {{#if gate.url_spotify}}s-show{{/if}}">
+		<section id="support-spotify" class="support-section ">
 			<h3 class="form-steps__title text-left">Apoyar con Spotify</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -274,12 +273,13 @@
 					</label>
 				</div><!-- .col -->
 			</div><!-- .form-row -->
+<div class="other-container cont_spt">
+	{{#URLRSS33 gate.url_spotify 'url_spotify'}}{{/URLRSS33}}
 
-			<label class="form-steps__title">Ingresa la URL del playlist</label>
-			<input type="text" class="form-control-steps" name="url_spotify" placeholder="URL del playlist" value="{{gate.url_spotify}}">
+			</div>
 		</section>
 
-		<section id="support-deezer" class="support-section {{#if gate.url_deezer}}s-show{{/if}}">
+		<section id="support-deezer" class="support-section ">
 			<h3 class="form-steps__title text-left">Apoyar con Deezer</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -305,17 +305,13 @@
 			</label>
 
 			<label class="form-steps__title">Ingresa la URL del perfil</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_deezer" placeholder="URL del perfil" value="{{gate.url_deezer}}">
-					<button type="button" class="add-other__btn">
-						<i class="fa fa-plus"></i>
-					</button>
-				</div>
+			<div class="other-container cont_dee">
+				{{#URLRSS33 gate.url_deezer 'url_deezer'}}{{/URLRSS33}}
+				
 			</div>
 		</section>
 
-		<section id="support-tiktok" class="support-section {{#if gate.url_tiktok}}s-show{{/if}}">
+		<section id="support-tiktok" class="support-section ">
 			<h3 class="form-steps__title text-left">Apoyar con TikTok</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -334,17 +330,13 @@
 				</div><!-- .col -->
 			</div><!-- .form-row -->
 			<label class="form-steps__title">Ingresa la URL del perfil</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_tiktok" placeholder="URL del perfil" value="{{gate.url_tiktok}}">
-					<button type="button" class="add-other__btn">
-						<i class="fa fa-plus"></i>
-					</button>
-				</div>
+			<div class="other-container cont_tik">
+				{{#URLRSS33 gate.url_tiktok 'url_tiktok'}}{{/URLRSS33}}
+				
 			</div>
 		</section>
 
-		<section id="support-mixcloud" class="support-section {{#if gate.url_mixcloud}}s-show{{/if}}">
+		<section id="support-mixcloud" class="support-section ">
 			<h3 class="form-steps__title text-left">Apoyar con MixCloud</h3>
 			<div class="form-row">
 				<div class="col-12 col-md-6 mb-3">
@@ -354,22 +346,10 @@
 						Seguir perfil
 					</label>
 				</div><!-- .col -->
-				<div class="col-12 col-md-6 mb-3">
-					<label class="checkbox-style">
-						<input type="checkbox" name="repost_mixcloud" value="repost_mixcloud"  {{#if gate.repost_mixcloud}}checked{{/if}}>
-						<span class="checkbox-style__circle"></span>
-						Repost track
-					</label>
-				</div><!-- .col -->
+				
 			</div><!-- .form-row -->
 			<div class="form-row">
-				<div class="col-12 col-md-6 mb-3">
-					<label class="checkbox-style">
-						<input type="checkbox" name="like_mixcloud" value="like_mixcloud"  {{#if gate.like_mixcloud}}checked{{/if}}>
-						<span class="checkbox-style__circle"></span>
-						Like al track
-					</label>
-				</div><!-- .col -->
+			
 				<div class="col-12 col-md-6 mb-3">
 					<label class="checkbox-style">
 						<input type="checkbox" name="omitir_mixcloud" value="omitir_mixcloud" class="optional" {{#if gate.omitir_mixcloud}}checked{{/if}}>
@@ -380,15 +360,71 @@
 			</div><!-- .form-row -->
 
 			<label class="form-steps__title">Ingresa la URL del perfil</label>
-			<div class="other-container">
-				<div class="add-other">
-					<input type="url" class="form-control-steps" name="url_mixcloud" placeholder="URL del perfil" value="{{gate.url_mixcloud}}">
-					<button type="button" class="add-other__btn">
-						<i class="fa fa-plus"></i>
-					</button>
-				</div>
+			<div class="other-container cont_mix">
+					{{#URLRSS33 gate.url_mixcloud 'url_mixcloud'}}{{/URLRSS33}}
+				
+			</div>
+		</section>
+
+
+		<section id="support-twitch" class="support-section ">
+			<h3 class="form-steps__title text-left">Apoyar con MixCloud</h3>
+			<div class="form-row">
+				<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="seguir_twitch" value="seguir_twitch"  {{#if gate.seguir_twitch}}checked{{/if}}>
+						<span class="checkbox-style__circle"></span>
+						Seguir perfil
+					</label>
+				</div><!-- .col -->
+				
+			</div><!-- .form-row -->
+			<div class="form-row">
+				
+				<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="omitir_twitch" value="omitir_twitch" class="optional" {{#if gate.omitir_twitch}}checked{{/if}}>
+						<span class="checkbox-style__circle"></span>
+						Hacer que los fanáticos puedan omitir los pasos
+					</label>
+				</div><!-- .col -->
+			</div><!-- .form-row -->
+
+			<label class="form-steps__title">Ingresa la URL del perfil</label>
+			<div class="other-container cont_twic">
+				{{#URLRSS33 gate.url_twitch 'url_twitch'}}{{/URLRSS33}}
+				
+			</div>
+		</section>
+
+		<section id="support-applemusic" class="support-section ">
+			<h3 class="form-steps__title text-left">Apoyar con Apple Music</h3>
+			<div class="form-row">
+				<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="seguir_applemusic" value="seguir_applemusic"  {{#if gate.seguir_applemusic}}checked{{/if}}>
+						<span class="checkbox-style__circle"></span>
+						Seguir perfil
+					</label>
+				</div><!-- .col -->
+			</div><!-- .form-row -->
+			<div class="form-row">
+				<div class="col-12 col-md-6 mb-3">
+					<label class="checkbox-style">
+						<input type="checkbox" name="omitir_applemusic" value="omitir_applemusic" class="optional" {{#if gate.omitir_applemusic}}checked{{/if}}>
+						<span class="checkbox-style__circle"></span>
+						Hacer que los fanáticos puedan omitir los pasos
+					</label>
+				</div><!-- .col -->
+			</div><!-- .form-row -->
+
+			<label class="form-steps__title">Ingresa la URL del perfil</label>
+			<div class="other-container cont_appl">
+				{{#URLRSS33 gate.url_applemusic 'url_applemusic'}}{{/URLRSS33}}
+				
 			</div>
 		</section>
 	</div>
+	
 	<!-- End Support Sections -->
 

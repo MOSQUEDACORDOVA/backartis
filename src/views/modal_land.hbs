@@ -1,0 +1,161 @@
+<script type="text/javascript">
+function valideKey(evt){
+    
+    // code is the decimal ASCII representation of the pressed key.
+    var code = (evt.which) ? evt.which : evt.keyCode;
+    
+    if(code==8) { // backspace.
+      return true;
+    } else if(code>=48 && code<=57) { // is a number.
+      return true;
+    } else{ // other keys.
+      return false;
+    }
+}
+</script> 
+<style>
+	.texto-gris{
+    color: #CCC;
+	margin-left: 10px;
+}
+.contenedor_usuarios {
+ 
+    width:120%;
+}
+/* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
+/* Ponemos un color de fondo y redondeamos las esquinas del track */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+table>thead>tr{font-weight: bolder;}
+.linea-oculta{display: none;}
+
+.Activo{
+	color: green;
+}
+.Caducado{
+	color: orange;
+}
+.Agotado{
+	color: red;
+}
+@media(max-width:414px){
+	.box_admin{
+		width: 100%;
+	}
+	.card-box__nav .nav-link{
+		font-size: 14px !important;
+	}
+	.data-user{
+		margin-bottom: 3rem;
+    	margin-top: 15rem;
+	}
+	.card-box--icon{
+		margin-bottom: 2rem;
+	}
+}
+</style>
+<div class="card-box shadow position-relative calculate-height">
+	<div class="row">
+		<div class="col-xl-7">
+			<div class="card-box--icon card-box--mini-icon dashboard__card-box-header dashboard__card-box-header--mini align-items-center">
+				<div class="card-box__icon card-box__icon--celeste">
+					<i class="fa fa-bell" ></i>
+				</div>
+				<div class="card-box__body">
+					<h2 class="card-box__title m-0">{{pageName}}</h2>
+				</div>
+			</div><!-- .card-box -->
+		</div><!-- .col-xl-7 -->
+	</div><!-- .row -->
+
+	<form action="/{{#if parsed_modal_land}}save_edit_modal_land{{else}}modal_land_save{{/if}}" method="post" class="p-to-btn" autocomplete="off" id="form-create-plan" enctype='multipart/form-data'>
+	<input type="text" class="form-control-steps" id="id" name="id_user" placeholder="id"  value="{{userID}}" hidden />
+	{{#if parsed_modal_land}}<input type="text" class="form-control-steps" id="id" name="id_" placeholder="id"  value="{{parsed_modal_land.id}}" hidden />{{/if}}
+		<div class="form-update-account">
+			<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Titulo</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fa fa-user"></i>
+						</div>
+				
+					<input type="text" class="form-control-steps"  id="titulo" name="titulo" placeholder="Titulo para el modal" required {{#if parsed_modal_land}} value="{{parsed_modal_land.titulo}}" {{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
+			<div class="form-update-account__item" style="grid-row-end: 1;">
+				<label class="form-steps__title" for="text">Estado</label>
+				<div class="form-control-steps__container mb-3">
+					<div class="form-control-steps__placeholder">
+						<i class="fas fa-project-diagram"></i>
+					</div>
+					<i class="fa fa-angle-down form-control-steps__select-arrow"></i>
+					<select class="form-control-steps" id="estado" name="estado" required style="background-color: #11111108;">	
+						{{#if parsed_modal_land}}<option value="{{parsed_modal_land.estado}}" selected>{{parsed_modal_land.estado}}</option>{{/if}}
+						<option value="Activa">Activa</option>
+						<option value="Inactiva">Inactiva</option>						
+					</select>
+				</div>
+				
+			</div><!-- .form-update-accound__item -->
+			
+				<div class="form-update-account__item">
+				<label class="form-steps__title" for="text">Link</label>
+				<div class="form-control-steps__container mb-3">
+						<div class="form-control-steps__placeholder">
+					<i class="fa fa-user"></i>
+						</div>
+				
+					<input type="text" class="form-control-steps"  id="titulo" name="link" placeholder="Link para el modal" required {{#if parsed_modal_land}} value="{{parsed_modal_land.link}}" {{/if}}>
+				</div>
+			</div><!-- .form-update-accound__item -->
+
+			<div class="form-update-account__item" style="grid-row-end: 1;">
+				<label class="form-steps__title" for="ws">Descripción</label>
+				<div class="form-control-steps__container">
+				<textarea type="text" class="form-control-steps"  id="descripcion" name="descripcion" placeholder="Descripción" required >{{#if parsed_modal_land}}{{parsed_modal_land.descripcion}}{{/if}}</textarea>
+				</div>
+			</div>
+						<div class="form-update-account__item">
+				<p class="form-steps__title--label form-steps__title text-left" for="user-name">Añade una foto para el modal</p>
+				<div class="drop-area__wrapper divider">
+					<div class="drop-area" id="upload-user-img">
+						<input type="file" id="profile-img" accept="image/*" class="d-none" name='photo'>
+						<input type="text" id="profile_img_"  class="form-control-steps" name='img' {{#if parsed_modal_land}} value="{{parsed_modal_land.img}}" {{/if}} hidden>
+						<div class="drop-content flex-column">
+							<div class="drop-icon mr-0 mb-2" id="drop-icon">
+								<i class="fa fa-upload"></i>
+							</div>
+							<div class="info-drop">
+								<label for="profile-img">Elije un archivo</label>
+							</div>
+						</div>
+						<a id="eliminar_foto" style="cursor: pointer;font-size: 1.3em;  color: #707070;">Eliminar Foto</a>	
+						<div id="resultado"></div>
+						<div id="loadingP" style="width: 200px;border-radius: 10px;">
+				<div id='progressBar1' class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%; border-radius: 10px;'>0%
+
+				</div>
+
+				</div>
+					</div>
+					<img src="{{#if parsed_modal_land}}/assets/uploads/{{parsed_modal_land.img}}{{else}}https://st4.depositphotos.com/29453910/37778/v/600/depositphotos_377784120-stock-illustration-hand-drawn-modern-man-avatar.jpg{{/if}}" alt="Foto de perfil" id="img_photo">
+					
+					
+				</div>
+			</div><!-- .form-update-accound__item -->
+		<button type="submit" disabled class="btn btn-primary btn-x-lg form-steps__btn">Guardar <i class="fa fa-angle-right"></i></button>
+	</form>
+
+	<a href="/admin_dash" class="before-page">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+</div><!-- .card-box -->

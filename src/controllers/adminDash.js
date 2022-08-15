@@ -1,10 +1,10 @@
 const Modulo_BD = require("../models/modulos_");
-
+var moment = require('moment-timezone');
 exports.dashboard = (req, res) => {
   ////console.log(req.params.gates);
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let msg = false;
@@ -16,21 +16,78 @@ exports.dashboard = (req, res) => {
   Modulo_BD.totalGates().then((res) => {
     let parsed = JSON.parse(res);
     total_gates = parsed.length;
-  });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });;
   Modulo_BD.obtenerUsuarios().then((resultado) => {
     let parsed = JSON.parse(resultado);
-    let cont = parsed.length;
-    ////console.log(parsed);
+    let cont_u = parsed.length;
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+let gold_c=0, vip_c=0,basic_c=0
+for (let i = 0; i < parsed.length; i++) {
+  if (parsed[i].membership === "Gold") {
+    gold_c++
+  }
+  if (parsed[i].membership === "VIP") {
+    vip_c++
+  }
+  if (parsed[i].membership === "Basic") {
+    basic_c++
+  }
+}
+
+   console.log(gold_c);
+   console.log(vip_c);
     res.render("index_admin", {
       usuarios: parsed,
       dashboardPage: true,
-      cont_user: cont,
+      cont_user: cont_u,
       cont_gates: total_gates,
       admin_dash1,
       notPhoto,
-      msg,
+      msg,gold_c,
+      vip_c,
+      basic_c,
+      parsed_lmit,
+      hay_not
     });
-  });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });;
+}).catch((err) => {
+  console.log(err)
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
 };
 
 exports.verCupones = (req, res) => {
@@ -38,7 +95,7 @@ exports.verCupones = (req, res) => {
   let username = req.params.username;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   ////console.log(req.params.gates);
@@ -51,6 +108,32 @@ exports.verCupones = (req, res) => {
   Modulo_BD.obtenerCuponesUsados(userID).then((resultado) => {
     let parsed = JSON.parse(resultado);
     ////console.log(parsed);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("index_admin", {
       cupones_usados: parsed,
       dashboardPage: true,
@@ -58,9 +141,20 @@ exports.verCupones = (req, res) => {
       admin_dash1: true,
       username,
       notPhoto,
-      msg,
+      msg,      
+      parsed_lmit,
+      hay_not
     });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });;
 };
 
 exports.updateProfile = (req, res) => {
@@ -71,14 +165,50 @@ exports.updateProfile = (req, res) => {
     let parsed_user = JSON.parse(resultado)[0];
     let cont = parsed_user.length;
     ////console.log(parsed_user);
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("editar_usuario", {
       pageName: "Actualizar Perfil del Usuario",
       dashboardPage: true,
       parsed_user,
-      admin_dash1,
+      admin_dash1,    
+      parsed_lmit,
+      hay_not
     });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });;
 };
 
 // Actualizar usuario en la base de datos
@@ -93,7 +223,7 @@ exports.UpdateUser = async (req, res) => {
     confirmpassword,
     photo1,
     tipo,
-    membresia,
+    membresia,fecha_final
   } = req.body;
 
   if (!password && !confirmpassword) {
@@ -105,13 +235,15 @@ exports.UpdateUser = async (req, res) => {
       email,
       photo1,
       tipo,
-      membresia
+      membresia,fecha_final
     )
       .then(() => {
         //////console.log(result);
       })
       .catch((err) => {
-        return res.status(500).send("Error actualizando" + err);
+        console.log(err)
+        let msg = "Error en sistema";
+        return res.redirect("/?msg=" + msg);
       });
     //redirect('/dashboard');
     //const usuario = await Usuarios.findOne({where: {email}});
@@ -132,7 +264,9 @@ exports.UpdateUser = async (req, res) => {
       Modulo_BD.actualizarpassW(id, password)
         .then(() => {})
         .catch((err) => {
-          return res.status(500).send("Error actualizando" + err);
+          console.log(err)
+          let msg = "Error en sistema";
+          return res.redirect("/?msg=" + msg);
         });
       //redirect('/dashboard');
       //const usuario = await Usuarios.findOne({where: {email}});
@@ -150,7 +284,11 @@ exports.deleteUser = async (req, res) => {
       ////console.log(resultado);
       let msg = "Se borró con éxito toda la informacion de su cuenta";
       res.redirect("/?msg=" + msg);
-    });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });;
   } else {
     Modulo_BD.deleteUsuario(parametro_buscar).then((resultado) => {
       //let parsed = JSON.parse(resultado);
@@ -158,7 +296,11 @@ exports.deleteUser = async (req, res) => {
       ////console.log(resultado);
 
       res.redirect("/admin_dash");
-    });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });;
   }
 };
 
@@ -167,7 +309,7 @@ exports.planes = (req, res) => {
   //////console.log(req.params.gates);
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let msg = false;
@@ -179,12 +321,42 @@ exports.planes = (req, res) => {
   Modulo_BD.totalGates().then((res) => {
     let parsed = JSON.parse(res);
     total_gates = parsed.length;
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
   Modulo_BD.totalPlanes().then((resultado) => {
     let parsed = JSON.parse(resultado);
     let cont = parsed.length;
     let planes = true;
     //////console.log(parsed);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("index_admin", {
       //usuarios: parsed,
       dashboardPage: true,
@@ -194,15 +366,25 @@ exports.planes = (req, res) => {
       cont_gates: total_gates,
       admin_dash1,
       notPhoto,
-      msg,
+      msg,parsed_lmit,
+  hay_not
     });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
 };
 
 exports.addplanes = (req, res) => {
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let userID = req.user.id;
@@ -212,13 +394,49 @@ exports.addplanes = (req, res) => {
   //	let parsed = JSON.parse(resultado);
   //	let cont= parsed.length
   //////console.log(parsed);
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+    let cont = parsed_lmit.length;
+
+    Hoy = new Date(); //Fecha actual del sistema
+    var hay_not = false;
+    if (cont == 0) {
+      hay_not = true;
+    } else {
+
+      for (let i = 0; i < cont; i++) {
+
+        console.log(parsed_lmit[i].fecha_inicio)
+        console.log(parsed_lmit[i].fecha_final)
+        let fecha_inicio = moment(parsed_lmit[i].fecha_inicio).isSame(Hoy, 'day'); // true
+        let fecha_final= moment(parsed_lmit[i].fecha_final).isAfter(Hoy, 'day'); // true
+          console.log(fecha_inicio)
+          console.log(fecha_final)
+        if (parsed_lmit[i].estado == "Activa") {
+          if (fecha_final == false) {
+            break;
+          } else {
+            hay_not = true;
+          }
+        } else {
+          hay_not = true;
+          break;
+        }
+      }
+    }
   res.render("crear_planes", {
     pageName: "Crear Plan",
     dashboardPage: true,
  admin_dash1: true,
     userID,
-    notPhoto,
+    notPhoto,parsed_lmit,
+hay_not
   });
+}).catch((err) => {
+  console.log(err)
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
 
   //})
 };
@@ -240,7 +458,7 @@ exports.savePlan = async (req, res) => {
     octava_linea,
     novena_linea,
     decima_linea,
-    descuento,
+    descuento, detalles
   } = req.body;
   var msg = "";
   Modulo_BD.guardarPlan(
@@ -258,7 +476,7 @@ exports.savePlan = async (req, res) => {
     octava_linea,
     novena_linea,
     decima_linea,
-    descuento
+    descuento, detalles
   )
     .then((result) => {
       ////console.log(result);
@@ -270,7 +488,9 @@ exports.savePlan = async (req, res) => {
       res.redirect("/planes/" + msg);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
 };
 exports.deletePlan = async (req, res) => {
@@ -283,8 +503,16 @@ exports.deletePlan = async (req, res) => {
     Modulo_BD.totalPlanes().then((resultado) => {
       let msg = "Plan eliminado con exito";
       res.redirect("/planes/" + msg);
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.editPlan = (req, res) => {
@@ -292,7 +520,7 @@ exports.editPlan = (req, res) => {
   //	var id_user = req.user.id;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let admin_dash1 = true;
@@ -301,16 +529,51 @@ exports.editPlan = (req, res) => {
     let parsed_plan = JSON.parse(resultado)[0];
     let cont = parsed_plan.length;
     ////console.log(parsed_plan);
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("edit_plan", {
       pageName: "Editar Plan",
       dashboardPage: true,
  admin_dash1: true,
       parsed_plan,
       notPhoto,
-      admin_dash1,
+      admin_dash1,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.savePlanEdited = async (req, res) => {
@@ -329,7 +592,7 @@ exports.savePlanEdited = async (req, res) => {
     octava_linea,
     novena_linea,
     decima_linea,
-    descuento,
+    descuento,detalles
   } = req.body;
 
   Modulo_BD.guardarPlanEdited(
@@ -347,13 +610,15 @@ exports.savePlanEdited = async (req, res) => {
     octava_linea,
     novena_linea,
     decima_linea,
-    descuento
+    descuento,detalles
   )
     .then((result) => {
       ////console.log(result);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
   let msg = "Plan actualizado con exito";
   res.redirect("/planes/" + msg);
@@ -364,7 +629,7 @@ exports.aboutUs = (req, res) => {
   //////console.log(req.params.gates);
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let msg = false;
@@ -376,12 +641,42 @@ exports.aboutUs = (req, res) => {
   Modulo_BD.totalGates().then((res) => {
     let parsed = JSON.parse(res);
     total_gates = parsed.length;
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
   Modulo_BD.totalaboutUs().then((resultado) => {
     let parsed = JSON.parse(resultado);
     let cont = parsed.length;
     let aboutUs = true;
     //////console.log(parsed);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("index_admin", {
       //usuarios: parsed,
       dashboardPage: true,
@@ -391,26 +686,67 @@ exports.aboutUs = (req, res) => {
       notPhoto,
       cont_gates: total_gates,
       admin_dash1,
-      msg,
+      msg,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.addAboutUs = (req, res) => {
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let userID = req.user.id;
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
   res.render("create_about", {
     pageName: "Crear Sobre Nosotros",
     dashboardPage: true,
     admin_dash1: true,
     userID,
-    notPhoto,
+    notPhoto,parsed_lmit,
+hay_not
+  })
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
-
   //})
 };
 
@@ -427,7 +763,9 @@ exports.save_aboutus = async (req, res) => {
     correo,
     twitter,
     spotify,
-    tiktok,
+    tiktok,deezer,
+    twitch,
+    apple_music,
   } = req.body;
   var msg = "";
   Modulo_BD.guardaraboutus(
@@ -442,7 +780,10 @@ exports.save_aboutus = async (req, res) => {
     correo,
     twitter,
     spotify,
-    tiktok
+    tiktok,
+    deezer,
+twitch,
+apple_music
   )
     .then((result) => {
       ////console.log(result);
@@ -454,7 +795,9 @@ exports.save_aboutus = async (req, res) => {
       res.redirect("/aboutus/" + msg);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
 };
 
@@ -464,7 +807,7 @@ exports.editabout = (req, res) => {
   let admin_dash1 = true;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
 
@@ -472,16 +815,51 @@ exports.editabout = (req, res) => {
     let parsed_about = JSON.parse(resultado)[0];
     let cont = parsed_about.length;
     ////console.log(parsed_about);
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("edit_about", {
       pageName: "Editar Plan",
       dashboardPage: true,
       admin_dash1: true,
       parsed_about,
       notPhoto,
-      admin_dash1,
+      admin_dash1,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.saveaboutEdited = async (req, res) => {
@@ -497,7 +875,9 @@ exports.saveaboutEdited = async (req, res) => {
     correo,
     twitter,
     spotify,
-    tiktok,
+    tiktok,deezer,
+twitch,
+apple_music
   } = req.body;
 
   Modulo_BD.saveEditedAbout(
@@ -512,13 +892,17 @@ exports.saveaboutEdited = async (req, res) => {
     correo,
     twitter,
     spotify,
-    tiktok
+    tiktok,deezer,
+twitch,
+apple_music
   )
     .then((result) => {
       ////console.log(result);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
   let msg = "Sobre nosotros actualizado con exito";
   res.redirect("/aboutus/" + msg);
@@ -533,6 +917,10 @@ exports.deleteAbout = async (req, res) => {
 
     let msg = "Sobre nosotros eliminado con exito";
     res.redirect("/aboutus/" + msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
 };
 
@@ -541,7 +929,7 @@ exports.getCupones = (req, res) => {
   //////console.log(req.params.gates);
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let msg = false;
@@ -553,12 +941,42 @@ exports.getCupones = (req, res) => {
   Modulo_BD.totalGates().then((res) => {
     let parsed = JSON.parse(res);
     total_gates = parsed.length;
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
   Modulo_BD.totalcupones().then((resultado) => {
     let parsed = JSON.parse(resultado);
     let cont = parsed.length;
     let cupones = true;
     //////console.log(parsed);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("index_admin", {
       //usuarios: parsed,
       dashboardPage: true,
@@ -568,25 +986,67 @@ exports.getCupones = (req, res) => {
       notPhoto,
       cont_gates: total_gates,
       admin_dash1,
-      msg,
+      msg,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.addCupon = (req, res) => {
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let userID = req.user.id;
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
   res.render("create_cupon", {
     pageName: "Crear Cupón",
     dashboardPage: true,
     admin_dash1: true,
     userID,
-    notPhoto,
+    notPhoto,parsed_lmit,
+hay_not
   });
+}).catch((err) => {
+  console.log(err)
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
 
   //})
 };
@@ -621,7 +1081,9 @@ exports.save_cupon = async (req, res) => {
       res.redirect("/cupones/" + msg);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
 };
 
@@ -631,22 +1093,57 @@ exports.editCupon = (req, res) => {
   let admin_dash1 = true;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerCuponforedit(id_buscar).then((resultado) => {
     let parsed_cupon = JSON.parse(resultado)[0];
     let cont = parsed_cupon.length;
     ////console.log(parsed_cupon);
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("edit_cupon", {
       pageName: "Editar Cupón",
       dashboardPage: true,
       parsed_cupon,
       admin_dash1,
-      notPhoto,
+      notPhoto,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.saveCuponEdited = async (req, res) => {
@@ -673,7 +1170,9 @@ exports.saveCuponEdited = async (req, res) => {
       ////console.log(result);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
   let msg = "Cupón actualizado con exito";
   res.redirect("/cupones/" + msg);
@@ -688,6 +1187,10 @@ exports.deleteCupon = async (req, res) => {
 
     let msg = "Cupón eliminado con exito";
     res.redirect("/cupones/" + msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
 };
 
@@ -700,7 +1203,7 @@ exports.getPagos = (req, res) => {
   }
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   var total_gates = "";
@@ -708,7 +1211,11 @@ exports.getPagos = (req, res) => {
   Modulo_BD.totalGates().then((res) => {
     let parsed = JSON.parse(res);
     total_gates = parsed.length;
-  });
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });;
   Modulo_BD.totalPagos().then((resultado) => {
     let parsed = JSON.parse(resultado);
     let cont = parsed.length;
@@ -718,6 +1225,32 @@ exports.getPagos = (req, res) => {
       pre = true;
     }
     console.log(parsed);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("index_admin", {
       dashboardPage: true,
       cont_user: cont,
@@ -726,9 +1259,19 @@ exports.getPagos = (req, res) => {
       notPhoto,
       cont_gates: total_gates,
       admin_dash1,
-      msg,
+      msg,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 // BANNER
@@ -740,7 +1283,7 @@ exports.bannersGet = (req, res) => {
   }
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let admin_dash1 = true;
@@ -749,6 +1292,32 @@ exports.bannersGet = (req, res) => {
     let cont = parsed.length;
     let banners = true;
     //////console.log(parsed);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("index_admin", {
       //usuarios: parsed,
       dashboardPage: true,
@@ -757,25 +1326,64 @@ exports.bannersGet = (req, res) => {
       banners,
       notPhoto,
       admin_dash1,
-      msg,
+      msg,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.addBanner = (req, res) => {
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   let userID = req.user.id;
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+    let cont = parsed_lmit.length;
+    Hoy = moment(); //Fecha actual del sistema
+    var hay_not = false;
+    if (cont == 0) {
+      hay_not = true;
+    } else {
+      for (let i = 0; i < cont; i++) {
+         let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+        let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+        if (parsed_lmit[i].estado == "Activa") {
+          if (fecha_inicio == true) {
+            console.log(fecha_inicio)
+            if (fecha_final == false) {
+              break;
+            } else {
+              hay_not = true;
+            }
+          }  
+        } else {
+          hay_not = true;
+          break;
+        }
+      }
+    }
   res.render("create_banner", {
     pageName: "Crear Banner",
     dashboardPage: true,
     admin_dash1: true,
     userID,
-    notPhoto,
+    banners: true,
+    notPhoto,parsed_lmit,
+hay_not
   });
+})
 };
 
 exports.save_banner = async (req, res) => {
@@ -792,7 +1400,9 @@ exports.save_banner = async (req, res) => {
       res.redirect("/banner/" + msg);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
 };
 
@@ -802,22 +1412,57 @@ exports.editBanner = (req, res) => {
   let admin_dash1 = true;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerBannerforedit(id_buscar).then((resultado) => {
     let parsed_banner = JSON.parse(resultado)[0];
     let cont = parsed_banner.length;
     ////console.log(parsed_banner);
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("edit_banner", {
       pageName: "Editar Banner",
       dashboardPage: true,
       parsed_banner,
       notPhoto,
-      admin_dash1,
+      admin_dash1,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.sEditedBanner = async (req, res) => {
@@ -828,7 +1473,9 @@ exports.sEditedBanner = async (req, res) => {
       ////console.log(result);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
   let msg = "Banner actualizado con exito";
   res.redirect("/banner/" + msg);
@@ -843,6 +1490,10 @@ exports.deleteBanner = async (req, res) => {
 
     let msg = "Banner eliminado con exito";
     res.redirect("/banner/" + msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
 };
 
@@ -855,7 +1506,7 @@ exports.notificacionesGet = (req, res) => {
   }
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenernotificaciones().then((resultado) => {
@@ -863,48 +1514,113 @@ exports.notificacionesGet = (req, res) => {
     //let cont= parsed.length
     Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
       let parsed_lmit = JSON.parse(resultado2);
-      //let cont= parsed.length
-      ////console.log(parsed_lmit);
-
-      ////console.log(parsed);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
       res.render("index_admin", {
         //usuarios: parsed,
         dashboardPage: true,
         notificaciones_parsed: parsed,
         parsed_lmit,
+        hay_not,
         notificaciones: true,
         admin_dash1: true,
         msg,
         notPhoto,
       });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.addnotificaciones = (req, res) => {
   let userID = req.user.id;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerUsuarios().then((resultado) => {
     let parsed = JSON.parse(resultado);
     let cont = parsed.length;
     //////console.log(parsed);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("notificaciones", {
       pageName: "Crear Notificacion",
       usuarios_parsed: parsed,
       dashboardPage: true,
       notPhoto,
       admin_dash1: true,
-      userID,
+      userID,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.save_notificaciones = async (req, res) => {
-  const { id_user, nombre, estado, descripcion, fecha_publicacion, destino } =
+  const { id_user, nombre, estado, descripcion, fecha_inicio, fecha_final, destino,id_notificacion } =
     req.body;
   var msg = "";
   Modulo_BD.saveDatosNotificaciones(
@@ -912,8 +1628,8 @@ exports.save_notificaciones = async (req, res) => {
     nombre,
     estado,
     descripcion,
-    fecha_publicacion,
-    destino
+    fecha_inicio, fecha_final,
+    destino,id_notificacion
   )
     .then((result) => {
       ////console.log(result);
@@ -925,7 +1641,9 @@ exports.save_notificaciones = async (req, res) => {
       res.redirect("/notificaciones/" + msg);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
 };
 
@@ -934,23 +1652,60 @@ exports.editNotificaciones = (req, res) => {
   let userID = req.user.id;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerNotificacionforedit(id_buscar).then((resultado) => {
     let parsed_notificacion = JSON.parse(resultado)[0];
     let cont = parsed_notificacion.length;
     ////console.log(parsed_notificacion);
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            console.log('hello')
+            hay_not = true;
+            break;
+          }
+        }
+      }
+      console.log(hay_not)
     res.render("notificaciones", {
       pageName: "Editar Notificacion",
       dashboardPage: true,
       parsed_notificacion,
       notPhoto,
       admin_dash1: true,
-      userID,
+      userID,parsed_lmit,
+  hay_not
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.deletenotificaciones = async (req, res) => {
@@ -963,6 +1718,241 @@ exports.deletenotificaciones = async (req, res) => {
 
     let msg = "Notificacion eliminada con exito";
     res.redirect("/notificaciones/" + msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });
+};
+
+// modal_land
+exports.modal_landGet = (req, res) => {
+  //////console.log(req.params.gates);
+  let msg = false;
+  if (req.params.msg) {
+    msg = req.params.msg;
+  }
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  Modulo_BD.obtenerModalLand().then((resultado) => {
+    let parsed = JSON.parse(resultado);
+    //let cont= parsed.length
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+      res.render("index_admin", {
+        //usuarios: parsed,
+        dashboardPage: true,
+        modal_land_parsed: parsed,
+        parsed_lmit,
+        hay_not,
+        modal_land: true,
+        admin_dash1: true,
+        msg,
+        notPhoto,
+      });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+
+exports.addmodal_land = (req, res) => {
+  let userID = req.user.id;
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+    res.render("modal_land", {
+      pageName: "Crear modal",
+      dashboardPage: true,
+      notPhoto,
+      admin_dash1: true,
+      modal_land:true,
+      userID,parsed_lmit,
+  hay_not
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+
+exports.save_modal_land = async (req, res) => {
+  const { id_user, titulo, estado, descripcion,img ,link} =
+    req.body;
+  var msg = "";
+  Modulo_BD.saveDatosModal_land(id_user, titulo, estado, descripcion,img,link)
+    .then((result) => {
+      ////console.log(result);
+      if (result === "0") {
+        msg = "El nombre de la notificacion existe y se actualizado con éxito";
+      } else {
+        msg = "Modal guardado con exito";
+      }
+      res.redirect("/modal_land/" + msg);
+    })
+    .catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+exports.save_modal_land_edit = async (req, res) => {
+  const { id_, titulo, estado, descripcion,img,link} =
+    req.body;
+  var msg = "";
+  Modulo_BD.saveEditedmodal(id_, titulo, estado, descripcion,img,link  )
+    .then((result) => {
+      ////console.log(result);
+      if (result === "0") {
+        msg = "El nombre de la notificacion existe y se actualizado con éxito";
+      } else {
+        msg = "Modal editado con exito";
+      }
+      res.redirect("/modal_land/" + msg);
+    })
+    .catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+exports.editmodal_land = (req, res) => {
+  let id_buscar = req.params.id;
+  let userID = req.user.id;
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  Modulo_BD.obtenerModalforedit(id_buscar).then((resultado) => {
+    let parsed_modal_land = JSON.parse(resultado)[0];
+    ////console.log(parsed_notificacion);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            console.log('hello')
+            hay_not = true;
+            break;
+          }
+        }
+      }
+      console.log(hay_not)
+    res.render("modal_land", {
+      pageName: "Editar modal",
+      dashboardPage: true,
+      parsed_modal_land,
+      notPhoto,
+      admin_dash1: true,
+      modal_land:true,
+      userID,parsed_lmit,
+  hay_not
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+
+exports.deletemodal_land = async (req, res) => {
+  let parametro_buscar = req.params.id;
+
+  Modulo_BD.deleteNotificaciones(parametro_buscar).then((resultado) => {
+    //let parsed = JSON.parse(resultado);
+    //let cont= parsed.length
+    ////console.log(resultado);
+
+    let msg = "Modal eliminado con exito";
+    res.redirect("/modal_land/" + msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
 };
 
@@ -975,7 +1965,7 @@ exports.tipo_cambio = (req, res) => {
   }
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerTipo_cambio().then((resultado) => {
@@ -983,8 +1973,31 @@ exports.tipo_cambio = (req, res) => {
     //let cont= parsed.length
     Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
       let parsed_lmit = JSON.parse(resultado2);
-      //let cont= parsed.length
-      ////console.log(parsed_lmit);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }parsed_lmit,
+  hay_not
 
       res.render("index_admin", {
         //usuarios: parsed,
@@ -993,29 +2006,79 @@ exports.tipo_cambio = (req, res) => {
         parsed_lmit,
         tipo_cambio: true,
         admin_dash1: true,
-        msg,
+        msg,hay_not,
         notPhoto,
       });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.tipo_cambio_add = (req, res) => {
   let userID = req.user.id;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+    let cont = parsed_lmit.length;
 
-  //////console.log(parsed);
+    Hoy = new Date(); //Fecha actual del sistema
+    var AnyoHoy = Hoy.getFullYear();
+    var MesHoy = Hoy.getMonth();
+    var DiaHoy = Hoy.getDate();
+    var hay_not = false;
+    if (cont == 0) {
+      hay_not = true;
+    }else{
+   
+    for (let i = 0; i < cont; i++) {
+
+      console.log(parsed_lmit[i].estado)
+      var Fecha_aux = parsed_lmit[i].fecha_publicacion.split("-");
+      var Fecha1 = new Date(
+        parseInt(Fecha_aux[0]),
+        parseInt(Fecha_aux[1] - 1),
+        parseInt(Fecha_aux[2])
+      );
+      ////////console.log(Fecha1)
+
+      var AnyoFecha = Fecha1.getFullYear();
+      var MesFecha = Fecha1.getMonth();
+      var DiaFecha = Fecha1.getDate();
+
+      if (parsed_lmit[i].estado == "Activa") {
+        if (AnyoFecha == AnyoHoy && MesFecha == MesHoy && DiaFecha == DiaHoy) {
+          break;
+        } else {
+          //////console.log("hay fecha");
+          hay_not = true;
+        }
+      } else {
+        //////console.log("hay activo");
+        hay_not = true;
+        break;
+      }
+    }
+}
   res.render("tipo_cambio", {
     pageName: "Crear Tipo de Cambio",
     dashboardPage: true,
     notPhoto,
     admin_dash1: true,
-    userID,
+    userID,parsed_lmit,
+hay_not
   });
+})
 };
 
 exports.tipo_cambio_save = async (req, res) => {
@@ -1047,22 +2110,49 @@ exports.tipo_cambio_edit = (req, res) => {
   let userID = req.user.id;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerTipoCambioById(id_buscar).then((resultado) => {
     let parsed_Tipo_cambio = JSON.parse(resultado)[0];
     let cont = parsed_Tipo_cambio.length;
     ////console.log(parsed_Tipo_cambio);
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("tipo_cambio", {
       pageName: "Editar Tipo de Cambio",
       dashboardPage: true,
       parsed_Tipo_cambio,
       notPhoto,
       admin_dash1: true,
-      userID,
+      userID,parsed_lmit,
+  hay_not
     });
+  })
   });
 };
 
@@ -1088,7 +2178,7 @@ exports.terminos_ayuda = (req, res) => {
   }
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerAyuda().then((resultado) => {
@@ -1096,45 +2186,108 @@ exports.terminos_ayuda = (req, res) => {
     //let cont= parsed.length
     Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
       let parsed_lmit = JSON.parse(resultado2);
-      //let cont= parsed.length
-      //console.log(parsed_lmit);
-
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
       res.render("index_admin", {
         parsed_ayuda,
         dashboardPage: true,
         parsed_lmit,
         terminos_ayuda: true,
         admin_dash1: true,
-        msg,
+        msg,hay_not,
         notPhoto,
       });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.terminos_ayuda_add = (req, res) => {
   let userID = req.user.id;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+    let cont = parsed_lmit.length;
 
-  ////console.log(parsed);
+    Hoy = new Date(); //Fecha actual del sistema
+    var hay_not = false;
+    if (cont == 0) {
+      hay_not = true;
+    } else {
+
+      for (let i = 0; i < cont; i++) {
+
+        console.log(parsed_lmit[i].fecha_inicio)
+        console.log(parsed_lmit[i].fecha_final)
+        let fecha_inicio = moment(parsed_lmit[i].fecha_inicio).isSame(Hoy, 'day'); // true
+        let fecha_final= moment(parsed_lmit[i].fecha_final).isAfter(Hoy, 'day'); // true
+          console.log(fecha_inicio)
+          console.log(fecha_final)
+        if (parsed_lmit[i].estado == "Activa") {
+          if (fecha_final == false) {
+            break;
+          } else {
+            hay_not = true;
+          }
+        } else {
+          hay_not = true;
+          break;
+        }
+      }
+    }
   res.render("ayudas", {
     pageName: "Crear Ayuda ó  Términos y condiciones",
     dashboardPage: true,
     notPhoto,
     admin_dash1: true,
-    userID,
+    userID,parsed_lmit,
+hay_not
   });
+}).catch((err) => {
+  console.log(err)
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
 };
 
 exports.terminos_ayuda_save = async (req, res) => {
   const { id_user, tipo, terminos, politicas_privacidad, pregunta, respuesta } =
     req.body;
   var id_tipo = req.body.id_tipo;
-  //console.log(id_tipo);
+  console.log(terminos);
   if (typeof id_tipo === "undefined") {
     id_tipo = 0;
   }
@@ -1159,7 +2312,9 @@ exports.terminos_ayuda_save = async (req, res) => {
       res.redirect("/terminos_ayuda/" + msg);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
 };
 
@@ -1168,7 +2323,7 @@ exports.terminos_ayuda_edit = (req, res) => {
   let userID = req.user.id;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerAyudaById(id_buscar).then((resultado) => {
@@ -1187,7 +2342,32 @@ exports.terminos_ayuda_edit = (req, res) => {
     if (parsed_Ayuda.tipo === "Preguntas Frecuentes") {
       preguntas = true;
     }
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("ayudas", {
       pageName: "Editar Ayuda",
       dashboardPage: true,
@@ -1197,9 +2377,19 @@ exports.terminos_ayuda_edit = (req, res) => {
       userID,
       terminos,
       politicas,
-      preguntas,
+      preguntas,parsed_lmit,
+  hay_not
+    })
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });;
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
-  });
 };
 
 exports.terminos_ayuda_delete = async (req, res) => {
@@ -1212,6 +2402,10 @@ exports.terminos_ayuda_delete = async (req, res) => {
 
     let msg = "Ayuda elimina con éxito";
     res.redirect("/terminos_ayuda/" + msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
 };
 
@@ -1224,16 +2418,39 @@ exports.retiros = (req, res) => {
   }
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerRetiros1().then((resultado) => {
     let parsed_retiros = JSON.parse(resultado);
     //let cont= parsed.length
+    console.log(parsed_retiros)
     Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
       let parsed_lmit = JSON.parse(resultado2);
-      //let cont= parsed.length
-      //console.log(parsed_retiros);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
 
       res.render("index_admin", {
         parsed_retiros,
@@ -1241,25 +2458,40 @@ exports.retiros = (req, res) => {
         parsed_lmit,
         retiros: true,
         admin_dash1: true,
-        msg,
+        msg,hay_not,
         notPhoto,
       });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
-  });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
 };
 
 exports.retiros_save = async (req, res) => {
-  const { id, status, photo1, fecha_pago, observacion } = req.body;
+  const { id, status, photo1, fecha_pago, observacion,monto,id_usuario } = req.body;
 
   var msg = "";
   Modulo_BD.RetirosSave_update(id, status, photo1, fecha_pago, observacion)
     .then((result) => {
-      //console.log(result);
+      console.log(status);
+
+      if (status == "Error"){
+        return res.redirect(`/cancelar_back/${id}/${monto}/${status}/${id_usuario}`)
+
+      }
       msg = "Se actualizó con exito el retiro";
       res.redirect("/retiros/" + msg);
     })
     .catch((err) => {
-      return res.status(500).send("Error actualizando" + err);
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
 };
 
@@ -1268,14 +2500,39 @@ exports.retiros_edit = (req, res) => {
   let userID = req.user.id;
   var photo = req.user.photo;
   let notPhoto = true;
-  if (photo == "0") {
+   if (photo == "0" || photo=="" || photo == null) {
     notPhoto = false;
   }
   Modulo_BD.obtenerRetirosbyId(id_buscar).then((resultado) => {
     let parsed_retiros = JSON.parse(resultado)[0];
     let cont = parsed_retiros.length;
     //console.log(parsed_retiros);
-
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
     res.render("retiros", {
       pageName: "Editar retiros",
       dashboardPage: true,
@@ -1283,7 +2540,611 @@ exports.retiros_edit = (req, res) => {
       notPhoto,
       admin_dash1: true,
       userID,
-      retiros: true,
+      retiros: true,parsed_lmit,
+  hay_not
+    })
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
     });
+}).catch((err) => {
+  console.log(err)
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
+};
+
+
+
+// PUBLICIDAD
+exports.publicidadGet = (req, res) => {
+  //////console.log(req.params.gates);
+  let msg = false;
+  if (req.params.msg) {
+    msg = req.params.msg;
+  }
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  let admin_dash1 = true;
+  Modulo_BD.obtenerPublicidad().then((resultado) => {
+    let parsed = JSON.parse(resultado);
+    let cont = parsed.length;
+    let publicidad = true;
+
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+      res.render("index_admin", {
+      //usuarios: parsed,
+      dashboardPage: true,
+      cont_user: cont,
+      publicidad_parsed: parsed,
+      publicidad,
+      notPhoto,
+      admin_dash1,
+      msg,parsed_lmit,
+  hay_not
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });;
+};
+
+exports.addpublicidad = (req, res) => {
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  let userID = req.user.id;
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+    let cont = parsed_lmit.length;
+
+    Hoy = new Date(); //Fecha actual del sistema
+    var hay_not = false;
+    if (cont == 0) {
+      hay_not = true;
+    } else {
+
+      for (let i = 0; i < cont; i++) {
+
+        console.log(parsed_lmit[i].fecha_inicio)
+        console.log(parsed_lmit[i].fecha_final)
+        let fecha_inicio = moment(parsed_lmit[i].fecha_inicio).isSame(Hoy, 'day'); // true
+        let fecha_final= moment(parsed_lmit[i].fecha_final).isAfter(Hoy, 'day'); // true
+          console.log(fecha_inicio)
+          console.log(fecha_final)
+        if (parsed_lmit[i].estado == "Activa") {
+          if (fecha_final == false) {
+            break;
+          } else {
+            hay_not = true;
+          }
+        } else {
+          hay_not = true;
+          break;
+        }
+      }
+    }
+  res.render("create_banner", {
+    pageName: "Crear Publicidad",
+    dashboardPage: true,
+    admin_dash1: true,
+    publicidad:true,
+    userID,
+    notPhoto,parsed_lmit,
+hay_not
+  });
+}).catch((err) => {
+  console.log(err)
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
+};
+
+exports.save_publicidad = async (req, res) => {
+  const { id, link, nombre } = req.body;
+  var msg = "";
+  Modulo_BD.guardarPublicidad(id, link, nombre)
+    .then((result) => {
+      ////console.log(result);
+      if (result === "0") {
+        msg = "Ya existe Publicidad con ese nombre, porfavor verifique";
+      } else {
+        msg = "Publicidad guardada con exito";
+      }
+      res.redirect("/publicidad/" + msg);
+    })
+    .catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+
+exports.editpublicidad = (req, res) => {
+  let id_buscar = req.params.id;
+  //	var id_user = req.user.id;
+  let admin_dash1 = true;
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  Modulo_BD.obtenerBannerforedit(id_buscar).then((resultado) => {
+    let parsed_publicidad = JSON.parse(resultado)[0];
+    let cont = parsed_publicidad.length;
+    ////console.log(parsed_publicidad);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+    res.render("create_banner", {
+      pageName: "Editar Publicidad",
+      dashboardPage: true,
+      editar_publicidad:true,
+      parsed_publicidad,
+      notPhoto,
+      admin_dash1,parsed_lmit,
+  hay_not
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+
+exports.sEditedpublicidad = async (req, res) => {
+  const { id, link, nombre } = req.body;
+
+  Modulo_BD.saveEditedPublicidad(id, link, nombre)
+    .then((result) => {
+      ////console.log(result);
+    })
+    .catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  let msg = "Publicidad actualizada con exito";
+  res.redirect("/publicidad/" + msg);
+};
+exports.deletepublicidad = async (req, res) => {
+  let parametro_buscar = req.params.id;
+
+  Modulo_BD.deleteBanner(parametro_buscar).then((resultado) => {
+    //let parsed = JSON.parse(resultado);
+    //let cont= parsed.length
+    ////console.log(resultado);
+
+    let msg = "Publicidad eliminada con exito";
+    res.redirect("/publicidad/" + msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });
+};
+
+//soporte
+exports.support = (req, res) => {
+  ////console.log(req.params.gates);
+  let msg = false;
+  if (req.params.msg) {
+    msg = req.params.msg;
+  }
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  Modulo_BD.obtenerSoporte().then((resultado) => {
+    let par_support = JSON.parse(resultado);
+    //let cont= parsed.length
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+
+      res.render("index_admin", {
+        par_support,
+        dashboardPage: true,
+        parsed_lmit,
+        support: true,
+        admin_dash1: true,
+        msg,hay_not,
+        notPhoto,
+      });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+exports.delete_support = async (req, res) => {
+  let parametro_buscar = req.params.id;
+
+  Modulo_BD.deleteSoporte(parametro_buscar).then((resultado) => {
+    //let parsed = JSON.parse(resultado);
+    //let cont= parsed.length
+    ////console.log(resultado);
+
+    let msg = "Soporte eliminado con exito";
+    res.redirect("/support_view/" + msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });
+};
+
+//fans
+
+exports.fansPage_admin = (req, res) => {
+  let msg = false;
+  const user = res.locals.user;
+  var photo = req.user.photo;
+  let notPhoto = true;
+  if (photo == "0") {
+    notPhoto = false;
+  }
+  if (req.params.msg) {
+    msg = req.params.msg;
+  }
+
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+Modulo_BD.obtenerSuscripAdmin(user.id).then((data) => {
+  let parsed_s = JSON.parse(data);
+  total_sus = parsed_s.length;
+          res.render("fans_admin", {
+            pageName: "Fans",
+        dashboardPage: true,
+        parsed_lmit,
+        fans_admin: true,
+        admin_dash1: true,
+        msg,hay_not,
+        notPhoto,
+        parsed_s
+          });
+        }).catch((err) => {
+          console.log(err)
+          let msg = "Error en sistema";
+          return res.redirect("/?msg=" + msg);
+        });
+      }).catch((err) => {
+        console.log(err)
+        let msg = "Error en sistema";
+        return res.redirect("/?msg=" + msg);
+      });
+     
+};
+
+exports.deletefan_admin = async (req, res) => {
+  let parametro_buscar = req.params.id;
+  
+  Modulo_BD.deleteFan_admin(parametro_buscar).then((resultado) => {
+    let msg ="Se eliminó el fan con éxito"
+    res.redirect("/fans/"+msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
+  });
+};
+
+//generos
+exports.generos = (req, res) => {
+  ////console.log(req.params.gates);
+  let msg = false;
+  if (req.params.msg) {
+    msg = req.params.msg;
+  }
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  Modulo_BD.obtenerGeneros().then((resultado) => {
+    let par_generos = JSON.parse(resultado);
+    //let cont= parsed.length
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+console.log(par_generos)
+      res.render("index_admin", {
+        par_generos,
+        dashboardPage: true,
+        parsed_lmit,
+        generos: true,
+        admin_dash1: true,
+        msg,hay_not,
+        notPhoto,
+      });
+    }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+exports.generos_create = (req, res) => {
+  let userID = req.user.id;
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+    let parsed_lmit = JSON.parse(resultado2);
+    let cont = parsed_lmit.length;
+
+    Hoy = new Date(); //Fecha actual del sistema
+    var hay_not = false;
+    if (cont == 0) {
+      hay_not = true;
+    } else {
+
+      for (let i = 0; i < cont; i++) {
+
+        console.log(parsed_lmit[i].fecha_inicio)
+        console.log(parsed_lmit[i].fecha_final)
+        let fecha_inicio = moment(parsed_lmit[i].fecha_inicio).isSame(Hoy, 'day'); // true
+        let fecha_final= moment(parsed_lmit[i].fecha_final).isAfter(Hoy, 'day'); // true
+          console.log(fecha_inicio)
+          console.log(fecha_final)
+        if (parsed_lmit[i].estado == "Activa") {
+          if (fecha_final == false) {
+            break;
+          } else {
+            hay_not = true;
+          }
+        } else {
+          hay_not = true;
+          break;
+        }
+      }
+    }
+  res.render("generos", {
+    pageName: "Crear Generos",
+    dashboardPage: true,
+    notPhoto,
+    admin_dash1: true,
+    generos: true,
+    userID,parsed_lmit,
+hay_not
+  });
+}).catch((err) => {
+  console.log(err)
+  let msg = "Error en sistema";
+  return res.redirect("/?msg=" + msg);
+});
+};
+exports.genero_save = async (req, res) => {
+  const user =  res.locals.user.id
+  const {id, nombre } = req.body;
+  var msg = "";
+  Modulo_BD.saveGeneros(nombre, id, user)
+    .then((result) => {
+      ////console.log(result);
+        msg = "Género guardado con exito";
+      res.redirect("/generos_view/" + msg);
+    })
+    .catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+exports.edit_genero = (req, res) => {
+  let id_buscar = req.params.id;
+  //	var id_user = req.user.id;
+  let admin_dash1 = true;
+  var photo = req.user.photo;
+  let notPhoto = true;
+   if (photo == "0" || photo=="" || photo == null) {
+    notPhoto = false;
+  }
+  Modulo_BD.obtenerGenerosById(id_buscar).then((resultado) => {
+    let parsed_genero = JSON.parse(resultado)[0];
+    let cont = parsed_genero.length;
+    ////console.log(parsed_genero);
+    Modulo_BD.obtenernotificacionesbyLimit3().then((resultado2) => {
+      let parsed_lmit = JSON.parse(resultado2);
+      let cont = parsed_lmit.length;
+      Hoy = moment(); //Fecha actual del sistema
+      var hay_not = false;
+      if (cont == 0) {
+        hay_not = true;
+      } else {
+        for (let i = 0; i < cont; i++) {
+           let fecha_inicio = moment(Hoy).isSameOrAfter(parsed_lmit[i].fecha_inicio); // true
+          let fecha_final= moment(Hoy).isAfter(parsed_lmit[i].fecha_final); // true
+          if (parsed_lmit[i].estado == "Activa") {
+            if (fecha_inicio == true) {
+              console.log(fecha_inicio)
+              if (fecha_final == false) {
+                break;
+              } else {
+                hay_not = true;
+              }
+            }  
+          } else {
+            hay_not = true;
+            break;
+          }
+        }
+      }
+    res.render("generos", {
+      pageName: "Editar genero",
+      dashboardPage: true,
+      generos:true,
+      parsed_genero,
+      notPhoto,
+      admin_dash1,parsed_lmit,
+  hay_not
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+  }).catch((err) => {
+      console.log(err)
+      let msg = "Error en sistema";
+      return res.redirect("/?msg=" + msg);
+    });
+};
+exports.del_genero = async (req, res) => {
+  let parametro_buscar = req.params.id;
+  
+  Modulo_BD.deleteGeneros(parametro_buscar).then((resultado) => {
+    let msg ="Se eliminó el genero con éxito"
+    res.redirect("/generos_view/"+msg);
+  }).catch((err) => {
+    console.log(err)
+    let msg = "Error en sistema";
+    return res.redirect("/?msg=" + msg);
   });
 };

@@ -24,6 +24,9 @@
 <label id="msgs"></label>
 {{/if}}
 <style>
+	#cajas_usuarios .col-lg-3{
+		margin-bottom: 10px;
+	}
 	.texto-gris{
     color: #CCC;
 	margin-left: 10px;
@@ -56,6 +59,24 @@ table>thead>tr{font-weight: bolder;}
 }
 .Agotado{
 	color: red;
+}
+@media(max-width:414px){
+	.box_admin{
+		width: 100%;
+	}
+	.card-box__nav .nav-link{
+		font-size: 14px !important;
+	}
+	.data-user{
+		margin-bottom: 3rem;
+    	margin-top: 15rem;
+	}
+	.card-box--icon{
+		margin-bottom: 2rem;
+	}
+	.box_admin {
+    width: auto;
+  }
 }
 </style>
 
@@ -142,7 +163,56 @@ function Askdelete(id, tipo, link){
 <div class="card-box data-user text-center text-lg-left d-lg-inline-block">
 	<h2 class="data-user__name">{{user.name}} {{user.lastName}}</h2>
 	<p class="data-user__user-name">{{user.tipo}}</p>
-</div><!-- data-user -->       
+</div><!-- data-user --> 
+{{#if usuarios}}
+<div class="row box-group" id="cajas_usuarios">
+	<div class="col-lg-3">
+		<div href="/share-music" class="card-box card-box--icon shadow" style="padding: 0.5rem;height: auto;">
+			<div class="card-box__icon" style="color: black;">
+				<i class="fa fa-user"></i>
+			</div>
+			<div class="">
+				<h1 class="card-box__title">Total Usuarios</h1>
+				<p class="card-box__text m-0" style="font-size: 4.5em; text-align: center">{{cont_user}}</p>
+			</div>
+		</div><!-- .card-box -->
+	</div><!-- .col-lg-6 -->
+	
+	<div class="col-lg-3">
+		<div href="/backstore" class="card-box card-box--icon shadow new"  style="padding: 0.5rem;height: auto;">
+			<div class="card-box__icon" style="color: black;">
+				<i class="fa fa-user"></i>
+			</div>
+			<div class="">
+				<h2 class="card-box__title">Usuarios GOLD</h2>
+				<p class="card-box__text m-0" style="font-size: 4.5em; text-align: center">{{gold_c}}</p>
+			</div>
+		</div><!-- .card-box -->
+	</div><!-- .col-lg-6 -->
+		<div class="col-lg-3">
+		<div href="/backstore" class="card-box card-box--icon shadow new  " style="padding: 0.5rem;height: auto;">
+			<div class="card-box__icon" style="color: black;">
+				<i class="fa fa-user"></i>
+			</div>
+			<div class="">
+				<h2 class="card-box__title">Usuarios VIP</h2>
+				<p class="card-box__text m-0" style="font-size: 4.5em; text-align: center">{{vip_c}}</p>
+			</div>
+		</div><!-- .card-box -->
+	</div><!-- .col-lg-6 -->
+	<div class="col-lg-3">
+		<div href="/backstore" class="card-box card-box--icon shadow new  " style="padding: 0.5rem;height: auto;">
+			<div class="card-box__icon" style="color: black;">
+				<i class="fa fa-user"></i>
+			</div>
+			<div class="">
+				<h2 class="card-box__title">Usuarios Basic</h2>
+				<p class="card-box__text m-0" style="font-size: 4.5em; text-align: center">{{basic_c}}</p>
+			</div>
+		</div><!-- .card-box -->
+	</div><!-- .col-lg-6 -->
+</div><!-- .row -->
+{{/if}}
 <div class="card-box shadow"><!-- Aquí se aplica el height solo por la seccion fans -->
 
 	{{#if planes}}<div><a class="" href="/agregar_plan" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Plan</label></a></i></div>{{/if}}
@@ -151,9 +221,12 @@ function Askdelete(id, tipo, link){
 	{{#if aboutUs}}<div><a class="" href="/aboutus_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
 	{{#if cupones}}<div><a class="" href="/cupones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Cupon</label></a></i></div>{{/if}}
 	{{#if banners}}<div><a class="" href="/banner_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Banner</label></a></i></div>{{/if}}
+	{{#if publicidad}}<div><a class="" href="/publicidad_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
 	{{#if notificaciones}}<div><a class="" href="/notificaciones_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Notificación</label></a></i></div>{{/if}}
 	{{#if tipo_cambio}}<div><a class="" href="/tipo_cambio_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar Tipo de Cambio</label></a></i></div>{{/if}}
 	{{#if terminos_ayuda}}<div><a class="" href="/terminos_ayuda_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
+	{{#if generos}}<div><a class="" href="/generos_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar</label></a></i></div>{{/if}}
+	{{#if modal_land}}<div><a class="" href="/modal_land_create" ><label style="cursor: pointer;"><i class="fa fa-plus"></i> Agregar modal</label></a></i></div>{{/if}}
 <div>
 <label for="buscador">Buscar:</label><input type="text" class="texto-gris" id="buscador" />	
 
@@ -202,11 +275,11 @@ function Askdelete(id, tipo, link){
 	{{/each}}
 	</tbody> 
 	<tfoot>
-	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
-	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
 	<td id="indicador_paginas"></td>
-	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
-	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
 </tfoot>
  			</table>
 
@@ -280,11 +353,11 @@ function Askdelete(id, tipo, link){
 	{{/each}}
 	</tbody> 
 	<tfoot>
-	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
-	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
 	<td id="indicador_paginas"></td>
-	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
-	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
 </tfoot>
  			</table>
 			 {{/if}}
@@ -435,11 +508,11 @@ function Askdelete(id, tipo, link){
 	{{/each}}
 	</tbody> 
 	<tfoot>
-	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
-	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
 	<td id="indicador_paginas"></td>
-	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
-	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
 </tfoot>
  			</table>
 	<!-- .gate-item -->
@@ -486,11 +559,11 @@ function Askdelete(id, tipo, link){
 	</tbody> 
 	
 <tfoot>
-	<td><input type="button" id="cargar_primera_pagina" value="<< Primero"/></td>
-	<td><input type="button" id="cargar_anterior_pagina" value="< Anterior"/></td>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
 	<td id="indicador_paginas"></td>
-	<td><input type="button" id="cargar_siguiente_pagina" value="Siguiente >"/></td>
-	<td><input type="button" id="cargar_ultima_pagina" value="Ultimo >>"/></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
 </tfoot>
  			</table>
 			 
@@ -525,6 +598,46 @@ function Askdelete(id, tipo, link){
 						<i class="fa fa-trash-alt"></i>
 					</a>
 					<a href="/edit_banner/{{banner.id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	</tbody> 
+	
+ 			</table>
+	<!-- .gate-item -->
+	{{/if}}
+			{{#if publicidad}}
+	<table class="table table-bordered table-striped" id="tabla_">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Nombre
+								</th>
+								<th class="text-xs-center">
+									Link
+								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
+								
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each publicidad_parsed as |publicidad i|}}	 
+			<tr>
+				<td>{{publicidad.nombre}}</td>
+				<td>{{publicidad.link}}</td>
+				<td><div class="gate-item__options">
+					<a class="gate-item__option" onclick="Askdelete('{{publicidad.id}}','logo','borrar_publicidad')">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/edit_publicidad/{{publicidad.id}}" class="gate-item__option">
 						<i class="fa fa-pen"></i>
 					</a>
 					
@@ -581,8 +694,7 @@ function Askdelete(id, tipo, link){
 			
 	<!-- .gate-item -->
 	{{/if}}
-
-	{{#if tipo_cambio}}
+	{{#if modal_land}}
 	<table class="table table-bordered table-striped" id="tabla_">
 						<thead>
 							<tr>
@@ -593,7 +705,10 @@ function Askdelete(id, tipo, link){
 									Id
 								</th>
 								<th class="text-xs-center">
-									Tipo de Cambio Actual
+									Titulo
+								</th>
+								<th class="text-xs-center">
+									Estado
 								</th>
 								<th class="text-xs-center">
 									Opciones
@@ -602,15 +717,16 @@ function Askdelete(id, tipo, link){
 								
 							</tr>
 						</thead><tbody ></tbody>
-	{{#each parsed_tipo_cambio as |tipo_c i|}}	 
+	{{#each modal_land_parsed as |modal_ i|}}	 
 			<tr class="pagedemo ">
-				<td>{{tipo_c.id}}</td>
-				<td>{{tipo_c.tipo_cambio}}</td>
+				<td>{{id}}</td>
+				<td>{{titulo}}</td>
+				<td>{{estado}}</td>
 				<td><div class="gate-item__options">
-					<a href="/borrar_tipo_cambio/{{tipo_c.id}}" class="gate-item__option">
+					<a class="gate-item__option" onclick="Askdelete('{{id}}','modal','borrar_modal_land')">
 						<i class="fa fa-trash-alt"></i>
 					</a>
-					<a href="/edit_tipo_cambio/{{tipo_c.id}}" class="gate-item__option">
+					<a href="/edit_modal_land/{{id}}" class="gate-item__option">
 						<i class="fa fa-pen"></i>
 					</a>
 					
@@ -619,6 +735,54 @@ function Askdelete(id, tipo, link){
 	{{/each}}
 	
 	</tbody> 
+ 			</table>
+			
+	<!-- .gate-item -->
+	{{/if}}
+	{{#if generos}}
+	<table class="table table-bordered table-striped" id="tabla_">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Id
+								</th>
+								<th class="text-xs-center">
+									Genero
+								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
+								
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each par_generos as |genero1 i|}}	 
+			<tr class="pagedemo ">
+				<td>{{id}}</td>
+				<td>{{genero}}</td>
+				<td><div class="gate-item__options">
+					<a href="/borrar_genero/{{id}}" class="gate-item__option">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					<a href="/edit_genero/{{id}}" class="gate-item__option">
+						<i class="fa fa-pen"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	
+	</tbody> 
+		<tfoot>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
+	<td id="indicador_paginas"></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
+</tfoot>
  			</table>
 			
 	<!-- .gate-item -->
@@ -660,6 +824,89 @@ function Askdelete(id, tipo, link){
 	{{/each}}
 	
 	</tbody> 
+ 			</table>
+			
+	<!-- .gate-item -->
+	{{/if}}
+	{{#if support}}
+	<table class="table table-bordered table-striped" id="tabla_">
+						<thead>
+							<tr>
+                            <!--<th class="text-xs-center">
+									Id
+								</th>-->
+								<th class="text-xs-center">
+									Id
+								</th>
+								<th class="text-xs-center">
+									Nombre
+								</th>
+								<th class="text-xs-center">
+									Teléfono
+								</th>
+								<th class="text-xs-center">
+									Correo
+								</th>
+								<th class="text-xs-center">
+									Fecha
+								</th>
+								<th class="text-xs-center">
+									Descripcion
+								</th>
+								<th class="text-xs-center">
+									Opciones
+								</th>
+								
+							</tr>
+						</thead><tbody ></tbody>
+	{{#each par_support as |ayuda i|}}	 
+			<tr class="pagedemo ">
+				<td>{{id}}</td>
+				<td>{{nombre}}</td>
+				<td>{{telefono}}</td>
+				<td>{{correo}}</td>
+				<td>{{#formatoFecha2 createdAt}}{{/formatoFecha2}}</td>
+				<td>         
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter{{id}}">
+ Click Para ver
+</button>
+  <style>
+    .modal-backdrop{
+      position: relative;
+    }
+  </style>
+<div class="modal fade" id="exampleModalCenter{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{descripcion}}</p>
+      </div>
+    </div>
+  </div>
+</div></td>
+
+<td><div class="gate-item__options">
+					<a class="gate-item__option" onclick="Askdelete('{{id}}','soporte','borrar_soporte')">
+						<i class="fa fa-trash-alt"></i>
+					</a>
+					
+				</div></td>
+				</tr>		
+	{{/each}}
+	
+	</tbody> 
+	<tfoot>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
+	<td id="indicador_paginas"></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
+</tfoot>
  			</table>
 			
 	<!-- .gate-item -->
@@ -721,7 +968,14 @@ function Askdelete(id, tipo, link){
 				</tr>		
 	{{/each}}
 	
-	</tbody> 
+	</tbody>
+	<tfoot>
+	<td><button type="button" id="cargar_primera_pagina" value="<< Primero"> << Primero </button>
+	<button type="button" id="cargar_anterior_pagina" value="< Anterior"> < Anterior</button></td>
+	<td id="indicador_paginas"></td>
+	<td><button type="button" id="cargar_siguiente_pagina" value="Siguiente >"> Siguiente ></button>
+	<button type="button" id="cargar_ultima_pagina" value="Ultimo >>"> Ultimo >></button></td>
+</tfoot> 
  			</table>
 			
 	<!-- .gate-item -->

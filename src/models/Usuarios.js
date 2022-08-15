@@ -12,13 +12,12 @@ const Usuarios = db.define('usuarios', {
 		type: DataTypes.STRING(60),
 		unique: {
 			args: true,
-			msg: 'Usuario ya registrado'
+			msg: 'Nombre de Usuario ya registrado, elija otro'
 		}
 	},
 	photo: {
 		type: DataTypes.TEXT,
-		allowNull: false,
-		defaultValue: 0
+		allowNull: true,
 	},
 	email: {
 		type: DataTypes.STRING(60),
@@ -33,7 +32,7 @@ const Usuarios = db.define('usuarios', {
 		},
 		unique: {
 			args: true,
-			msg: 'Usuario ya registrado'
+			msg: 'Email ya registrado'
 		}
 	},
 	password: {
@@ -47,21 +46,11 @@ const Usuarios = db.define('usuarios', {
 	},
 	name: {
 		type: DataTypes.STRING(60),
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El nombre es obligatorio'
-			}
-		}
+		allowNull: true,
 	},
 	lastName: {
 		type: DataTypes.STRING(60),
-		allowNull: false,
-		validate: {
-			notEmpty: {
-				msg: 'El apellido es obligatorio'
-			}
-		}
+		allowNull: true,
 	},
 	tipo: {
 		type: DataTypes.STRING(90),
@@ -97,6 +86,11 @@ const Usuarios = db.define('usuarios', {
 		allowNull: true,
 	},
 	metodo_pago: {
+		type: DataTypes.TEXT,
+		allowNull: true,
+		defaultValue: ""
+	},
+	validado: {
 		type: DataTypes.TEXT,
 		allowNull: true,
 		defaultValue: ""

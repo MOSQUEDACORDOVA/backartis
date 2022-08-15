@@ -1,8 +1,11 @@
 {{> header }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js" integrity="sha512-d8F1J2kyiRowBB/8/pAWsqUl0wSEOkG5KATkVV4slfblq9VRQ6MyDZVxWl2tWd+mPhuCbpTB4M7uU/x9FlgQ9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js" integrity="sha512-CEiA+78TpP9KAIPzqBvxUv8hy41jyI3f2uHi7DGp/Y/Ka973qgSdybNegWFciqh6GrN2UePx2KkflnQUbUhNIA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{#if msg}}
 	<!-- Sweet Alert -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+	
 <script>
 	$( document ).ready(function() {
     if ( $("#msgs").length ) {
@@ -16,6 +19,19 @@
 </script>
 <label id="msgs"></label>
 {{/if}}
+<script>
+    $(document).ready(function(){
+
+		let usuarios = (parseInt({{count_users}})+2000).toLocaleString()
+		//usuarios.digits();
+		$('.counter').text(usuarios)
+        $('.counter').counterUp({
+            delay:10,
+            time:1200
+        })
+		
+    })
+</script>
 	<main>
 		<!-- Jumbo Banner -->
 		<div class="jumbo-banner" style="background: linear-gradient(
@@ -29,6 +45,7 @@
 			</a>
 		</div>
 		<!-- End Jumbo Banner -->
+
 
 		<!-- Section Register -->
 		<section class="section-register">
@@ -65,23 +82,23 @@
 				<div class="steps">
 					<div class="step step--active">
 						<div class="step__number">1</div>
-						<div class="step__body">
+						<div class="step__body" id="stepuno">
 							<h3 class="step__title">Paso 1</h3>
 							<p class="step__desc">Crea</p>
 						</div>
 					</div>
 					<div class="steps__line"></div>
 					<div class="step">
-						<div class="step__number">2</div>
-						<div class="step__body">
+						<div class="step__number"></div>
+						<div class="step__body" id="stepdos" style="margin-left: -50px;">
 							<h3 class="step__title">Paso 2</h3>
 							<p class="step__desc">Comparte</p>
 						</div>
 					</div>
 					<div class="steps__line"></div>
 					<div class="step">
-						<div class="step__number">3</div>
-						<div class="step__body">
+						<div class="step__number"></div>
+						<div class="step__body" id="steptres" style="margin-left: -10px;">
 							<h3 class="step__title">Paso 3</h3>
 							<p class="step__desc">Vende</p>
 						</div>
@@ -127,7 +144,7 @@
 								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea9}}</li>
 								<li class="list-item-disabled">{{plan_basico_Mensual.0.linea10}}</li>
 							</ul>
-							<a href="/register" class="btn btn-block btn-primary">
+							<a href="/login" class="btn btn-block btn-primary">
 								<span>Obtener Plan</span>
 								<i class="fa fa-angle-right"></i>
 							</a>
@@ -146,8 +163,9 @@
 								<span id="vip-press">{{plan_VIP_Anual.0.costo}}</span>
 								<span id="anual_vip" hidden>{{plan_VIP_Anual.0.costo}}</span>
 								<span id="mensual_vip" hidden>{{plan_VIP_Mensual.0.costo}}</span>
-								<span class="card-press__divider"></span>
-								<span id="vip-time">/ Año  </span>
+								<span id="vip-time" >/ Año {{#if plan_VIP_Anual.0.detalles}}({{plan_VIP_Anual.0.detalles}}) {{/if}}</span>
+								<span id="vip-detalle" hidden>{{#if plan_VIP_Mensual.0.detalles}}({{plan_VIP_Mensual.0.detalles}}) {{/if}}</span>
+								<span id="vip-detalle_anual" hidden>{{#if plan_VIP_Anual.0.detalles}}({{plan_VIP_Anual.0.detalles}}) {{/if}}</span>
 								<!--<span>{{plan_VIP_Anual.0.descuento}}% de Dsct. Por apertura</span>-->
 							</p>
 							<ul class="card-list">
@@ -162,7 +180,8 @@
 								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea9}}</li>
 								<li class="list-item-disabled">{{plan_VIP_Anual.0.linea10}}</li>
 							</ul>
-							<a href="/register" class="btn btn-block btn-light">
+						<div hidden>{{#showBtnMembership user.membership 'VIP' 'primary' 'change-membership/vip' plan_VIP_Anual.0.costo "Anual"}}{{/showBtnMembership}}</div>
+							<a href="/login" class="btn btn-block btn-light">
 								<span>Obtener Plan</span>
 								<i class="fa fa-angle-right"></i>
 							</a>
@@ -181,8 +200,9 @@
 								<span id="gold-press">{{plan_Gold_Anual.0.costo}}</span>
 								<span id="anual_gold" hidden>{{plan_Gold_Anual.0.costo}}</span>
 								<span id="mensual_gold" hidden>{{plan_Gold_mensual.0.costo}}</span>
-								<span class="card-press__divider"></span>
-								<span id="gold-time">/ Año  </span>
+								<span id="gold-time" >/ Año {{#if plan_Gold_Anual.0.detalles}}({{plan_Gold_Anual.0.detalles}}) {{/if}} </span>
+								<span id="gold-detalle" hidden>{{#if plan_Gold_mensual.0.detalles}}({{plan_Gold_mensual.0.detalles}}) {{/if}}</span>
+								<span id="gold-detalle_anual" hidden>{{#if plan_Gold_Anual.0.detalles}}({{plan_Gold_Anual.0.detalles}}) {{/if}}</span>
 								<!--<span>{{plan_Gold_Anual.0.descuento}}% de Dsct. Por apertura</span>-->
 							</p>
 							<ul class="card-list">
@@ -197,7 +217,8 @@
 								<li class="">{{plan_Gold_Anual.0.linea9}}</li>
 								<li class="">{{plan_Gold_Anual.0.linea10}}</li>
 							</ul>
-							<a href="/register" class="btn btn-block btn-primary">
+							<div hidden>{{#showBtnMembership user.membership 'Gold' 'light' 'change-membership/gold' plan_Gold_Anual.0.costo "Anual"}}{{/showBtnMembership}}</div>
+							<a href="/login" class="btn btn-block btn-primary">
 								<span>Obtener Plan</span>
 								<i class="fa fa-angle-right"></i>
 							</a>
@@ -208,6 +229,24 @@
 		</section>
 		<!-- Section Planes -->
 
+				<!-- section peoples-->
+		<section>
+			<div class="peoples-backartist d-flex align-items-center text-center">
+				<div>
+					<h4 style="font-weight: 500;">
+						Ya somos más de
+					</h4>
+					<br>
+					<h1 style="font-size: 5rem;" class="counter">
+						2,000,000
+					</h1>
+					<h4 style="font-weight: 500;">
+						fans unidos
+					</h4>
+				</div>
+			</div>
+		</section>
+
 		<!-- Section Artistas -->
 		<section class="section-center py-5">
 			<div class="section-center__content">
@@ -217,7 +256,7 @@
 				<div class="container">
 				<div class="grid-artist">
 					{{#each parsedBanner as |banner i|}}
-					<a href="{{banner.link}}"  target="_blank">	<img src="/assets/uploads/{{banner.photo}}" alt="Logo de {{banner.nombre}}"></a>
+					<a href="{{banner.link}}"  target="_blank">	<img src="/assets/uploads/{{banner.photo}}" alt="Logo de {{banner.nombre}}" style="width: 100%;"> </a>
 						{{/each}}
 					</div>
 				</div>
