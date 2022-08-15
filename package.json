@@ -7,7 +7,7 @@
     "start": "node src",
     "dev": "nodemon src"
   },
-  "author": "Homer Moncayo",
+  "author": "Ing. Jose Arzolay",
   "license": "ISC",
   "dependencies": {
     "@curiosity/niubiz": "^0.1.9",
