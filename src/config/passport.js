@@ -94,8 +94,9 @@ passport.use('facebook',
     callbackURL: "https://www.backartist.com/auth/g/call"
   },
   async (token, tokenSecret, profile, done) =>{
-	  console.log(profile._json);
-	  console.log(token);
+   console.log("🚀 ~ file: passport.js ~ line 97 ~ tokenSecret", tokenSecret)
+   console.log("🚀 ~ file: passport.js ~ line 97 ~ token", token)
+   console.log("🚀 ~ file: passport.js ~ line 99 ~ profile._json", profile._json)
 	  const {sub, email, name, given_name, family_name}=profile._json
 	   usuario = await Usuarios.findOne({where: {email: email}});
 	  if (!usuario) {
