@@ -3,9 +3,9 @@ const Usuarios = require('../models/modulos_');
 const Swal = require('sweetalert2')
 
 const visa = new Niubiz({
-  user: 'integraciones@niubiz.com.pe',
-  password: '_7z3@8fF',
-  merchantId: '456879852',
+  user: '',
+  password: '',
+  merchantId: '',
   env: 'dev',
 });
 exports.pasarela = async (req, res, next) => {
