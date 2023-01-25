@@ -5,9 +5,9 @@ let fs = require("fs");
 // Add your credentials:
 // Add your client ID and secret
 var CLIENT_ID =
-  "AXAh-Ze4KzcjXTdOFXJ6U3ZagzU3aM8HUhRSI9Xn10Z8Ac2yXFQg58AbRzaGdfDS0achuY62g6sO_H9c";
+  "";
 var SECRET =
-  "ENE0CtubJ5-TSMh1TB9FN5kZW87G37C6tLi0c-c1hG-Zruz_yHKAOPEyllzTd-Lhzcl__PBllJ3-mGsk";
+  "";
 var PAYPAL_API = "https://api-m.paypal.com";
 express();
 // Set up the payment:
