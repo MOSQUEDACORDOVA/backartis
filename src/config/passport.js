@@ -47,8 +47,8 @@ passport.use(
 /* C贸digo 100% funcional */
 passport.use('facebook',
 	new FacebookStrategy({
-		clientID: 1059585144777269,
- 		clientSecret: '8e6e18b612b0371a27724e5c6fd60fe2',
+		clientID: 'ClientID de meta',
+ 		clientSecret: 'clientSecret',
  		callbackURL: "https://www.backartist.com/auth/facebook/callback",
  		profileFields: ['id', 'displayName', 'photos', 'email']
  },
@@ -89,8 +89,8 @@ passport.use('facebook',
 
  //inicio con google
  passport.use('google',new GoogleStrategy({
-    clientID: '425427803550-5hcacf2hmbmj1k2nm1o1a5c6cg5kgk8j.apps.googleusercontent.com',
-    clientSecret: 'RPmihfCgf5iuIugPX-pe_xSH',
+    clientID: 'googleID',
+    clientSecret: 'secret google',
     callbackURL: "https://www.backartist.com/auth/g/call"
   },
   async (token, tokenSecret, profile, done) =>{
@@ -124,8 +124,8 @@ passport.use('facebook',
 
 
 passport.use('mixcloud',new MixCloudStrategy({
-    clientID: 'KEwRCR3zB6jE9fGKgK',
-    clientSecret: 'm5YKEAFC4sB5wNehuCrTYcYhCWTbm2NG',
+    clientID: '',
+    clientSecret: '',
 	callbackURL: "https://www.backartist.com/auth/mixcloud/callback"
   },
  async function(accessToken, refreshToken, profile, done) {
