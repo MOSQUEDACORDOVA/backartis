@@ -4,9 +4,9 @@ var moment = require('moment-timezone');
 const crypto = require("crypto");
 
 var CLIENT_ID =
-  "AQEp93PNKe5pQUGK4bMiah30CZzi_9YYP5pw1LqnWELnymhFyIvEQgjYT782ChQrqmSy8tUb81WNMcBF";
+  "";
 var SECRET =
-  "EB5Wbz_NTICPraelJFn-5rK1T0tbp87DTmF8TvaQRjL3xckJyYIU4aC_Xbj41KqosgbKk5M4YIjuk__W";
+  "";
 var PAYPAL_API = "https://api-m.sandbox.paypal.com";
 
 exports.walletDashboard = (req, res) => {
